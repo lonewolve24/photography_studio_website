@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Service Header Banner -->
+<section class="page-header" style="background-image: url('{% if service.cover_image %}{{ service.cover_image.url }}{% else %}{% static service_header_image %}{% endif %}');">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center text-white">
+                <h1 class="display-3 fw-bold mb-3">{% block service_title %}{% endblock %}</h1>
+                <p class="lead mb-0">{% block service_subtitle %}{% endblock %}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Service Description Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm p-4">
+                    <h2 class="fw-bold mb-4">About This Service</h2>
+                    <p class="lead mb-0">{% block service_description %}{% endblock %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- What's Included Section -->
+{% block whats_included %}{% endblock %}
+
+<!-- Gallery Section with Tabs -->
+{% block gallery_section %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Portfolio</h2>
+            <p class="lead text-muted mb-0">Some examples of my work</p>
+        </div>
+        
+        <!-- Gallery Tabs -->
+        <ul class="nav nav-pills justify-content-center mb-5" id="galleryTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">All</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="photos-tab" data-bs-toggle="pill" data-bs-target="#photos" type="button" role="tab" aria-controls="photos" aria-selected="false">Photos</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="videos-tab" data-bs-toggle="pill" data-bs-target="#videos" type="button" role="tab" aria-controls="videos" aria-selected="false">Videos</button>
+            </li>
+        </ul>
+        
+        <!-- Gallery Content -->
+        <div class="tab-content" id="galleryTabsContent">
+            <!-- All Tab -->
+            <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                <div class="row g-4">
+                    {% if photos %}
+                        {% for photo in photos %}
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <div class="gallery-item position-relative">
+                                <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
+                                <div class="gallery-item-tag">
+                                    <span class="badge bg-primary">{{ photo.category.name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <!-- Fallback static images -->
+                        {% for i in "123456789012"|make_list %}
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <div class="gallery-item position-relative">
+                                <img src="{% static 'images/services/'|add:service_slug|add:'/sample'|add:i|add:'.jpg' %}" alt="Gallery Image" class="img-fluid rounded shadow gallery-img">
+                                <div class="gallery-item-tag">
+                                    <span class="badge bg-primary">{{ service_slug|title }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Photos Tab -->
+            <div class="tab-pane fade" id="photos" role="tabpanel" aria-labelledby="photos-tab">
+                <!-- Photo content similar to above -->
+            </div>
+            
+            <!-- Videos Tab -->
+            <div class="tab-pane fade" id="videos" role="tabpanel" aria-labelledby="videos-tab">
+                <!-- Video content similar to above -->
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+<!-- Pricing Section (Dynamic) -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Pricing</h2>
+            <p class="lead text-muted mb-0">Flexible packages to meet your needs</p>
+        </div>
+        
+        <div class="row g-4 justify-content-center">
+            {% if pricing_packages %}
+                {% for package in pricing_packages %}
+                <div class="col-lg-4 col-md-6">
+                    <div class="card pricing-card h-100 border-0 shadow text-center {% if package.is_highlighted %}border border-primary border-2{% endif %}">
+                        <div class="card-header bg-white pt-4 border-0">
+                            <h4 class="fw-bold">{{ package.name }}</h4>
+                            <h2 class="display-5 fw-bold text-primary">{{ package.price }}</h2>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <p class="mb-4">{{ package.description }}</p>
+                            <ul class="list-unstyled mb-4">
+                                {% for feature in package.features.all %}
+                                <li class="mb-2">
+                                    <i class="fas fa-check text-primary me-2"></i> {{ feature.feature }}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <a href="#" class="btn btn-outline-primary mt-auto py-2">Select Package</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Fallback static pricing -->
+                {% block static_pricing %}{% endblock %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Book Now CTA Section -->
+<section class="py-5 bg-primary text-white">
+    <div class="container text-center">
+        <h2 class="display-5 fw-bold mb-4">{% block cta_title %}Ready to Book?{% endblock %}</h2>
+        <p class="lead mb-5">{% block cta_text %}Let's create beautiful memories together.{% endblock %}</p>
+        <a href="#" class="btn btn-light text-primary px-4 py-2 fw-bold btn-lg">
+            Book Now
+            <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+    </div>
+</section>
+
+<!-- Image Lightbox Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content border-0 bg-transparent">
+      <div class="modal-body p-0 position-relative">
+        <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close"></button>
+        
+        <div class="lightbox-container text-center">
+          <img src="" alt="" class="img-fluid lightbox-img">
+          
+          <div class="lightbox-caption bg-dark bg-opacity-50 text-white py-2 px-4 position-absolute bottom-0 start-0 end-0">
+            <h5 class="mb-0 lightbox-title"></h5>
+          </div>
+          
+          <button class="btn btn-light position-absolute top-50 start-0 translate-middle-y rounded-circle ms-3 lightbox-prev">
+            <i class="fas fa-chevron-left"></i>
+          </button>
+          
+          <button class="btn btn-light position-absolute top-50 end-0 translate-middle-y rounded-circle me-3 lightbox-next">
+            <i class="fas fa-chevron-right"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} 

@@ -1,0 +1,386 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}PhotoStudio - Professional Photography Services{% endblock %}
+
+{% block content %}
+<!-- Hero Section (Slider) -->
+<section class="hero-slider">
+    <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="hero-slide" style="background-image: url('{% static 'images/hero1.jpg' %}');">
+                    <div class="container hero-content text-center">
+                        <h1 class="display-3 fw-bold mb-3">Capturing Life's Precious Moments</h1>
+                        <p class="lead mb-4">Professional photography services for weddings, portraits, events, and more</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="#" class="btn btn-primary px-4 py-2">Book a Session</a>
+                            <a href="#" class="btn btn-outline-light px-4 py-2">View Services</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="hero-slide" style="background-image: url('{% static 'images/hero2.jpg' %}');">
+                    <div class="container hero-content text-center">
+                        <h1 class="display-3 fw-bold mb-3">Wedding Photography</h1>
+                        <p class="lead mb-4">Preserving your special day with timeless, elegant imagery</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="#" class="btn btn-primary px-4 py-2">Book Now</a>
+                            <a href="#" class="btn btn-outline-light px-4 py-2">Learn More</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="hero-slide" style="background-image: url('{% static 'images/hero3.jpg' %}');">
+                    <div class="container hero-content text-center">
+                        <h1 class="display-3 fw-bold mb-3">Portrait Excellence</h1>
+                        <p class="lead mb-4">Showcasing your unique personality through artful portraiture</p>
+                        <div class="d-flex justify-content-center gap-3">
+                            <a href="#" class="btn btn-primary px-4 py-2">Book a Session</a>
+                            <a href="#" class="btn btn-outline-light px-4 py-2">See Portfolio</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
+<!-- About Section -->
+<section class="py-5 my-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-5 mb-4 mb-lg-0 text-center">
+                <img src="{% static 'images/about.jpg' %}" alt="Alex - Professional Photographer" class="about-img">
+            </div>
+            <div class="col-lg-7">
+                <h2 class="display-5 fw-bold mb-3">Hello, I'm Alex</h2>
+                <h5 class="text-muted mb-4">Professional Photographer</h5>
+                <p class="mb-3">With over 15 years of experience capturing life's most precious moments, I bring a blend of technical expertise and creative vision to every project.</p>
+                <p class="mb-3">My photography style balances candid documentary approach with fine art aesthetics, creating images that feel authentic while showcasing subjects in their best light.</p>
+                <p class="mb-4">I believe that exceptional photography is about more than just technical skill—it's about connecting with people and telling their unique stories through compelling visual narratives.</p>
+                <a href="#" class="btn btn-outline-primary px-4">
+                    Read My Story
+                    <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="py-5 my-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">My Services</h2>
+            <p class="lead text-muted">Professional photography services tailored to capture your special moments</p>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="card service-card p-4">
+                    <div class="text-center mb-2">
+                        <i class="fas fa-camera service-icon"></i>
+                    </div>
+                    <div class="card-body p-0 text-center">
+                        <h4 class="fw-bold mb-3">Wedding Photography</h4>
+                        <p class="mb-4">Capture every moment of your special day with our comprehensive wedding photography services.</p>
+                        <a href="#" class="btn btn-outline-primary">
+                            Learn More
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card service-card p-4">
+                    <div class="text-center mb-2">
+                        <i class="fas fa-user service-icon"></i>
+                    </div>
+                    <div class="card-body p-0 text-center">
+                        <h4 class="fw-bold mb-3">Portrait Sessions</h4>
+                        <p class="mb-4">Professional portrait photography for individuals, families, and corporate headshots.</p>
+                        <a href="#" class="btn btn-outline-primary">
+                            Learn More
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card service-card p-4">
+                    <div class="text-center mb-2">
+                        <i class="fas fa-image service-icon"></i>
+                    </div>
+                    <div class="card-body p-0 text-center">
+                        <h4 class="fw-bold mb-3">Event Coverage</h4>
+                        <p class="mb-4">Complete documentation of special events, corporate functions, and celebrations.</p>
+                        <a href="#" class="btn btn-outline-primary">
+                            Learn More
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6 col-lg-3">
+                <div class="card service-card p-4">
+                    <div class="text-center mb-2">
+                        <i class="fas fa-video service-icon"></i>
+                    </div>
+                    <div class="card-body p-0 text-center">
+                        <h4 class="fw-bold mb-3">Videography</h4>
+                        <p class="mb-4">Professional video services that complement our photography for a complete visual package.</p>
+                        <a href="#" class="btn btn-outline-primary">
+                            Learn More
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="#" class="btn btn-primary px-4">
+                View All Services
+                <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Portfolio/Gallery Section -->
+<section class="py-5 my-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">My Work</h2>
+            <p class="lead text-muted">A selection of my favorite projects and photographs</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Gallery images - first row -->
+            <div class="col-sm-6 col-lg-3">
+                <img src="{% static 'images/gallery/image1.jpg' %}" alt="Photography" class="gallery-img">
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <img src="{% static 'images/gallery/image2.jpg' %}" alt="Photography" class="gallery-img">
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <img src="{% static 'images/gallery/image3.jpg' %}" alt="Photography" class="gallery-img">
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <img src="{% static 'images/gallery/image4.jpg' %}" alt="Photography" class="gallery-img">
+            </div>
+            
+            <!-- Gallery images - second row -->
+            <div class="col-sm-6 col-lg-3">
+                <img src="{% static 'images/gallery/image5.jpg' %}" alt="Photography" class="gallery-img">
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <img src="{% static 'images/gallery/image6.jpg' %}" alt="Photography" class="gallery-img">
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <img src="{% static 'images/gallery/image7.jpg' %}" alt="Photography" class="gallery-img">
+            </div>
+            <div class="col-sm-6 col-lg-3">
+                <img src="{% static 'images/gallery/image8.jpg' %}" alt="Photography" class="gallery-img">
+            </div>
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="#" class="btn btn-primary px-4">
+                View Full Gallery
+                <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials Section -->
+<section class="testimonial-section py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Client Testimonials</h2>
+            <p class="lead">Read what my clients have to say about their experience</p>
+        </div>
+        
+        <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <div class="testimonial-card mx-auto" style="max-width: 800px;">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-quote-right fa-3x opacity-25"></i>
+                        </div>
+                        <p class="lead fst-italic text-center mb-4">
+                            We couldn't be happier with our wedding photos! Every special moment was captured beautifully, and the candid shots really tell the story of our day. Working with this photographer was one of the best decisions we made for our wedding.
+                        </p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <img src="{% static 'images/testimonials/client1.jpg' %}" alt="Client" class="client-img me-3">
+                            <div>
+                                <h5 class="mb-0">Sarah & James Thompson</h5>
+                                <p class="mb-0 opacity-75">Wedding Clients</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-item">
+                    <div class="testimonial-card mx-auto" style="max-width: 800px;">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-quote-right fa-3x opacity-25"></i>
+                        </div>
+                        <p class="lead fst-italic text-center mb-4">
+                            The family portraits exceeded our expectations! Alex had a natural way with our kids, making them comfortable and capturing their true personalities. We'll treasure these photos for generations.
+                        </p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <img src="{% static 'images/testimonials/client2.jpg' %}" alt="Client" class="client-img me-3">
+                            <div>
+                                <h5 class="mb-0">Michael Johnson</h5>
+                                <p class="mb-0 opacity-75">Family Portrait Client</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="carousel-item">
+                    <div class="testimonial-card mx-auto" style="max-width: 800px;">
+                        <div class="text-center mb-4">
+                            <i class="fas fa-quote-right fa-3x opacity-25"></i>
+                        </div>
+                        <p class="lead fst-italic text-center mb-4">
+                            Our corporate event was documented beautifully. The team was professional, unobtrusive, and delivered polished images quickly. We've received countless compliments on the photos and will certainly book again.
+                        </p>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <img src="{% static 'images/testimonials/client3.jpg' %}" alt="Client" class="client-img me-3">
+                            <div>
+                                <h5 class="mb-0">Emily Chen</h5>
+                                <p class="mb-0 opacity-75">Corporate Event Manager</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+            
+            <div class="carousel-indicators position-relative mt-4">
+                <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Testimonial 1"></button>
+                <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="1" aria-label="Testimonial 2"></button>
+                <button type="button" data-bs-target="#testimonialCarousel" data-bs-slide-to="2" aria-label="Testimonial 3"></button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="py-5 my-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Get In Touch</h2>
+            <p class="lead text-muted">Ready to capture your special moments? Contact me to discuss your project</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4 mb-4 mb-lg-0">
+                <h4 class="fw-bold mb-4">Contact Information</h4>
+                <p class="text-muted mb-3">Fill out the form or reach out directly using the information below</p>
+                
+                <div class="mb-4">
+                    <h5 class="fw-bold">Email</h5>
+                    <p class="text-muted">hello@photostudio.com</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h5 class="fw-bold">Phone</h5>
+                    <p class="text-muted">(123) 456-7890</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h5 class="fw-bold">Studio Address</h5>
+                    <p class="text-muted mb-0">123 Photography Lane</p>
+                    <p class="text-muted mb-0">Creative District</p>
+                    <p class="text-muted">New York, NY 10001</p>
+                </div>
+                
+                <div>
+                    <h5 class="fw-bold">Business Hours</h5>
+                    <p class="text-muted mb-0">Monday - Friday: 9am - 6pm</p>
+                    <p class="text-muted">Saturday: 10am - 4pm</p>
+                </div>
+            </div>
+            {% comment %} {% url 'contact' %} {% endcomment %}
+            <div class="col-lg-8">
+                <form method="post" action="">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Your name" required>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="your.email@example.com" required>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Phone (Optional)</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Your phone number">
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <label for="service" class="form-label">Service Interest</label>
+                            <select class="form-select" id="service" name="service">
+                                <option selected>Select a service</option>
+                                <option value="wedding">Wedding Photography</option>
+                                <option value="portrait">Portrait Session</option>
+                                <option value="event">Event Coverage</option>
+                                <option value="commercial">Commercial Photography</option>
+                                <option value="video">Videography</option>
+                            </select>
+                        </div>
+                        
+                        <div class="col-12">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell me about your project and requirements..." required></textarea>
+                        </div>
+                        
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn btn-primary px-4 py-2">Send Message</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    // Initialize Bootstrap components if needed
+    document.addEventListener('DOMContentLoaded', function() {
+        // Any additional JavaScript for the home page
+    });
+</script>
+{% endblock %}

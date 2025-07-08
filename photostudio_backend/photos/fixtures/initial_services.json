@@ -1,0 +1,239 @@
+[
+  {
+    "model": "photos.category",
+    "pk": 1,
+    "fields": {
+      "name": "Wedding",
+      "slug": "wedding",
+      "description": "Wedding photography captures the special moments of your big day."
+    }
+  },
+  {
+    "model": "photos.category",
+    "pk": 2,
+    "fields": {
+      "name": "Portrait",
+      "slug": "portrait",
+      "description": "Portrait photography focuses on capturing the personality of a person or group."
+    }
+  },
+  {
+    "model": "photos.category",
+    "pk": 3,
+    "fields": {
+      "name": "Event",
+      "slug": "event",
+      "description": "Event photography documents special occasions and gatherings."
+    }
+  },
+  {
+    "model": "photos.service",
+    "pk": 1,
+    "fields": {
+      "title": "Wedding Photography",
+      "slug": "wedding",
+      "subtitle": "Capturing your special day with elegance and emotion",
+      "description": "Our wedding photography services are designed to document every special moment of your big day, from getting ready to the final dance. With a blend of photojournalistic and artistic approaches, we create a complete visual narrative of your celebration.",
+      "cover_image": "services/wedding-cover.jpg",
+      "order": 1,
+      "is_active": true,
+      "created_at": "2023-07-01T12:00:00Z",
+      "updated_at": "2023-07-01T12:00:00Z",
+      "category": 1
+    }
+  },
+  {
+    "model": "photos.service",
+    "pk": 2,
+    "fields": {
+      "title": "Portrait Photography",
+      "slug": "portrait",
+      "subtitle": "Professional portraits that showcase your personality",
+      "description": "My portrait sessions are designed to capture authentic expressions and create striking images that reflect your true personality. Whether for professional headshots, family portraits, or personal branding, I work with you to create images you'll love.",
+      "cover_image": "services/portrait-cover.jpg",
+      "order": 2,
+      "is_active": true,
+      "created_at": "2023-07-01T12:00:00Z",
+      "updated_at": "2023-07-01T12:00:00Z",
+      "category": 2
+    }
+  },
+  {
+    "model": "photos.service",
+    "pk": 3,
+    "fields": {
+      "title": "Event Photography",
+      "slug": "event",
+      "subtitle": "Documenting special occasions with attention to detail",
+      "description": "From corporate gatherings to birthday celebrations, my event photography services capture the atmosphere, key moments, and subtle interactions that make your event special. I work unobtrusively to document the story of your event as it unfolds.",
+      "cover_image": "services/event-cover.jpg",
+      "order": 3,
+      "is_active": true,
+      "created_at": "2023-07-01T12:00:00Z",
+      "updated_at": "2023-07-01T12:00:00Z", 
+      "category": 3
+    }
+  },
+  {
+    "model": "photos.servicefeature",
+    "pk": 1,
+    "fields": {
+      "service": 1,
+      "feature": "Full-day coverage (up to 10 hours)",
+      "order": 1
+    }
+  },
+  {
+    "model": "photos.servicefeature",
+    "pk": 2,
+    "fields": {
+      "service": 1,
+      "feature": "Engagement session included",
+      "order": 2
+    }
+  },
+  {
+    "model": "photos.servicefeature",
+    "pk": 3,
+    "fields": {
+      "service": 1,
+      "feature": "Custom wedding album options",
+      "order": 3
+    }
+  },
+  {
+    "model": "photos.servicefeature",
+    "pk": 4,
+    "fields": {
+      "service": 1,
+      "feature": "Two professional photographers",
+      "order": 4
+    }
+  },
+  {
+    "model": "photos.servicefeature",
+    "pk": 5,
+    "fields": {
+      "service": 1,
+      "feature": "Online gallery with high-resolution images",
+      "order": 5
+    }
+  },
+  {
+    "model": "photos.servicefeature",
+    "pk": 6,
+    "fields": {
+      "service": 1,
+      "feature": "Fast turnaround (4-6 weeks)",
+      "order": 6
+    }
+  },
+  {
+    "model": "photos.pricingpackage",
+    "pk": 1,
+    "fields": {
+      "service": 1,
+      "name": "Basic Package",
+      "price": "$1,200",
+      "description": "6 hours coverage, 1 photographer, 300+ digital images",
+      "order": 1,
+      "is_highlighted": false
+    }
+  },
+  {
+    "model": "photos.pricingpackage",
+    "pk": 2,
+    "fields": {
+      "service": 1,
+      "name": "Premium Package",
+      "price": "$2,500",
+      "description": "10 hours coverage, 2 photographers, 500+ digital images",
+      "order": 2,
+      "is_highlighted": true
+    }
+  },
+  {
+    "model": "photos.pricingpackage",
+    "pk": 3,
+    "fields": {
+      "service": 1,
+      "name": "Luxury Package",
+      "price": "$3,800",
+      "description": "Full day coverage, 2 photographers, 800+ digital images",
+      "order": 3,
+      "is_highlighted": false
+    }
+  },
+  {
+    "model": "photos.packagefeature",
+    "pk": 1,
+    "fields": {
+      "package": 1,
+      "feature": "Engagement session",
+      "order": 1
+    }
+  },
+  {
+    "model": "photos.packagefeature",
+    "pk": 2,
+    "fields": {
+      "package": 1,
+      "feature": "High-resolution images",
+      "order": 2
+    }
+  },
+  {
+    "model": "photos.packagefeature",
+    "pk": 3,
+    "fields": {
+      "package": 1,
+      "feature": "Online gallery",
+      "order": 3
+    }
+  },
+  {
+    "model": "photos.packagefeature",
+    "pk": 4,
+    "fields": {
+      "package": 1,
+      "feature": "Print release",
+      "order": 4
+    }
+  },
+  {
+    "model": "photos.packagefeature",
+    "pk": 5,
+    "fields": {
+      "package": 2,
+      "feature": "Engagement session",
+      "order": 1
+    }
+  },
+  {
+    "model": "photos.packagefeature",
+    "pk": 6,
+    "fields": {
+      "package": 2,
+      "feature": "Second photographer",
+      "order": 2
+    }
+  },
+  {
+    "model": "photos.packagefeature",
+    "pk": 7,
+    "fields": {
+      "package": 2,
+      "feature": "Wedding album (10×10)",
+      "order": 3
+    }
+  },
+  {
+    "model": "photos.packagefeature",
+    "pk": 8,
+    "fields": {
+      "package": 2,
+      "feature": "Online gallery with downloads",
+      "order": 4
+    }
+  }
+] 

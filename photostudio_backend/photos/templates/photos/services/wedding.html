@@ -1,0 +1,226 @@
+{% extends 'photos/services/service_base.html' %}
+{% load static %}
+
+{% block title %}Wedding Photography - PhotoStudio{% endblock %}
+
+{% block service_title %}Wedding Photography{% endblock %}
+{% block service_subtitle %}Capturing your special day with elegance and emotion{% endblock %}
+
+{% block service_description %}
+Our wedding photography services are designed to document every special moment of your big day, 
+from getting ready to the final dance. With a blend of photojournalistic and artistic approaches, 
+we create a complete visual narrative of your celebration.
+{% endblock %}
+
+{% block whats_included %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm p-4">
+                    <h2 class="fw-bold mb-4">What's Included</h2>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <div class="d-flex">
+                                        <i class="fas fa-check-circle text-primary me-2 mt-1"></i>
+                                        <span>Full-day coverage (up to 10 hours)</span>
+                                    </div>
+                                </li>
+                                <li class="mb-3">
+                                    <div class="d-flex">
+                                        <i class="fas fa-check-circle text-primary me-2 mt-1"></i>
+                                        <span>Engagement session included</span>
+                                    </div>
+                                </li>
+                                <li class="mb-3">
+                                    <div class="d-flex">
+                                        <i class="fas fa-check-circle text-primary me-2 mt-1"></i>
+                                        <span>Custom wedding album options</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li class="mb-3">
+                                    <div class="d-flex">
+                                        <i class="fas fa-check-circle text-primary me-2 mt-1"></i>
+                                        <span>Two professional photographers</span>
+                                    </div>
+                                </li>
+                                <li class="mb-3">
+                                    <div class="d-flex">
+                                        <i class="fas fa-check-circle text-primary me-2 mt-1"></i>
+                                        <span>Online gallery with high-resolution images</span>
+                                    </div>
+                                </li>
+                                <li class="mb-3">
+                                    <div class="d-flex">
+                                        <i class="fas fa-check-circle text-primary me-2 mt-1"></i>
+                                        <span>Fast turnaround (4-6 weeks)</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block gallery_section %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Portfolio</h2>
+            <p class="lead text-muted mb-0">Some examples of my wedding photography work</p>
+        </div>
+        
+        <!-- Gallery Tabs -->
+        <ul class="nav nav-pills justify-content-center mb-5" id="galleryTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">All</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="photos-tab" data-bs-toggle="pill" data-bs-target="#photos" type="button" role="tab" aria-controls="photos" aria-selected="false">Photos</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="videos-tab" data-bs-toggle="pill" data-bs-target="#videos" type="button" role="tab" aria-controls="videos" aria-selected="false">Videos</button>
+            </li>
+        </ul>
+        
+        <!-- Gallery Content -->
+        <div class="tab-content" id="galleryTabsContent">
+            <!-- All Tab -->
+            <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                <div class="row g-4">
+                    {% if photos %}
+                        {% for photo in photos %}
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <div class="gallery-item position-relative">
+                                <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="img-fluid w-100 gallery-img">
+                                <div class="gallery-item-tag">
+                                    <span class="badge bg-primary">{{ photo.category.name }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <!-- Fallback to static images if no photos available -->
+                        {% for i in "123456789012"|make_list %}
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <div class="gallery-item position-relative">
+                                <img src="{% static 'images/services/wedding/sample'|add:i|add:'.jpg' %}" alt="Gallery Image" class="img-fluid rounded shadow gallery-img">
+                                <div class="gallery-item-tag">
+                                    <span class="badge bg-primary">Wedding</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Photos Tab -->
+            <div class="tab-pane fade" id="photos" role="tabpanel" aria-labelledby="photos-tab">
+                <div class="row g-4">
+                    {% if photos %}
+                        {% for photo in photos %}
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <div class="gallery-item position-relative">
+                                <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="img-fluid w-100 gallery-img">
+                                <div class="gallery-item-tag">
+                                    <span class="badge bg-primary">Photo</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <!-- Fallback static images -->
+                        {% for i in "12345678"|make_list %}
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <div class="gallery-item position-relative">
+                                <img src="{% static 'images/services/wedding/sample'|add:i|add:'.jpg' %}" alt="Photo" class="img-fluid rounded shadow gallery-img">
+                                <div class="gallery-item-tag">
+                                    <span class="badge bg-primary">Photo</span>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Videos Tab -->
+            <div class="tab-pane fade" id="videos" role="tabpanel" aria-labelledby="videos-tab">
+                <div class="row g-4">
+                    {% if videos %}
+                        {% for video in videos %}
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <div class="gallery-item position-relative">
+                                <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="img-fluid rounded shadow gallery-img">
+                                <div class="gallery-item-tag">
+                                    <span class="badge bg-primary">Video</span>
+                                </div>
+                                <div class="video-play-icon">
+                                    <i class="fas fa-play-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <!-- Fallback static video thumbnails -->
+                        {% for i in "9101112"|make_list %}
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <div class="gallery-item position-relative">
+                                <img src="{% static 'images/services/wedding/sample'|add:i|add:'.jpg' %}" alt="Video Thumbnail" class="img-fluid rounded shadow gallery-img">
+                                <div class="gallery-item-tag">
+                                    <span class="badge bg-primary">Video</span>
+                                </div>
+                                <div class="video-play-icon">
+                                    <i class="fas fa-play-circle"></i>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block static_pricing %}
+<!-- Only shown if no pricing packages are found in database -->
+<div class="col-lg-4 col-md-6">
+    <div class="card pricing-card h-100 border-0 shadow text-center">
+        <div class="card-header bg-white pt-4 border-0">
+            <h4 class="fw-bold">Basic Package</h4>
+            <h2 class="display-5 fw-bold text-primary">$1,200</h2>
+        </div>
+        <div class="card-body d-flex flex-column">
+            <p class="mb-4">6 hours coverage, 1 photographer, 300+ digital images</p>
+            <ul class="list-unstyled mb-4">
+                <li class="mb-2"><i class="fas fa-check text-primary me-2"></i> Engagement session</li>
+                <li class="mb-2"><i class="fas fa-check text-primary me-2"></i> High-resolution images</li>
+                <li class="mb-2"><i class="fas fa-check text-primary me-2"></i> Online gallery</li>
+                <li class="mb-2"><i class="fas fa-check text-primary me-2"></i> Print release</li>
+            </ul>
+            <a href="#" class="btn btn-outline-primary mt-auto py-2">Select Package</a>
+        </div>
+    </div>
+</div>
+<!-- Add more fallback packages if needed -->
+{% endblock %}
+
+{% block cta_title %}Ready to Book Your Wedding Photography?{% endblock %}
+{% block cta_text %}Let's create beautiful memories together. Contact me today to check availability for your special day.{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/gallery.js' %}"></script>
+{% endblock %} 
