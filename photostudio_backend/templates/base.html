@@ -10,15 +10,30 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=1.2">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}?v=1.4">
+    <style>
+        /* Manual override to fix layout overlap */
+        .navbar {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        body {
+            padding-top: 84px; /* Default for all pages, creates space for fixed nav */
+        }
+        body.is-homepage {
+            padding-top: 0; /* Homepage hero starts at the very top */
+        }
+    </style>
         
 </head>
-<body>
+<body class="{% if request.path == '/' %}is-homepage{% endif %}">
     <!-- Header/Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white headless">
+    <nav class="navbar navbar-expand-lg fixed-top {% if request.path == '/' %}navbar-homepage{% else %}navbar-default{% endif %}">
         <div class="container">
             <a class="navbar-brand" href="{% url 'home' %}">
-                <img src="{% static 'images/services/logo/shotz_logo.jpg' %}" alt="Shotz Logo" style="height: 30px;"> Shotz
+                <img src="{% static 'images/services/logo/shotz_logo.jpg' %}" alt="Shotz Logo" style="height: 30px;" class="logo-white">
+                <img src="{% static 'images/services/logo/shotz_logo.jpg' %}" alt="Shotz Logo" style="height: 30px;" class="logo-dark">
+                <span class="brand-text">Shotz</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
@@ -41,7 +56,7 @@
                         <a class="nav-link {% if 'contact' in request.path %}active{% endif %}" href="#">Contact</a>
                     </li>
                 </ul>
-                <a href="#" class="btn btn-primary ms-lg-3">Book Now</a>
+                <a href="#" class="btn btn-primary ms-lg-3 btn-book-now">Book Now</a>
             </div>
         </div>
     </nav>
@@ -56,26 +71,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Custom JavaScript -->
     <script>
-        // Headless navbar that appears on scroll
         document.addEventListener('DOMContentLoaded', function() {
-            const navbar = document.querySelector('.navbar.headless');
-            const body = document.body;
-            
-            function toggleNavbar() {
-                if (window.scrollY > 100) {
-                    navbar.classList.add('visible');
-                    body.classList.add('scrolled');
-                } else {
-                    navbar.classList.remove('visible');
-                    body.classList.remove('scrolled');
-                }
+            // This script ONLY targets the homepage navbar
+            const navbar = document.querySelector('.navbar-homepage');
+            if (navbar) {
+                const handleScroll = () => {
+                    if (window.scrollY > 50) {
+                        navbar.classList.add('scrolled');
+                    } else {
+                        navbar.classList.remove('scrolled');
+                    }
+                };
+                window.addEventListener('scroll', handleScroll);
+                handleScroll(); // Check on page load
             }
-            
-            // Initial check
-            toggleNavbar();
-            
-            // Listen for scroll events
-            window.addEventListener('scroll', toggleNavbar);
         });
     </script>
     <script src="{% static 'js/main.js' %}"></script>
