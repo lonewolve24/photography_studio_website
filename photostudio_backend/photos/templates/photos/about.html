@@ -21,108 +21,152 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <img src="{% static 'images/about-full.jpg' %}" alt="About Shotz" class="img-fluid rounded shadow">
+                <div class="position-relative">
+                    <img src="{% static 'images/about-full.jpg' %}" alt="About Shotz" class="img-fluid rounded-4 shadow-lg">
+                    <div class="position-absolute top-0 start-0 w-100 h-100 bg-primary bg-opacity-10 rounded-4"></div>
+                </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 ps-lg-5">
+                <div class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3">
+                    <i class="fas fa-camera me-2"></i>Est. August 2022
+                </div>
                 <h2 class="display-5 fw-bold mb-4">Our Story</h2>
-                <p class="mb-4">
-                    Shotz is a dynamic multimedia brand specializing in high-quality photography and videography services with a signature intimate and storytelling style. Founded in August 2022 in Brusubi Phase 2, Shotz operates as a Sole Proprietorship dedicated to helping individuals, brands, and organizations visually tell their stories in the most authentic, artistic, and emotionally engaging way possible.
+                <p class="lead mb-4">
+                    Shotz is a dynamic multimedia brand specializing in high-quality photography and videography services with a signature intimate and storytelling style.
                 </p>
-                 <p class="mb-2"><strong>Vision:</strong> To become the leading multimedia brand in West Africa, known for excellence in storytelling through visual content.</p>
-                 <p class="mb-0"><strong>Mission:</strong> To deliver intimate, artistic, and emotionally resonant photography and videography services that connect audiences and elevate brands.</p>
+                <p class="mb-4">
+                    Founded in August 2022 in Brusubi Phase 2, Shotz operates as a Sole Proprietorship dedicated to helping individuals, brands, and organizations visually tell their stories in the most authentic, artistic, and emotionally engaging way possible.
+                </p>
+                
+                <div class="row g-4 mb-4">
+                    <div class="col-12">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="bg-primary bg-opacity-10 rounded-circle p-2">
+                                    <i class="fas fa-eye text-primary"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Vision</h6>
+                                <p class="mb-0 text-muted">To become the leading multimedia brand in West Africa, known for excellence in storytelling through visual content.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-shrink-0 me-3">
+                                <div class="bg-primary bg-opacity-10 rounded-circle p-2">
+                                    <i class="fas fa-bullseye text-primary"></i>
+                                </div>
+                            </div>
+                            <div>
+                                <h6 class="fw-bold mb-1">Mission</h6>
+                                <p class="mb-0 text-muted">To deliver intimate, artistic, and emotionally resonant photography and videography services that connect audiences and elevate brands.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="#approach" class="btn btn-primary px-4">
+                    Learn More About Us
+                    <i class="fas fa-arrow-down ms-2"></i>
+                </a>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Our Approach Section -->
-<section class="py-5 my-5 bg-light">
+<section id="approach" class="py-5 my-5 bg-light">
     <div class="container">
         <div class="text-center mb-5">
+            <div class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3">
+                <i class="fas fa-lightbulb me-2"></i>Our Philosophy
+            </div>
             <h2 class="display-5 fw-bold mb-3">Our Approach</h2>
             <p class="lead text-muted mb-0">Delivering intimate and storytelling visual content</p>
         </div>
 
         <div class="row g-4">
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body p-4">
-                        <div class="feature-icon text-primary mb-3">
-                            <i class="fas fa-heart fa-2x"></i> {# Example icon - you can choose relevant icons #}
+            <div class="col-xl-4 col-lg-6 col-md-6">
+                <div class="card approach-card-new h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="approach-icon-new mb-4">
+                            <i class="fas fa-heart"></i>
                         </div>
                         <h4 class="fw-bold mb-3">Intimate Connection</h4>
                         <p class="text-muted mb-0">
-                            We build a genuine connection with our clients to capture authentic emotions and moments.
+                            We build a genuine connection with our clients to capture authentic emotions and moments that truly matter.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body p-4">
-                        <div class="feature-icon text-primary mb-3">
-                            <i class="fas fa-book-open fa-2x"></i> {# Example icon #}
+            <div class="col-xl-4 col-lg-6 col-md-6">
+                <div class="card approach-card-new h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="approach-icon-new mb-4">
+                            <i class="fas fa-book-open"></i>
                         </div>
                         <h4 class="fw-bold mb-3">Storytelling Focus</h4>
                         <p class="text-muted mb-0">
-                            Every project is approached with a narrative mindset to create compelling visual stories.
+                            Every project is approached with a narrative mindset to create compelling visual stories that resonate.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body p-4">
-                        <div class="feature-icon text-primary mb-3">
-                            <i class="fas fa-paint-brush fa-2x"></i> {# Example icon #}
+            <div class="col-xl-4 col-lg-6 col-md-6">
+                <div class="card approach-card-new h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="approach-icon-new mb-4">
+                            <i class="fas fa-paint-brush"></i>
                         </div>
                         <h4 class="fw-bold mb-3">Artistic Excellence</h4>
                         <p class="text-muted mb-0">
-                            We combine technical skill with creative vision to produce visually stunning content.
+                            We combine technical skill with creative vision to produce visually stunning and impactful content.
                         </p>
                     </div>
                 </div>
             </div>
 
-             <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body p-4">
-                        <div class="feature-icon text-primary mb-3">
-                            <i class="fas fa-users-cog fa-2x"></i> {# Example icon #}
+            <div class="col-xl-4 col-lg-6 col-md-6">
+                <div class="card approach-card-new h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="approach-icon-new mb-4">
+                            <i class="fas fa-users-cog"></i>
                         </div>
                         <h4 class="fw-bold mb-3">Collaborative Process</h4>
                         <p class="text-muted mb-0">
-                            We work closely with our clients from concept to delivery to ensure their vision is realized.
+                            We work closely with our clients from concept to delivery to ensure their vision is perfectly realized.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body p-4">
-                        <div class="feature-icon text-primary mb-3">
-                            <i class="fas fa-lightbulb fa-2x"></i> {# Example icon #}
+            <div class="col-xl-4 col-lg-6 col-md-6">
+                <div class="card approach-card-new h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="approach-icon-new mb-4">
+                            <i class="fas fa-cogs"></i>
                         </div>
                         <h4 class="fw-bold mb-3">Innovative Techniques</h4>
                         <p class="text-muted mb-0">
-                           We stay updated with the latest techniques and equipment to deliver cutting-edge multimedia content.
+                            We stay updated with the latest techniques and equipment to deliver cutting-edge multimedia content.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 border-0 shadow-sm">
-                    <div class="card-body p-4">
-                        <div class="feature-icon text-primary mb-3">
-                            <i class="fas fa-handshake fa-2x"></i> {# Example icon #}
+            <div class="col-xl-4 col-lg-6 col-md-6">
+                <div class="card approach-card-new h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div class="approach-icon-new mb-4">
+                            <i class="fas fa-handshake"></i>
                         </div>
                         <h4 class="fw-bold mb-3">Client-Centric Service</h4>
                         <p class="text-muted mb-0">
-                            Your satisfaction is our priority; we provide a seamless and enjoyable experience.
+                            Your satisfaction is our priority; we provide a seamless and enjoyable creative experience.
                         </p>
                     </div>
                 </div>
@@ -191,22 +235,21 @@
 </section>
 
 <!-- Get In Touch Section -->
-<section class="py-5 my-5 bg-primary text-white">
+<section class="py-5 my-5 bg-light">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 text-center">
                 <h2 class="display-5 fw-bold mb-4">Let's Tell Your Story</h2>
-                <p class="lead mb-5">
+                <p class="lead mb-4">
                     Ready to create compelling visual content? Contact Shotz today to discuss your project and how we can help you share your unique story.
                 </p>
 
-                <div class="text-center">
-                    {# Replace with Shotz logo if desired #}
-                    <img src="{% static 'images/services/logo/shotz_logo.jpg' %}" alt="Shotz Logo" class="rounded-circle mb-3 border border-4 border-white" style="width: 150px; height: 150px; object-fit: cover;">
+                <div class="text-center my-4">
+                    <img src="{% static 'images/services/logo/shotz_logo_white.jpg' %}" alt="Shotz Logo" class="rounded-circle border border-4" style="width: 150px; height: 150px; object-fit: cover; border-color: var(--primary-color) !important; padding: 5px; background: #fff;">
                 </div>
 
-                <div class="mb-5">
-                    <a href="#" class="btn btn-light text-primary px-4 py-2 fw-bold">
+                <div>
+                    <a href="#" class="btn btn-primary px-4 py-2 fw-bold">
                         Get in Touch
                         <i class="fas fa-arrow-right ms-2"></i>
                     </a>

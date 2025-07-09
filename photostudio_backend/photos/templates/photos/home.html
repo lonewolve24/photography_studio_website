@@ -9,7 +9,7 @@
     <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <div class="hero-slide" style="background-image: url('{% static 'images/hero1.jpg' %}');">
+                <div class="hero-slide" style="background-image: url('{% static 'images/services/hero_images/hero_image1.jpg' %}');">
                     <div class="container hero-content text-center">
                         <h1 class="display-3 fw-bold mb-3">Capturing Life's Precious Moments</h1>
                         <p class="lead mb-4">Professional photography services for weddings, portraits, events, and more</p>
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <div class="hero-slide" style="background-image: url('{% static 'images/hero2.jpg' %}');">
+                <div class="hero-slide" style="background-image: url('{% static 'images/services/hero_images/hero_image2.jpg' %}');">
                     <div class="container hero-content text-center">
                         <h1 class="display-3 fw-bold mb-3">Wedding Photography</h1>
                         <p class="lead mb-4">Preserving your special day with timeless, elegant imagery</p>
@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="carousel-item">
-                <div class="hero-slide" style="background-image: url('{% static 'images/hero3.jpg' %}');">
+                <div class="hero-slide" style="background-image: url('{% static 'images/services/hero_images/hero_image3.jpg' %}');">
                     <div class="container hero-content text-center">
                         <h1 class="display-3 fw-bold mb-3">Portrait Excellence</h1>
                         <p class="lead mb-4">Showcasing your unique personality through artful portraiture</p>
@@ -79,84 +79,125 @@
 </section>
 
 <!-- Services Section -->
-<section class="py-5 my-5 bg-light">
+<section class="py-5 my-5 services-section-bg">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3">My Services</h2>
-            <p class="lead text-muted">Professional photography services tailored to capture your special moments</p>
+            <div class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3">
+                <i class="fas fa-star me-2"></i>What We Offer
+            </div>
+            <h2 class="display-5 fw-bold mb-3">Our Creative Services</h2>
+            <p class="lead text-muted">Comprehensive multimedia solutions to bring your vision to life</p>
         </div>
         
+        <!-- Services Grid -->
         <div class="row g-4">
-            <div class="col-md-6 col-lg-3">
-                <div class="card service-card p-4">
-                    <div class="text-center mb-2">
-                        <i class="fas fa-camera service-icon"></i>
-                    </div>
-                    <div class="card-body p-0 text-center">
-                        <h4 class="fw-bold mb-3">Wedding Photography</h4>
-                        <p class="mb-4">Capture every moment of your special day with our comprehensive wedding photography services.</p>
-                        <a href="#" class="btn btn-outline-primary">
-                            Learn More
-                            <i class="fas fa-arrow-right ms-2"></i>
-                        </a>
-                    </div>
+            <!-- Video Production -->
+            <div class="col-lg-3 col-md-6">
+                <div class="clean-service-card h-100">
+                    <i class="fas fa-video service-icon-clean"></i>
+                    <h4 class="service-title-clean">Video Production</h4>
+                    <p class="service-description">Professional video services for commercials, music videos, weddings, films, and podcasts.</p>
+                    
+                    <ul class="service-list-clean">
+                        <li>Commercials</li>
+                        <li>Music Videos</li>
+                        <li>Wedding Films</li>
+                        <li>Documentary Films</li>
+                        <li>Podcast Production</li>
+                    </ul>
+                    
+                    <a href="#" class="learn-more-btn">
+                        Learn More
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
             
-            <div class="col-md-6 col-lg-3">
-                <div class="card service-card p-4">
-                    <div class="text-center mb-2">
-                        <i class="fas fa-user service-icon"></i>
-                    </div>
-                    <div class="card-body p-0 text-center">
-                        <h4 class="fw-bold mb-3">Portrait Sessions</h4>
-                        <p class="mb-4">Professional portrait photography for individuals, families, and corporate headshots.</p>
-                        <a href="#" class="btn btn-outline-primary">
-                            Learn More
-                            <i class="fas fa-arrow-right ms-2"></i>
-                        </a>
-                    </div>
+            <!-- Photography -->
+            <div class="col-lg-3 col-md-6">
+                <div class="clean-service-card h-100">
+                    <i class="fas fa-camera service-icon-clean"></i>
+                    <h4 class="service-title-clean">Photography</h4>
+                    <p class="service-description">Comprehensive photography services for events, portraits, promotional content, and weddings.</p>
+                    
+                    <ul class="service-list-clean">
+                        <li>Event Photography</li>
+                        <li>Portrait Sessions</li>
+                        <li>Promotional Shoots</li>
+                        <li>Wedding Photography</li>
+                        <li>Private Sessions</li>
+                    </ul>
+                    
+                    <a href="#" class="learn-more-btn">
+                        Learn More
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
             
-            <div class="col-md-6 col-lg-3">
-                <div class="card service-card p-4">
-                    <div class="text-center mb-2">
-                        <i class="fas fa-image service-icon"></i>
-                    </div>
-                    <div class="card-body p-0 text-center">
-                        <h4 class="fw-bold mb-3">Event Coverage</h4>
-                        <p class="mb-4">Complete documentation of special events, corporate functions, and celebrations.</p>
-                        <a href="#" class="btn btn-outline-primary">
-                            Learn More
-                            <i class="fas fa-arrow-right ms-2"></i>
-                        </a>
-                    </div>
+            <!-- Graphic Design -->
+            <div class="col-lg-3 col-md-6">
+                <div class="clean-service-card h-100">
+                    <i class="fas fa-palette service-icon-clean"></i>
+                    <h4 class="service-title-clean">Graphic Design</h4>
+                    <p class="service-description">Creative visual design solutions for branding, marketing materials, and digital content.</p>
+                    
+                    <ul class="service-list-clean">
+                        <li>Brand Identity</li>
+                        <li>Marketing Materials</li>
+                        <li>Digital Graphics</li>
+                        <li>Print Design</li>
+                        <li>Logo Design</li>
+                    </ul>
+                    
+                    <a href="#" class="learn-more-btn">
+                        Learn More
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
             
-            <div class="col-md-6 col-lg-3">
-                <div class="card service-card p-4">
-                    <div class="text-center mb-2">
-                        <i class="fas fa-video service-icon"></i>
-                    </div>
-                    <div class="card-body p-0 text-center">
-                        <h4 class="fw-bold mb-3">Videography</h4>
-                        <p class="mb-4">Professional video services that complement our photography for a complete visual package.</p>
-                        <a href="#" class="btn btn-outline-primary">
-                            Learn More
-                            <i class="fas fa-arrow-right ms-2"></i>
-                        </a>
-                    </div>
+            <!-- Voiceover Recording -->
+            <div class="col-lg-3 col-md-6">
+                <div class="clean-service-card h-100">
+                    <i class="fas fa-microphone service-icon-clean"></i>
+                    <h4 class="service-title-clean">Voiceover Recording</h4>
+                    <p class="service-description">Professional voiceover services for commercials, narrations, audiobooks, and multimedia projects.</p>
+                    
+                    <ul class="service-list-clean">
+                        <li>Commercial Voiceovers</li>
+                        <li>Narration</li>
+                        <li>Audiobook Recording</li>
+                        <li>Character Voices</li>
+                        <li>Podcast Intros</li>
+                    </ul>
+                    
+                    <a href="#" class="learn-more-btn">
+                        Learn More
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
             </div>
         </div>
         
-        <div class="text-center mt-5">
-            <a href="#" class="btn btn-primary px-4">
-                View All Services
-                <i class="fas fa-arrow-right ms-2"></i>
-            </a>
+        <!-- Call to Action -->
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-10">
+                <div class="modern-cta-section">
+                    <h3 class="fw-bold mb-3">Ready to Start Your Project?</h3>
+                    <p class="lead text-muted mb-4">Let's discuss how we can help bring your creative vision to life with professional quality and artistic flair.</p>
+                    
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="#" class="btn btn-primary px-4 py-3">
+                            <i class="fas fa-calendar me-2"></i>Book Consultation
+                        </a>
+                        <a href="#" class="btn btn-outline-primary px-4 py-3">
+                            View All Work
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
