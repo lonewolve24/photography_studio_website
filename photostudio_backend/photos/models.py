@@ -97,8 +97,8 @@ class Service(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    # Connect to existing Category model
-    category = models.OneToOneField(Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='service')
+    # A service can be linked to multiple categories
+    categories = models.ManyToManyField(Category, blank=True, related_name='services')
     
     class Meta:
         ordering = ['order']
@@ -108,41 +108,3 @@ class Service(models.Model):
     
     def get_absolute_url(self):
         return reverse('service_detail', kwargs={'service_slug': self.slug})
-
-class ServiceFeature(models.Model):
-    """Features included in a service (e.g., "Full-day coverage", "Online gallery")"""
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='features')
-    feature = models.CharField(max_length=200)
-    order = models.IntegerField(default=0)
-    
-    class Meta:
-        ordering = ['order']
-    
-    def __str__(self):
-        return f"{self.service.title} - {self.feature}"
-
-class PricingPackage(models.Model):
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, related_name='packages')
-    name = models.CharField(max_length=100)
-    price = models.CharField(max_length=50)  # Keeping as CharField to allow for custom formatting
-    description = models.TextField()
-    order = models.IntegerField(default=0)
-    is_highlighted = models.BooleanField(default=False)  # For showcasing best value package
-    
-    class Meta:
-        ordering = ['order']
-    
-    def __str__(self):
-        return f"{self.service.title} - {self.name}"
-
-class PackageFeature(models.Model):
-    """Features included in a pricing package"""
-    package = models.ForeignKey(PricingPackage, on_delete=models.CASCADE, related_name='features')
-    feature = models.CharField(max_length=200)
-    order = models.IntegerField(default=0)
-    
-    class Meta:
-        ordering = ['order']
-    
-    def __str__(self):
-        return f"{self.package.name} - {self.feature}"

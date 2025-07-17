@@ -1,11 +1,15 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseNotFound
-from .models import Photo, Service, Category, PricingPackage, Video
+from django.core.paginator import Paginator
+from .models import Photo, Service, Category,  Video
 
 # Create your views here.
 def home(request):
-
-    return render(request, 'photos/home.html')
+    latest_photos = Photo.objects.order_by('-date_uploaded')[:9]
+    context = {
+        'latest_photos': latest_photos,
+    }
+    return render(request, 'photos/home.html', context)
 
 def about(request):
     return render(request, 'photos/about.html')
@@ -15,40 +19,92 @@ def services(request):
     services_list = Service.objects.filter(is_active=True)
     return render(request, 'photos/services.html', {'services': services_list})
 
-def service_detail(request, service_slug):
+def contact(request):
+    return render(request, 'photos/contact.html')
+
+def gallery(request):
     """
-    Renders a specific service page based on the service_slug.
-    Most content is static (template-based) except pricing and photos.
+    Displays all photos with category filters and pagination.
     """
-    # Get the service by slug
-    service = get_object_or_404(Service, slug=service_slug, is_active=True)
+    # Get all photos and categories
+    photo_list = Photo.objects.order_by('-date_uploaded')
+    categories = Category.objects.all()
     
-    # Get pricing packages
-    pricing_packages = PricingPackage.objects.filter(service=service).order_by('order')
-    
-    # Get photos for this service's category
-    photos = Photo.objects.filter(category=service.category)[:12]
-    
-    # Get videos for this service's category
-    videos = Video.objects.filter(category=service.category)[:8]
+    # Filter by category if a category slug is provided in the URL
+    category_filter = request.GET.get('category')
+    if category_filter:
+        photo_list = photo_list.filter(category__slug=category_filter)
+        
+    # Set up pagination
+    paginator = Paginator(photo_list, 12)  # Show 12 photos per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     
     context = {
-        'service': service,
-        'service_slug': service_slug,
-        'pricing_packages': pricing_packages,
-        'photos': photos,
-        'videos': videos,
-        'service_header_image': f'images/services/{service_slug}/header.jpg'  # Fallback
+        'page_obj': page_obj,
+        'categories': categories,
+        'category_filter': category_filter, # To keep track of the active filter
     }
     
-    # Return template based on slug
-    if service_slug == 'wedding':
-        return render(request, 'photos/services/wedding.html', context)
-    elif service_slug == 'portrait':
-        return render(request, 'photos/services/portrait.html', context)
-    elif service_slug == 'event':
-        return render(request, 'photos/services/event.html', context)
-    # Add more services as needed
-    else:
-        # Fallback to a generic template
-        return render(request, 'photos/services/generic.html', context)
+    return render(request, 'photos/gallery.html', context)
+
+def gallery_v2(request):
+    """
+    Second version of the gallery page with a custom banner.
+    """
+    photo_list = Photo.objects.order_by('-date_uploaded')
+    categories = Category.objects.all()
+    
+    # Photos for the banner collage
+    banner_photos = photo_list[:5]
+    
+    # Filter by category if a category slug is provided in the URL
+    category_filter = request.GET.get('category')
+    if category_filter:
+        photo_list = photo_list.filter(category__slug=category_filter)
+        
+    # Set up pagination
+    paginator = Paginator(photo_list, 12)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    
+    context = {
+        'page_obj': page_obj,
+        'categories': categories,
+        'category_filter': category_filter,
+        'banner_photos': banner_photos,
+    }
+    
+    return render(request, 'photos/gallery_v2.html', context)
+
+def service_detail(request, service_slug):
+    """
+    Renders a specific service page.
+    - Fetches the service by its slug.
+    - Gets all categories linked to this service.
+    - For each category, gets the associated photos and videos.
+    """
+    service = get_object_or_404(Service, slug=service_slug, is_active=True)
+    
+    # Get all categories associated with this service that we will use as tabs
+    service_categories = service.categories.all()
+    
+    # Prepare a dictionary to hold photos and videos grouped by category.
+    # This is perfect for creating the tabbed gallery in the template.
+    media_by_category = {}
+    for category in service_categories:
+        photos = Photo.objects.filter(category=category)
+        videos = Video.objects.filter(category=category)
+        # Only add the category to our dictionary if it has content
+        if photos.exists() or videos.exists():
+            media_by_category[category] = {
+                'photos': photos,
+                'videos': videos
+            }
+
+    context = {
+        'service': service,
+        'media_by_category': media_by_category,
+    }
+    
+    return render(request, 'photos/service_detail.html', context)

@@ -5,7 +5,7 @@
 
 {% block content %}
 <!-- Service Header Banner -->
-<section class="page-header" style="background-image: url('{% static service.cover_image %}');">
+<section class="page-header" style="background-image: url('{% if service.cover_image %}{{ service.cover_image.url }}{% else %}{% static 'images/services/default-header.jpg' %}{% endif %}');">
     <div class="container">
         <div class="row">
             <div class="col-12 text-center text-white">
@@ -23,50 +23,7 @@
             <div class="col-lg-10">
                 <div class="card border-0 shadow-sm p-4">
                     <h2 class="fw-bold mb-4">About This Service</h2>
-                    <p class="lead mb-0">{{ service.description }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- What's Included Section -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="card border-0 shadow-sm p-4">
-                    <h2 class="fw-bold mb-4">What's Included</h2>
-                    <div class="row">
-                        {% with total_features=service.features.count %}
-                        {% with half_features=total_features|intdiv:2 %}
-                        <div class="col-md-6">
-                            <ul class="list-unstyled">
-                                {% for feature in service.features.all|slice:":half_features" %}
-                                <li class="mb-3">
-                                    <div class="d-flex">
-                                        <i class="fas fa-check-circle text-primary me-2 mt-1"></i>
-                                        <span>{{ feature.feature }}</span>
-                                    </div>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <ul class="list-unstyled">
-                                {% for feature in service.features.all|slice:"half_features:" %}
-                                <li class="mb-3">
-                                    <div class="d-flex">
-                                        <i class="fas fa-check-circle text-primary me-2 mt-1"></i>
-                                        <span>{{ feature.feature }}</span>
-                                    </div>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                        </div>
-                        {% endwith %}
-                        {% endwith %}
-                    </div>
+                    <p class="lead mb-0">{{ service.description|linebreaks }}</p>
                 </div>
             </div>
         </div>
@@ -74,7 +31,8 @@
 </section>
 
 <!-- Gallery Section with Tabs -->
-<section class="py-5">
+{% if media_by_category %}
+<section class="py-5 bg-light">
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="display-5 fw-bold mb-3">Portfolio</h2>
@@ -83,125 +41,99 @@
         
         <!-- Gallery Tabs -->
         <ul class="nav nav-pills justify-content-center mb-5" id="galleryTabs" role="tablist">
+            {% for category, media in media_by_category.items %}
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">All</button>
+                <button class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ category.slug }}" data-bs-toggle="pill" data-bs-target="#pane-{{ category.slug }}" type="button" role="tab" aria-controls="pane-{{ category.slug }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
+                    {{ category.name }}
+                </button>
             </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="photos-tab" data-bs-toggle="pill" data-bs-target="#photos" type="button" role="tab" aria-controls="photos" aria-selected="false">Photos</button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="videos-tab" data-bs-toggle="pill" data-bs-target="#videos" type="button" role="tab" aria-controls="videos" aria-selected="false">Videos</button>
-            </li>
+            {% endfor %}
         </ul>
         
         <!-- Gallery Content -->
         <div class="tab-content" id="galleryTabsContent">
-            <!-- All Tab -->
-            <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+            {% for category, media in media_by_category.items %}
+            <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="pane-{{ category.slug }}" role="tabpanel" aria-labelledby="tab-{{ category.slug }}">
                 <div class="row g-4">
-                    {% for i in "123456789012"|make_list %}
+                    <!-- Display Photos -->
+                    {% for photo in media.photos %}
                     <div class="col-lg-3 col-md-4 col-6">
-                        <div class="gallery-item position-relative">
-                            <img src="{% static 'images/services/'|add:service_slug|add:'/sample'|add:i|add:'.jpg' %}" alt="Gallery Image" class="img-fluid rounded shadow gallery-img">
-                            <div class="gallery-item-tag">
-                                <span class="badge bg-primary">{{ service_slug|title }}</span>
+                        <a href="{{ photo.image.url }}" class="glightbox" data-gallery="service-gallery">
+                            <div class="gallery-item position-relative">
+                                <img src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
+                                <div class="gallery-item-tag">
+                                    <span class="badge bg-primary">{{ photo.category.name }}</span>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     {% endfor %}
-                </div>
-            </div>
-            
-            <!-- Photos Tab -->
-            <div class="tab-pane fade" id="photos" role="tabpanel" aria-labelledby="photos-tab">
-                <div class="row g-4">
-                    {% for i in "12345678"|make_list %}
-                    <div class="col-lg-3 col-md-4 col-6">
-                        <div class="gallery-item position-relative">
-                            <img src="{% static 'images/services/'|add:service_slug|add:'/sample'|add:i|add:'.jpg' %}" alt="Photo" class="img-fluid rounded shadow gallery-img">
-                            <div class="gallery-item-tag">
-                                <span class="badge bg-primary">Photo</span>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-            
-            <!-- Videos Tab -->
-            <div class="tab-pane fade" id="videos" role="tabpanel" aria-labelledby="videos-tab">
-                <div class="row g-4">
-                    {% for i in "9101112"|make_list %}
-                    <div class="col-lg-3 col-md-4 col-6">
-                        <div class="gallery-item position-relative">
-                            <img src="{% static 'images/services/'|add:service_slug|add:'/sample'|add:i|add:'.jpg' %}" alt="Video Thumbnail" class="img-fluid rounded shadow gallery-img">
-                            <div class="gallery-item-tag">
-                                <span class="badge bg-primary">Video</span>
-                            </div>
-                            <div class="video-play-icon">
-                                <i class="fas fa-play-circle"></i>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- Pricing Section -->
-<section class="py-5 bg-light">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3">Pricing</h2>
-            <p class="lead text-muted mb-0">Flexible packages to meet your needs</p>
-        </div>
-        
-        <div class="row g-4 justify-content-center">
-            {% for package in service.packages.all %}
-            <div class="col-lg-4 col-md-6">
-                <div class="card pricing-card h-100 border-0 shadow text-center {% if package.is_highlighted %}border border-primary border-2{% endif %}">
-                    <div class="card-header bg-white pt-4 border-0">
-                        <h4 class="fw-bold">{{ package.name }}</h4>
-                        <h2 class="display-5 fw-bold text-primary">{{ package.price }}</h2>
+                    <!-- Display Videos -->
+                    {% for video in media.videos %}
+                    <div class="col-lg-3 col-md-4 col-6">
+                        <a href="{{ video.video_file.url }}" class="glightbox" data-gallery="service-gallery" data-title="{{ video.title }}">
+                            <div class="gallery-item position-relative">
+                                {% if video.thumbnail %}
+                                <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="img-fluid rounded shadow gallery-img">
+                                {% else %}
+                                <div class="img-fluid rounded shadow gallery-img d-flex align-items-center justify-content-center" style="background-color: #343a40; color: white; height: 100%;">
+                                    <span>{{ video.title }}</span>
+                                </div>
+                                {% endif %}
+                                <div class="video-play-icon">
+                                    <i class="fas fa-play-circle"></i>
+                                </div>
+                                <div class="gallery-item-tag">
+                                    <span class="badge bg-primary">{{ video.category.name }}</span>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                    <div class="card-body d-flex flex-column">
-                        <p class="mb-4">{{ package.description }}</p>
-                        <ul class="list-unstyled mb-4">
-                            {% for feature in package.features.all %}
-                            <li class="mb-2">
-                                <i class="fas fa-check text-primary me-2"></i> {{ feature.feature }}
-                            </li>
-                            {% endfor %}
-                        </ul>
-                        <a href="#" class="btn btn-outline-primary mt-auto py-2">Select Package</a>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
             {% endfor %}
         </div>
     </div>
 </section>
+{% endif %}
 
-<!-- Book Now CTA Section -->
-<section class="py-5 bg-primary text-white">
-    <div class="container text-center">
-        <h2 class="display-5 fw-bold mb-4">Ready to Book Your Session?</h2>
-        <p class="lead mb-5">Let's create beautiful memories together. Contact me today to check availability.</p>
-        <a href="#" class="btn btn-light text-primary px-4 py-2 fw-bold btn-lg">
-            Book Now
-            <i class="fas fa-arrow-right ms-2"></i>
-        </a>
+
+<!-- Call to Action Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="modern-cta-section text-center p-5 rounded-3" style="background-color: var(--background-light);">
+                    <h3 class="fw-bold mb-3">Ready to Start Your Project?</h3>
+                    <p class="lead text-muted mb-4">Let's discuss how we can help bring your creative vision to life with professional quality and artistic flair.</p>
+                    
+                    <div class="d-flex justify-content-center gap-3 flex-wrap">
+                        <a href="{% url 'contact' %}" class="btn btn-primary px-4 py-3">
+                            <i class="fas fa-calendar me-2"></i>Book Consultation
+                        </a>
+                        <a href="{% url 'services' %}" class="btn btn-outline-primary px-4 py-3">
+                            View All Services
+                            <i class="fas fa-arrow-right ms-2"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 {% endblock %}
 
 {% block extra_js %}
-<script>
-    // Add any JavaScript specific to the service detail page
-    document.addEventListener('DOMContentLoaded', function() {
-        // Initialize any components if needed
+<!-- GLightbox CSS and JS for gallery popups -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+<script type="text/javascript">
+    const lightbox = GLightbox({
+        selector: '.glightbox',
+        loop: true,
+        touchNavigation: true,
     });
 </script>
 {% endblock %} 

@@ -1,34 +1,31 @@
 from django.contrib import admin
-from .models import Category, Tag, Photo, Video, Service, ServiceFeature, PricingPackage, PackageFeature
+from django.utils.html import format_html
+from .models import Category, Tag, Photo, Video, Service
 
-class ServiceFeatureInline(admin.TabularInline):
-    model = ServiceFeature
-    extra = 3
 
-class PricingPackageInline(admin.TabularInline):
-    model = PricingPackage
-    extra = 1
 
-class PackageFeatureInline(admin.TabularInline):
-    model = PackageFeature
-    extra = 4
+class PhotoAdmin(admin.ModelAdmin):
+    list_display = ('image_preview', 'title', 'category', 'date_uploaded')
+    list_filter = ('category', 'tags')
+    search_fields = ('title', 'description')
+    readonly_fields = ('image_preview',)
+
+    def image_preview(self, obj):
+        if obj.thumbnail:
+            return format_html('<img src="{}" style="height: 50px; width: auto;" />', obj.thumbnail.url)
+        return "No Thumbnail"
+    image_preview.short_description = 'Thumbnail'
 
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ('title', 'slug', 'is_active', 'order')
     list_filter = ('is_active',)
     search_fields = ('title', 'description')
     prepopulated_fields = {'slug': ('title',)}
-    inlines = [ServiceFeatureInline, PricingPackageInline]
-
-class PricingPackageAdmin(admin.ModelAdmin):
-    list_display = ('name', 'service', 'price', 'order', 'is_highlighted')
-    list_filter = ('service', 'is_highlighted')
-    inlines = [PackageFeatureInline]
+    filter_horizontal = ('categories',)
 
 # Register models
 admin.site.register(Category)
 admin.site.register(Tag)
-admin.site.register(Photo)
+admin.site.register(Photo, PhotoAdmin)
 admin.site.register(Video)
 admin.site.register(Service, ServiceAdmin)
-admin.site.register(PricingPackage, PricingPackageAdmin)

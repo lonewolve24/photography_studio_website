@@ -156,6 +156,17 @@ body.is-homepage {
     color: var(--white);
 }
 
+.btn-accent {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--white);
+}
+
+.btn-accent:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+
 .text-primary {
     color: var(--primary-color) !important;
 }
@@ -1618,4 +1629,74 @@ body.is-homepage {
 
 .services-section-bg {
     background-color: var(--background-light) !important;
+}
+
+/* ====== Detailed Service Cards (Services Page) ====== */
+.service-card-detailed {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+    height: 100%;
+}
+
+.service-card-detailed:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.1);
+}
+
+.service-card-detailed .card-img-container {
+    position: relative;
+    height: 300px;
+}
+
+.service-card-detailed .card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.service-card-detailed .card-img-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s ease;
+}
+
+.service-card-detailed:hover .card-img-overlay {
+    background-color: rgba(16, 52, 76, 0.7); /* Darker blue on hover */
+}
+
+.service-card-detailed .card-title-overlay {
+    font-weight: 700;
+    font-size: 1.75rem;
+}
+
+.service-card-detailed .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.service-card-detailed .tags-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.service-card-detailed .tags-section .badge {
+    padding: 0.5em 0.75em;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.service-card-detailed .list-unstyled {
+    margin-bottom: 1.5rem;
+}
+
+.service-card-detailed .list-unstyled li {
+    margin-bottom: 0.5rem;
+}
+
+.service-card-detailed .btn {
+    margin-top: auto; /* Pushes button to the bottom */
 }

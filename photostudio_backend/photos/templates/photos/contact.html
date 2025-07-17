@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Contact Me - PhotoStudio{% endblock %}
+
+{% block content %}
+<!-- Contact Header Banner -->
+<section class="page-header" style="background-color: var(--primary-color);">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="display-3 fw-bold mb-3" style="color: white !important;">Contact Me</h1>
+                <p class="lead mb-0" style="color: white !important;">I'd love to hear from you. Let's create something beautiful together.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Form Section -->
+<section class="py-5 my-5">
+    <div class="container">
+        <div class="row g-5">
+            <!-- Get In Touch Column -->
+            <div class="col-lg-5">
+                <h2 class="fw-bold mb-4">Get In Touch</h2>
+                
+                <div class="d-flex mb-4">
+                    <i class="fas fa-map-marker-alt fa-2x text-primary me-3"></i>
+                    <div>
+                        <h5 class="fw-bold">Studio Location</h5>
+                        <p class="text-muted mb-0">123 Photography Lane<br>Creative District<br>New York, NY 10001</p>
+                    </div>
+                </div>
+
+                <div class="d-flex mb-4">
+                    <i class="fas fa-envelope fa-2x text-primary me-3"></i>
+                    <div>
+                        <h5 class="fw-bold">Email</h5>
+                        <a href="mailto:hello@photographyname.com" class="text-decoration-none text-muted">hello@photographyname.com</a>
+                    </div>
+                </div>
+
+                <div class="d-flex mb-4">
+                    <i class="fas fa-phone fa-2x text-primary me-3"></i>
+                    <div>
+                        <h5 class="fw-bold">Phone</h5>
+                        <a href="tel:1234567890" class="text-decoration-none text-muted">(123) 456-7890</a>
+                    </div>
+                </div>
+
+                <div class="d-flex mb-4">
+                    <i class="fas fa-clock fa-2x text-primary me-3"></i>
+                    <div>
+                        <h5 class="fw-bold">Business Hours</h5>
+                        <p class="text-muted mb-0">Monday - Friday: 9am - 6pm</p>
+                        <p class="text-muted mb-0">Saturday: 10am - 4pm</p>
+                        <p class="text-muted mb-0">Sunday: Closed</p>
+                    </div>
+                </div>
+
+                <h5 class="fw-bold mt-5 mb-3">Follow Me</h5>
+                <div>
+                    <a href="#" class="text-decoration-none me-3"><i class="fab fa-instagram fa-2x text-muted"></i></a>
+                    <a href="#" class="text-decoration-none me-3"><i class="fab fa-facebook fa-2x text-muted"></i></a>
+                    <a href="#" class="text-decoration-none me-3"><i class="fab fa-twitter fa-2x text-muted"></i></a>
+                    <a href="#" class="text-decoration-none"><i class="fab fa-linkedin fa-2x text-muted"></i></a>
+                </div>
+            </div>
+
+            <!-- Send a Message Column -->
+            <div class="col-lg-7">
+                <h2 class="fw-bold mb-4">Send a Message</h2>
+                <form action="#" method="post">
+                    {% csrf_token %}
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Your name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="your.email@example.com" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="phone" class="form-label">Phone (Optional)</label>
+                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Your phone number">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="service" class="form-label">Service Interest</label>
+                            <select class="form-select" id="service" name="service">
+                                <option selected>Select a service</option>
+                                <option value="video-production">Video Production</option>
+                                <option value="photography-services">Photography Services</option>
+                                <option value="graphic-design">Graphic Design</option>
+                                <option value="voiceover-recording">Voiceover Recording</option>
+                            </select>
+                        </div>
+                        <div class="col-12">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell me about your project and requirements..." required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary px-4 py-2">Send Message</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Map Section -->
+<section class="py-5 my-5 bg-light">
+    <div class="container">
+        <div class="text-center">
+            <h2 class="fw-bold mb-4">Map will be displayed here</h2>
+            <!-- In a real project, you would embed a map here using Google Maps or another service -->
+            <div style="height: 400px; background-color: #e9ecef;" class="d-flex align-items-center justify-content-center rounded">
+                <p class="text-muted">Map Placeholder</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %} 
