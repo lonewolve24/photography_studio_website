@@ -11,10 +11,10 @@
             <div class="carousel-item active">
                 <div class="hero-slide" style="background-image: url('{% static 'images/services/hero_images/hero_image1.jpg' %}');">
                     <div class="container hero-content text-center">
-                        <h1 class="display-3 fw-bold mb-3">Capturing Life's Precious Moments</h1>
+                        <h1 class="display-3 fw-bold mb-3" style="color: var(--accent-color) !important;">Capturing Life's Precious Moments</h1>
                         <p class="lead mb-4">Professional photography services for weddings, portraits, events, and more</p>
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="#" class="btn btn-primary px-4 py-2">Book a Session</a>
+                            <a href="#" class="btn btn-accent px-4 py-2">Book a Session</a>
                             <a href="#" class="btn btn-outline-light px-4 py-2">View Services</a>
                         </div>
                     </div>
@@ -23,7 +23,7 @@
             <div class="carousel-item">
                 <div class="hero-slide" style="background-image: url('{% static 'images/services/hero_images/hero_image2.jpg' %}');">
                     <div class="container hero-content text-center">
-                        <h1 class="display-3 fw-bold mb-3">Wedding Photography</h1>
+                        <h1 class="display-3 fw-bold mb-3" style="color: var(--accent-color) !important;">Wedding Photography</h1>
                         <p class="lead mb-4">Preserving your special day with timeless, elegant imagery</p>
                         <div class="d-flex justify-content-center gap-3">
                             <a href="#" class="btn btn-primary px-4 py-2">Book Now</a>
@@ -35,10 +35,10 @@
             <div class="carousel-item">
                 <div class="hero-slide" style="background-image: url('{% static 'images/services/hero_images/hero_image3.jpg' %}');">
                     <div class="container hero-content text-center">
-                        <h1 class="display-3 fw-bold mb-3">Portrait Excellence</h1>
+                        <h1 class="display-3 fw-bold mb-3" style="color: var(--accent-color) !important;">Portrait Excellence</h1>
                         <p class="lead mb-4">Showcasing your unique personality through artful portraiture</p>
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="#" class="btn btn-primary px-4 py-2">Book a Session</a>
+                            <a href="#" class="btn btn-accent px-4 py-2">Book a Session</a>
                             <a href="#" class="btn btn-outline-light px-4 py-2">See Portfolio</a>
                         </div>
                     </div>
@@ -206,45 +206,33 @@
 <section class="py-5 my-5">
     <div class="container">
         <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3">My Work</h2>
-            <p class="lead text-muted">A selection of my favorite projects and photographs</p>
+            <h2 class="display-5 fw-bold mb-3">Featured Work</h2>
+            <p class="lead text-muted">A glimpse into my creative portfolio</p>
         </div>
         
         <div class="row g-4">
-            <!-- Gallery images - first row -->
-            <div class="col-sm-6 col-lg-3">
-                <img src="{% static 'images/gallery/image1.jpg' %}" alt="Photography" class="gallery-img">
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <img src="{% static 'images/gallery/image2.jpg' %}" alt="Photography" class="gallery-img">
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <img src="{% static 'images/gallery/image3.jpg' %}" alt="Photography" class="gallery-img">
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <img src="{% static 'images/gallery/image4.jpg' %}" alt="Photography" class="gallery-img">
-            </div>
-            
-            <!-- Gallery images - second row -->
-            <div class="col-sm-6 col-lg-3">
-                <img src="{% static 'images/gallery/image5.jpg' %}" alt="Photography" class="gallery-img">
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <img src="{% static 'images/gallery/image6.jpg' %}" alt="Photography" class="gallery-img">
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <img src="{% static 'images/gallery/image7.jpg' %}" alt="Photography" class="gallery-img">
-            </div>
-            <div class="col-sm-6 col-lg-3">
-                <img src="{% static 'images/gallery/image8.jpg' %}" alt="Photography" class="gallery-img">
-            </div>
+            {% if latest_photos %}
+                {% for photo in latest_photos %}
+                <div class="col-lg-4 col-md-6">
+                    <a href="{{ photo.image.url }}" class="glightbox" data-gallery="home-gallery">
+                        <div class="gallery-item position-relative">
+                            <img src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
+                            <div class="gallery-item-tag">
+                                <span class="badge bg-primary">{{ photo.category.name }}</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <p class="text-center text-muted">No photos have been uploaded yet.</p>
+                </div>
+            {% endif %}
         </div>
         
         <div class="text-center mt-5">
-            <a href="#" class="btn btn-primary px-4">
-                View Full Gallery
-                <i class="fas fa-arrow-right ms-2"></i>
-            </a>
+            <a href="#" class="btn btn-outline-primary px-4 py-2">View Full Gallery</a>
         </div>
     </div>
 </section>
@@ -418,10 +406,14 @@
 
 
 {% block extra_js %}
-<script>
-    // Initialize Bootstrap components if needed
-    document.addEventListener('DOMContentLoaded', function() {
-        // Any additional JavaScript for the home page
+<!-- GLightbox CSS and JS for gallery popups -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+<script type="text/javascript">
+    const lightbox = GLightbox({
+        selector: '.glightbox',
+        loop: true,
+        touchNavigation: true,
     });
 </script>
 {% endblock %}

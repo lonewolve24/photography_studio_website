@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gallery - PhotoStudio{% endblock %}
+
+{% block content %}
+<!-- New Gallery Header Banner -->
+<section class="gallery-banner-v2">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-center">
+                <img src="{% static 'images/services/logo/shotz_logo.jpg' %}" alt="Shotz Logo" class="gallery-banner-logo">
+            </div>
+            <div class="col-lg-6">
+                {% if banner_photos.count >= 5 %}
+                <div class="simple-collage-container">
+                    {% for photo in banner_photos %}
+                    <div class="simple-collage-item item-{{ forloop.counter }}">
+                        <img src="{{ photo.image.url }}" alt="Collage image {{ forloop.counter }}">
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Gallery Section -->
+<section class="py-5 my-5">
+    <div class="container">
+        <!-- Filter Buttons -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <a href="{% url 'gallery_v2' %}" class="btn {% if not category_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">All</a>
+                {% for category in categories %}
+                <a href="?category={{ category.slug }}" class="btn {% if category_filter == category.slug %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ category.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Photo Grid -->
+        <div class="row g-4">
+            {% for photo in page_obj %}
+            <div class="col-lg-4 col-md-6">
+                <a href="{{ photo.image.url }}" class="glightbox" data-gallery="portfolio-gallery" data-title="{{ photo.title }}">
+                    <div class="gallery-item position-relative">
+                        <img src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
+                        <div class="gallery-item-tag">
+                            <span class="badge bg-primary">{{ photo.category.name }}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="lead text-muted">No photos found for this category.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if category_filter %}&category={{ category_filter }}{% endif %}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo; Previous</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if category_filter %}&category={{ category_filter }}{% endif %}" aria-label="Next">
+                        <span aria-hidden="true">Next &raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<!-- GLightbox CSS and JS for gallery popups -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+<script type="text/javascript">
+    const lightbox = GLightbox({
+        selector: '.glightbox',
+        loop: true,
+        touchNavigation: true,
+    });
+</script>
+
+<style>
+.gallery-banner-v2 {
+    background-color: var(--background-light);
+    padding: 2rem 0;
+    overflow: hidden;
+    min-height: 450px;
+    display: flex;
+    align-items: center;
+}
+.gallery-banner-logo {
+    max-width: 300px;
+    height: auto;
+}
+.simple-collage-container {
+    position: relative;
+    height: 400px;
+    perspective: 1000px;
+}
+.simple-collage-item {
+    position: absolute;
+    width: 220px;
+    height: 160px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    border: 6px solid white;
+    transition: all 0.4s ease-in-out;
+}
+.simple-collage-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Initial positioning for 5 items, classic collage */
+.item-1 { top: 10%; left: 0%; transform: rotate(-15deg); }
+.item-2 { top: 50%; left: 15%; z-index: 2; transform: rotate(8deg); }
+.item-3 { top: 20%; left: 40%; z-index: 3; transform: rotate(-5deg); } /* Centerpiece */
+.item-4 { top: 5%; left: 70%; z-index: 1; transform: rotate(12deg); }
+.item-5 { top: 55%; left: 60%; z-index: 2; transform: rotate(-8deg); }
+
+/* Animation on hover */
+.simple-collage-container:hover .item-1 { transform: rotate(-20deg) translate(-20px, -15px); }
+.simple-collage-container:hover .item-2 { transform: rotate(12deg) translate(10px, 15px); }
+.simple-collage-container:hover .item-3 { transform: rotate(-2deg) scale(1.05); } /* Centerpiece moves less */
+.simple-collage-container:hover .item-4 { transform: rotate(18deg) translate(20px, -15px); }
+.simple-collage-container:hover .item-5 { transform: rotate(-12deg) translate(-10px, 15px); }
+
+@media (max-width: 991px) {
+    .gallery-banner-logo {
+        margin-bottom: 2rem;
+    }
+    .simple-collage-container {
+        transform: scale(0.8) translateX(-10%);
+    }
+}
+
+</style>
+{% endblock %} 

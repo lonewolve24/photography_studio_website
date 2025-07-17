@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Gallery - PhotoStudio{% endblock %}
+
+{% block content %}
+<!-- Gallery Header Banner -->
+<section class="page-header" style="background-color: var(--secondary-color);">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="display-3 fw-bold mb-3" style="color: white !important;">Gallery</h1>
+                <p class="lead mb-0" style="color: white !important;">Explore my full portfolio of work.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Gallery Section -->
+<section class="py-5 my-5">
+    <div class="container">
+        <!-- Filter Buttons -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <a href="{% url 'gallery' %}" class="btn {% if not category_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">All</a>
+                {% for category in categories %}
+                <a href="?category={{ category.slug }}" class="btn {% if category_filter == category.slug %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ category.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Photo Grid -->
+        <div class="row g-4">
+            {% for photo in page_obj %}
+            <div class="col-lg-4 col-md-6 col-6">
+                <a href="{{ photo.image.url }}" class="glightbox" data-gallery="portfolio-gallery" data-title="{{ photo.title }}">
+                    <div class="gallery-item position-relative">
+                        <img src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
+                        <div class="gallery-item-tag">
+                            <span class="badge bg-primary">{{ photo.category.name }}</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="lead text-muted">No photos found for this category.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation" class="mt-5">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if category_filter %}&category={{ category_filter }}{% endif %}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo; Previous</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if category_filter %}&category={{ category_filter }}{% endif %}" aria-label="Next">
+                        <span aria-hidden="true">Next &raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<!-- GLightbox CSS and JS for gallery popups -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+<script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+<script type="text/javascript">
+    const lightbox = GLightbox({
+        selector: '.glightbox',
+        loop: true,
+        touchNavigation: true,
+    });
+</script>
+{% endblock %} 

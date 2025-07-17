@@ -20,8 +20,11 @@ body {
     font-family: 'Poppins', sans-serif;
     background-color: var(--white);
     color: var(--text-light);
-    padding-top: 0; /* Initially no padding as navbar is headless */
+    padding-top: 84px; /* Default for all pages, creates space for fixed nav */
     transition: padding-top 0.3s ease;
+}
+body.is-homepage {
+    padding-top: 0; /* Homepage hero starts at the very top */
 }
 
 body.scrolled {
@@ -32,9 +35,76 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     color: var(--text-dark);
 }
 
+/* --- Body Padding --- */
+body {
+    padding-top: 84px; /* Creates space for the fixed nav on all pages */
+}
+body.is-homepage {
+    padding-top: 0; /* Homepage hero starts at the top, no padding needed */
+}
+
+/* ====== Default Solid Navbar (for all pages except homepage) ====== */
+.navbar-default {
+    background-color: var(--white) !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+.navbar-default .logo-white { display: none; }
+.navbar-default .logo-dark { display: inline-block; }
+.navbar-default .brand-text { color: var(--text-dark); }
+.navbar-default .navbar-nav .nav-link { color: var(--text-dark); }
+.navbar-default .btn-book-now {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--white);
+}
+.navbar-default .btn-book-now:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+.navbar-default .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0, 0, 0, 0.55)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+
+/* ====== Homepage Navbar (Transparent on top, solid on scroll) ====== */
+/* --- Initial Transparent State --- */
+.navbar-homepage {
+    background-color: transparent;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+.navbar-homepage .logo-white { display: inline-block; }
+.navbar-homepage .logo-dark { display: none; }
+.navbar-homepage .brand-text { color: var(--white); }
+.navbar-homepage .navbar-nav .nav-link { color: var(--white); opacity: 0.85; }
+.navbar-homepage .navbar-nav .nav-link:hover,
+.navbar-homepage .navbar-nav .nav-link.active { opacity: 1; }
+.navbar-homepage .btn-book-now {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--white);
+}
+.navbar-homepage .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255, 255, 255, 0.85)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* --- Scrolled State (becomes solid white) --- */
+.navbar-homepage.scrolled {
+    background-color: var(--white) !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+.navbar-homepage.scrolled .logo-white { display: none; }
+.navbar-homepage.scrolled .logo-dark { display: inline-block; }
+.navbar-homepage.scrolled .brand-text { color: var(--text-dark); }
+.navbar-homepage.scrolled .navbar-nav .nav-link { color: var(--text-dark); opacity: 1; }
+.navbar-homepage.scrolled .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0, 0, 0, 0.55)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
 /* ====== Navigation ====== */
 .navbar {
     transition: all 0.3s ease;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
 }
 
 .navbar.headless {
@@ -84,6 +154,17 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     background-color: var(--primary-color);
     border-color: var(--primary-color);
     color: var(--white);
+}
+
+.btn-accent {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--white);
+}
+
+.btn-accent:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
 }
 
 .text-primary {
@@ -1548,4 +1629,74 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 .services-section-bg {
     background-color: var(--background-light) !important;
+}
+
+/* ====== Detailed Service Cards (Services Page) ====== */
+.service-card-detailed {
+    border: 1px solid #dee2e6;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+    height: 100%;
+}
+
+.service-card-detailed:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.1);
+}
+
+.service-card-detailed .card-img-container {
+    position: relative;
+    height: 300px;
+}
+
+.service-card-detailed .card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.service-card-detailed .card-img-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    transition: background-color 0.3s ease;
+}
+
+.service-card-detailed:hover .card-img-overlay {
+    background-color: rgba(16, 52, 76, 0.7); /* Darker blue on hover */
+}
+
+.service-card-detailed .card-title-overlay {
+    font-weight: 700;
+    font-size: 1.75rem;
+}
+
+.service-card-detailed .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.service-card-detailed .tags-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.service-card-detailed .tags-section .badge {
+    padding: 0.5em 0.75em;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.service-card-detailed .list-unstyled {
+    margin-bottom: 1.5rem;
+}
+
+.service-card-detailed .list-unstyled li {
+    margin-bottom: 0.5rem;
+}
+
+.service-card-detailed .btn {
+    margin-top: auto; /* Pushes button to the bottom */
 }
