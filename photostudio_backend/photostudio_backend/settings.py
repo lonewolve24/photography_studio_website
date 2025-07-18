@@ -29,7 +29,7 @@ DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
 CSRF_TRUSTED_ORIGINS = ['https://photographystudiowebsite-production.up.railway.app']
 
-ALLOWED_HOSTS = ['photographystudiowebsite-production.up.railway.app', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 CSRF_TRUSTED_ORIGINS = ['https://photographystudiowebsite-production.up.railway.app']
 
