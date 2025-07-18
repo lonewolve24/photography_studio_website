@@ -27,11 +27,9 @@ SECRET_KEY = 'django-insecure-mx+gia=)s5m+yv!+-^()lsrn-as)rdcl$^rfko8lo0xwk(0u@9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-CSRF_TRUSTED_ORIGINS = ['https://photographystudiowebsite-production.up.railway.app']
+CSRF_TRUSTED_ORIGINS = ['https://photographystudiowebsite-production.up.railway.app', 'http://127.0.0.1:8080']
 
 ALLOWED_HOSTS = ['*']
-
-CSRF_TRUSTED_ORIGINS = ['https://photographystudiowebsite-production.up.railway.app']
 
 # Application definition
 
@@ -177,3 +175,24 @@ else:
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
+    },
+}
