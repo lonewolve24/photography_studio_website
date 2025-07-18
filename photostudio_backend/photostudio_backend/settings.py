@@ -27,6 +27,8 @@ SECRET_KEY = 'django-insecure-mx+gia=)s5m+yv!+-^()lsrn-as)rdcl$^rfko8lo0xwk(0u@9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
+CSRF_TRUSTED_ORIGINS = ['https://photographystudiowebsite-production.up.railway.app']
+
 ALLOWED_HOSTS = ['photographystudiowebsite-production.up.railway.app', '127.0.0.1']
 
 CSRF_TRUSTED_ORIGINS = ['https://photographystudiowebsite-production.up.railway.app']
@@ -136,9 +138,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
-]
+
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = 'static/'
