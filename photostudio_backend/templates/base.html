@@ -56,7 +56,7 @@
                         <a class="nav-link {% if 'contact' in request.path %}active{% endif %}" href="{% url 'contact' %}">Contact</a>
                     </li>
                 </ul>
-                <a href="#" class="btn btn-primary ms-lg-3 btn-book-now">Book Now</a>
+                <a href="{% url 'contact' %}" class="btn btn-primary ms-lg-3 btn-book-now">Book Now</a>
             </div>
         </div>
     </nav>

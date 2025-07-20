@@ -53,7 +53,13 @@
                             <li class="col-md-6"><i class="fas fa-check-circle text-primary me-2"></i>Professional lighting</li>
                             <li class="col-md-6"><i class="fas fa-check-circle text-primary me-2"></i>Multi-camera setups</li>
                         </ul>
-                        <a href="#" class="btn btn-primary mt-3">Explore Video Production <i class="fas fa-arrow-right ms-2"></i></a>
+                        {% for service in services %}
+                        {% if service.title == "Video Production" %}
+            
+                        <a href="{% url 'service_detail' service.slug %}" class="btn btn-primary mt-3">Explore Video Production <i class="fas fa-arrow-right ms-2"></i></a>
+
+                        {% endif %}
+                    {% endfor %}
                     </div>
                 </div>
             </div>
@@ -87,7 +93,12 @@
                             <li class="col-md-6"><i class="fas fa-check-circle text-primary me-2"></i>On-location & studio shoots</li>
                             <li class="col-md-6"><i class="fas fa-check-circle text-primary me-2"></i>Same-day preview galleries</li>
                         </ul>
-                        <a href="#" class="btn btn-primary mt-3">Explore Photography Services <i class="fas fa-arrow-right ms-2"></i></a>
+                        {% for service in services %}
+                        {% if service.title == "Photography" %}
+            
+                        <a href="{% url 'service_detail' service.slug %}" class="btn btn-primary mt-3">Explore Photography <i class="fas fa-arrow-right ms-2"></i></a>
+                        {% endif %}
+                        {% endfor %}
                     </div>
                 </div>
             </div>
@@ -121,7 +132,13 @@
                             <li class="col-md-6"><i class="fas fa-check-circle text-primary me-2"></i>Logo design & branding</li>
                             <li class="col-md-6"><i class="fas fa-check-circle text-primary me-2"></i>Marketing collateral</li>
                         </ul>
-                        <a href="#" class="btn btn-primary mt-3">Explore Graphic Design <i class="fas fa-arrow-right ms-2"></i></a>
+                        {% for service in services %}
+                        {% if service.title == "Graphic Design" %}
+            
+                        <a href="{% url 'service_detail' service.slug %}" class="btn btn-primary mt-3">Explore Graphic Design <i class="fas fa-arrow-right ms-2"></i></a>
+
+                        {% endif %}
+                    {% endfor %}
                     </div>
                 </div>
             </div>
@@ -155,7 +172,12 @@
                             <li class="col-md-6"><i class="fas fa-check-circle text-primary me-2"></i>Script consultation</li>
                             <li class="col-md-6"><i class="fas fa-check-circle text-primary me-2"></i>Fast turnaround times</li>
                         </ul>
-                        <a href="#" class="btn btn-primary mt-3">Explore Voiceover Recording <i class="fas fa-arrow-right ms-2"></i></a>
+                        {% for service in services %}
+                        {% if service.title == "Voiceover Recording" %}
+            
+                            <a href="{% url 'service_detail' service.slug %}" class="btn btn-primary mt-3">Explore Voiceover Recording <i class="fas fa-arrow-right ms-2"></i></a>
+                        {% endif %}
+                    {% endfor %}
                     </div>
                 </div>
             </div>

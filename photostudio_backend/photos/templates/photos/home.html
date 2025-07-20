@@ -14,8 +14,8 @@
                         <h1 class="display-3 fw-bold mb-3" style="color: var(--accent-color) !important;">Capturing Life's Precious Moments</h1>
                         <p class="lead mb-4">Professional photography services for weddings, portraits, events, and more</p>
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="#" class="btn btn-accent px-4 py-2">Book a Session</a>
-                            <a href="#" class="btn btn-outline-light px-4 py-2">View Services</a>
+                            <a href="{% url 'contact'%}" class="btn btn-accent px-4 py-2">Book a Session</a>
+                            <a href="{% url 'services'%}" class="btn btn-outline-light px-4 py-2">View Services</a>
                         </div>
                     </div>
                 </div>
@@ -26,8 +26,8 @@
                         <h1 class="display-3 fw-bold mb-3" style="color: var(--accent-color) !important;">Wedding Photography</h1>
                         <p class="lead mb-4">Preserving your special day with timeless, elegant imagery</p>
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="#" class="btn btn-primary px-4 py-2">Book Now</a>
-                            <a href="#" class="btn btn-outline-light px-4 py-2">Learn More</a>
+                            <a href="{% url 'contact' %}" class="btn btn-primary px-4 py-2">Book Now</a>
+                            <a href="{% url 'about' %}" class="btn btn-outline-light px-4 py-2">Learn More</a>
                         </div>
                     </div>
                 </div>
@@ -38,8 +38,8 @@
                         <h1 class="display-3 fw-bold mb-3" style="color: var(--accent-color) !important;">Portrait Excellence</h1>
                         <p class="lead mb-4">Showcasing your unique personality through artful portraiture</p>
                         <div class="d-flex justify-content-center gap-3">
-                            <a href="#" class="btn btn-accent px-4 py-2">Book a Session</a>
-                            <a href="#" class="btn btn-outline-light px-4 py-2">See Portfolio</a>
+                            <a href="{% url 'contact' %}" class="btn btn-accent px-4 py-2">Book a Session</a>
+                            <a href="{% url 'gallery' %}" class="btn btn-outline-light px-4 py-2">See Portfolio</a>
                         </div>
                     </div>
                 </div>
@@ -69,7 +69,7 @@
                 <p class="mb-3">With over 15 years of experience capturing life's most precious moments, I bring a blend of technical expertise and creative vision to every project.</p>
                 <p class="mb-3">My photography style balances candid documentary approach with fine art aesthetics, creating images that feel authentic while showcasing subjects in their best light.</p>
                 <p class="mb-4">I believe that exceptional photography is about more than just technical skill—it's about connecting with people and telling their unique stories through compelling visual narratives.</p>
-                <a href="#" class="btn btn-outline-primary px-4">
+                <a href="{% url 'about' %}" class="btn btn-outline-primary px-4">
                     Read My Story
                     <i class="fas fa-arrow-right ms-2"></i>
                 </a>
@@ -106,10 +106,14 @@
                         <li>Podcast Production</li>
                     </ul>
                     
-                    <a href="#" class="learn-more-btn">
-                        Learn More
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                    {% for service in services %}
+                        {% if service.title == "Video Production" %}
+                            <a href="{% url 'service_detail' service.slug %}" class="learn-more-btn">
+                                Learn More
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
             
@@ -128,10 +132,14 @@
                         <li>Private Sessions</li>
                     </ul>
                     
-                    <a href="#" class="learn-more-btn">
-                        Learn More
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                    {% for service in services %}
+                        {% if service.title == "Photography" %}
+                            <a href="{% url 'service_detail' service.slug %}" class="learn-more-btn">
+                                Learn More
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
             
@@ -150,10 +158,14 @@
                         <li>Logo Design</li>
                     </ul>
                     
-                    <a href="#" class="learn-more-btn">
-                        Learn More
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                    {% for service in services %}
+                        {% if service.title == "Graphic Design" %}
+                            <a href="{% url 'service_detail' service.slug %}" class="learn-more-btn">
+                                Learn More
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
             
@@ -172,10 +184,14 @@
                         <li>Podcast Intros</li>
                     </ul>
                     
-                    <a href="#" class="learn-more-btn">
-                        Learn More
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                    {% for service in services %}
+                        {% if service.title == "Voiceover Recording" %}
+                            <a href="{% url 'service_detail' service.slug %}" class="learn-more-btn">
+                                Learn More
+                                <i class="fas fa-arrow-right"></i>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
                 </div>
             </div>
         </div>
@@ -188,10 +204,10 @@
                     <p class="lead text-muted mb-4">Let's discuss how we can help bring your creative vision to life with professional quality and artistic flair.</p>
                     
                     <div class="d-flex justify-content-center gap-3 flex-wrap">
-                        <a href="#" class="btn btn-primary px-4 py-3">
+                        <a href="{% url 'contact' %}" class="btn btn-primary px-4 py-3">
                             <i class="fas fa-calendar me-2"></i>Book Consultation
                         </a>
-                        <a href="#" class="btn btn-outline-primary px-4 py-3">
+                        <a href="{% url 'gallery' %}" class="btn btn-outline-primary px-4 py-3">
                             View All Work
                             <i class="fas fa-arrow-right ms-2"></i>
                         </a>

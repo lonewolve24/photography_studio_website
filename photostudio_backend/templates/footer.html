@@ -25,21 +25,27 @@
                 <h5 class="fw-bold mb-3">Quick Links</h5>
                 <ul class="list-unstyled">
                     <li class="mb-2"><a href="{% url 'home' %}" class="text-decoration-none text-muted">Home</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">About</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Services</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Gallery</a></li>
-                    <li><a href="#" class="text-decoration-none text-muted">Contact</a></li>
+                    <li class="mb-2"><a href="{% url 'about' %}" class="text-decoration-none text-muted">About</a></li>
+                    <li class="mb-2"><a href="{% url 'services' %}" class="text-decoration-none text-muted">Services</a></li>
+                    <li class="mb-2"><a href="{% url 'gallery' %}" class="text-decoration-none text-muted">Gallery</a></li>
+                    <li><a href="{% url 'contact' %}" class="text-decoration-none text-muted">Contact</a></li>
                 </ul>
             </div>
             
-            <div class="col-md-4 col-lg-3 mb-4 mb-md-0">
-                <h5 class="fw-bold mb-3">Services</h5>
+            <div class="col-lg-2 col-md-4 mb-4">
+                <h5 class="fw-bold mb-4">Services</h5>
                 <ul class="list-unstyled">
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Wedding Photography</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Portrait Photography</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Event Photography</a></li>
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Commercial Photography</a></li>
-                    <li><a href="#" class="text-decoration-none text-muted">Videography</a></li>
+                    {% for service in services %}
+                    {% if service.title == "Video Production" %}
+                    <li class="mb-2"><a href="{% url 'service_detail' service.slug %}" class="text-decoration-none text-muted">Video Production</a></li>
+                    {% elif service.title == "Photography" %}
+                    <li class="mb-2"><a href="{% url 'service_detail' service.slug %}" class="text-decoration-none text-muted">Photography</a></li>
+                    {% elif service.title == "Graphic Design"%}
+                    <li class="mb-2"><a href="{% url 'service_detail' service.slug %}" class="text-decoration-none text-muted">Graphic Design</a></li>
+                    {% elif service.title == "Voiceover Recording" %}
+                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Voiceover Recording</a></li>
+                    {% endif %}
+                    {% endfor %}
                 </ul>
             </div>
             

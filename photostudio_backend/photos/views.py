@@ -6,8 +6,10 @@ from .models import Photo, Service, Category,  Video
 # Create your views here.
 def home(request):
     latest_photos = Photo.objects.order_by('-date_uploaded')[:9]
+    services = Service.objects.filter(is_active=True)
     context = {
         'latest_photos': latest_photos,
+        'services': services,
     }
     return render(request, 'photos/home.html', context)
 
