@@ -31,22 +31,56 @@
 
         <!-- Photo Grid -->
         <div class="row g-4">
-            {% for photo in page_obj %}
-            <div class="col-lg-4 col-md-6 col-6">
-                <a href="{{ photo.image.url }}" class="glightbox" data-gallery="portfolio-gallery" data-title="{{ photo.title }}">
-                    <div class="gallery-item position-relative">
-                        <img src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
-                        <div class="gallery-item-tag">
-                            <span class="badge bg-primary">{{ photo.category.name }}</span>
-                        </div>
-                    </div>
+          {# Albums first #}
+          {% for album in albums %}
+            {% if album.cover_photo %}
+            <div class="col-lg-4 col-md-6">
+              <div class="album-card position-relative">
+                <a href="{{ album.cover_photo.image.url }}" class="glightbox d-block" data-gallery="album-{{ album.slug }}">
+                  {% if album.cover_photo.thumbnail %}
+                    <img src="{{ album.cover_photo.thumbnail.url }}" alt="{{ album.title }}" class="img-fluid album-img">
+                  {% else %}
+                    <img src="{{ album.cover_photo.image.url }}" alt="{{ album.title }}" class="img-fluid album-img">
+                  {% endif %}
                 </a>
+        
+                <div class="album-flag">
+                  <span class="album-flag-pill">{{ album.title }} Album </span>
+                </div>
+
+                <div class="album-dots">
+                  {% for p in album.photos.all|slice:":8" %}
+                    <span class="album-dot"></span>
+                  {% endfor %}
+                </div>
+        
+                {% for p in album.photos.all %}
+                  {% if p.pk != album.cover_photo.pk %}
+                    <a href="{{ p.image.url }}" class="glightbox" data-gallery="album-{{ album.slug }}"></a>
+                  {% endif %}
+                {% endfor %}
+              </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center">
-                <p class="lead text-muted">No photos found for this category.</p>
+            {% endif %}
+          {% endfor %}
+        
+          {# Standalone photos #}
+          {% for photo in standalone_photos %}
+            <div class="col-lg-4 col-md-6">
+              <a href="{{ photo.image.url }}" class="glightbox" data-gallery="standalone">
+                <div class="gallery-item position-relative">
+                  {% if photo.thumbnail %}
+                    <img src="{{ photo.thumbnail.url }}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
+                  {% else %}
+                    <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
+                  {% endif %}
+                  <div class="gallery-item-tag">
+                    <span class="badge bg-primary">{{ photo.category.name }}</span>
+                  </div>
+                </div>
+              </a>
             </div>
-            {% endfor %}
+          {% endfor %}
         </div>
 
         <!-- Pagination -->
@@ -80,10 +114,30 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
 <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
 <script type="text/javascript">
-    const lightbox = GLightbox({
-        selector: '.glightbox',
-        loop: true,
-        touchNavigation: true,
-    });
+     const lb = GLightbox({ selector: '.glightbox', loop: true, touchNavigation: true });
+
+  function buildDots(inst){
+    const container = document.querySelector('.glightbox-container');
+    if (!container) return;
+    // remove old
+    const old = container.querySelector('.glightbox-pagination');
+    if (old) old.remove();
+    // build new
+    const pag = document.createElement('div');
+    pag.className = 'glightbox-pagination';
+    const len = inst.elements.length;
+    for (let i=0;i<len;i++){
+      const d = document.createElement('span');
+      d.className = 'dot' + (i === inst.index ? ' active' : '');
+      pag.appendChild(d);
+    }
+    container.appendChild(pag);
+  }
+
+  lb.on('open', () => buildDots(lb));
+  lb.on('slide_changed', ({ current }) => {
+    const dots = document.querySelectorAll('.glightbox-pagination .dot');
+    dots.forEach((d,i) => d.classList.toggle('active', i === current.index));
+  });
 </script>
 {% endblock %} 

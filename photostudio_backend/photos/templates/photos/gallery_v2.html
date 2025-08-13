@@ -33,7 +33,7 @@
         <!-- Filter Buttons -->
         <div class="row mb-5">
             <div class="col-12 text-center">
-                <a href="{% url 'gallery_v2' %}" class="btn {% if not category_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">All</a>
+                <a href="{% url 'gallery' %}" class="btn {% if not category_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">All</a>
                 {% for category in categories %}
                 <a href="?category={{ category.slug }}" class="btn {% if category_filter == category.slug %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ category.name }}</a>
                 {% endfor %}
@@ -42,22 +42,71 @@
 
         <!-- Photo Grid -->
         <div class="row g-4">
-            {% for photo in page_obj %}
+          {# Albums first #}
+          {% for album in albums %}
+            {% if album.cover_photo and album.chunks %}
             <div class="col-lg-4 col-md-6">
-                <a href="{{ photo.image.url }}" class="glightbox" data-gallery="portfolio-gallery" data-title="{{ photo.title }}">
-                    <div class="gallery-item position-relative">
-                        <img src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
-                        <div class="gallery-item-tag">
-                            <span class="badge bg-primary">{{ photo.category.name }}</span>
-                        </div>
-                    </div>
+                <div class="album-card position-relative">
+
+                <a href="#album-{{ album.slug }}-chunk-1"
+                    class="glightbox d-block"
+                    data-type="inline"
+                    data-gallery="album-{{ album.slug }}">
+                    {% if album.cover_photo.thumbnail %}
+                    <img src="{{ album.cover_photo.thumbnail.url }}" alt="{{ album.title }}" class="img-fluid album-img">
+                    {% else %}
+                    <img src="{{ album.cover_photo.image.url }}" alt="{{ album.title }}" class="img-fluid album-img">
+                    {% endif %}
                 </a>
+
+                <div class="album-flag">
+                    <span class="album-flag-pill">{{ album.title }}</span>
+                </div>
+
+                {% for group in album.chunks %}
+                <div id="album-{{ album.slug }}-chunk-{{ forloop.counter }}" style="display:none;">
+                    <div class="album-chunk">
+                    <div class="album-chunk-grid">
+                        {% for p in group %}
+                        <div>
+                            {% if p.thumbnail %}
+                            <img src="{{ p.thumbnail.url }}" alt="{{ album.title }}">
+                            {% else %}
+                            <img src="{{ p.image.url }}" alt="{{ album.title }}">
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    </div>
+                </div>
+                {% if not forloop.first %}
+                    <a href="#album-{{ album.slug }}-chunk-{{ forloop.counter }}" class="glightbox" data-type="inline" data-gallery="album-{{ album.slug }}"></a>
+                {% endif %}
+                {% endfor %}
+
+                </div>
             </div>
-            {% empty %}
-            <div class="col-12 text-center">
-                <p class="lead text-muted">No photos found for this category.</p>
-            </div>
+            {% endif %}
             {% endfor %}
+
+        
+          {# Standalone photos #}
+          {% for photo in standalone_photos %}
+            <div class="col-lg-4 col-md-6">
+              <a href="{{ photo.image.url }}" class="glightbox" data-gallery="standalone">
+                <div class="gallery-item position-relative">
+                  {% if photo.thumbnail %}
+                    <img src="{{ photo.thumbnail.url }}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
+                  {% else %}
+                    <img src="{{ photo.image.url }}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
+                  {% endif %}
+                  <div class="gallery-item-tag">
+                    <span class="badge bg-primary">{{ photo.category.name }}</span>
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
         </div>
 
         <!-- Pagination -->

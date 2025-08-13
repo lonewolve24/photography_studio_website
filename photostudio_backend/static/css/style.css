@@ -199,7 +199,7 @@ body.is-homepage {
 .hero-slide {
     height: 100vh;
     min-height: 600px;
-    background-size: cover;
+    background-size: cover;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
     background-position: center;
     color: white;
     position: relative;
@@ -1640,6 +1640,7 @@ body.is-homepage {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     background-color: #fff;
     height: 100%;
+    z-index:2;
 }
 
 .service-card-detailed:hover {
@@ -1700,3 +1701,81 @@ body.is-homepage {
 .service-card-detailed .btn {
     margin-top: auto; /* Pushes button to the bottom */
 }
+
+.album-card{position:relative;}
+.album-img{width:100%;height:auto;display:block;border-radius:12px;aspect-ratio:1/1;object-fit:cover;}
+.album-flag{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  border-radius:12px;background:rgba(0,0,0,.25);color:#fff;opacity:1;
+  transition:background .2s;pointer-events:none;z-index:2;
+}
+.album-card:hover .album-flag{background:rgba(0,0,0,.5);}
+.album-flag-pill{
+  background:rgba(0,0,0,.6);border:1px solid rgba(255,255,255,.35);
+  padding:.4rem .9rem;border-radius:999px;font-weight:600;letter-spacing:.5px;
+  text-transform:uppercase;font-size:.85rem;
+}
+/* dots under overlay */
+.album-dots{
+    position:absolute; left:0; right:0; bottom:12px;
+    display:flex; justify-content:center; gap:6px;
+    z-index:3; pointer-events:none;
+  }
+  .album-dot{
+    width:8px; height:8px; border-radius:50%;
+    background:rgba(255,255,255,.85); border:1px solid rgba(0,0,0,.3);
+  }
+  .album-card:hover .album-dot{ background:#fff; }
+  
+  
+/* in-lightbox dots (pagination) */
+.glightbox-pagination{
+  position:absolute; left:0; right:0; bottom:16px;
+  display:flex; justify-content:center; gap:8px;
+  z-index:9999; pointer-events:none;
+}
+.glightbox-pagination .dot{
+  width:8px; height:8px; border-radius:50%;
+  background:rgba(255,255,255,.55); border:1px solid rgba(0,0,0,.25);
+}
+.glightbox-pagination .dot.active{ background:#fff; }
+
+
+.album-scroll{
+    display:flex; gap:10px; overflow-x:auto; -webkit-overflow-scrolling:touch;
+    scroll-snap-type:x mandatory; padding:8px; max-width:min(900px, 94vw); margin:0 auto;
+    max-height:80vh; align-items:center;
+  }
+  .album-scroll img{
+    flex:0 0 88vw; max-height:75vh; width:auto; height:auto;
+    object-fit:contain; border-radius:10px; scroll-snap-align:center; display:block;
+  }
+  
+  /* Dots inside mobile inline scroller */
+  .album-scroll-dots{
+    display:flex; justify-content:center; gap:8px; margin-top:10px;
+  }
+  .album-scroll-dots .dot{
+    width:8px; height:8px; border-radius:50%;
+    background:rgba(255,255,255,.55); border:1px solid rgba(0,0,0,.25);
+  }
+  .album-scroll-dots .dot.active{ background:#fff; }
+
+/* Mobile vertical stack inside inline lightbox */
+.album-stack{ display:block; max-width:min(900px, 94vw); margin:0 auto; }
+.album-stack-item{ margin-bottom:10px; }
+.album-stack-item img{ width:100%; height:auto; display:block; border-radius:10px; object-fit:cover; }
+
+.glightbox-clean .gcontrols{ z-index:10010!important; opacity:1!important; visibility:visible!important; display:flex!important; }
+.glightbox-clean .gbtn{ opacity:1!important; visibility:visible!important; display:flex!important; width:44px; height:44px; }
+.glightbox-clean .gbtn.gprev{ left:10px!important; }
+.glightbox-clean .gbtn.gnext{ right:10px!important; }
+  /* Ensure on touch devices too */
+  @media (hover: none){
+    .glightbox-clean .gcontrols,
+    .glightbox-clean .gcontrols .gbtn{
+      display: flex !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+    }
+  }

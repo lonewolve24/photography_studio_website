@@ -1,7 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseNotFound
 from django.core.paginator import Paginator
-from .models import Photo, Service, Category,  Video
+from .models import Photo, Service, Category,  Video, Album
+from django.db.models import Prefetch
+from django.db.models import Q
 
 # Create your views here.
 def home(request):
@@ -9,7 +11,6 @@ def home(request):
     services = Service.objects.filter(is_active=True)
     context = {
         'latest_photos': latest_photos,
-        'services': services,
     }
     return render(request, 'photos/home.html', context)
 
@@ -25,59 +26,68 @@ def contact(request):
     return render(request, 'photos/contact.html')
 
 def gallery(request):
-    """
-    Displays all photos with category filters and pagination.
-    """
-    # Get all photos and categories
-    photo_list = Photo.objects.order_by('-date_uploaded')
-    categories = Category.objects.all()
-    
-    # Filter by category if a category slug is provided in the URL
     category_filter = request.GET.get('category')
+
+    albums_qs = Album.objects.prefetch_related(
+        Prefetch('photos', queryset=Photo.objects.select_related('category').order_by('-date_uploaded')),
+        'tags',
+        'photos__category',
+        'cover_photo',
+    )
+    photos_qs = Photo.objects.select_related('category').filter(album__isnull=True).order_by('-date_uploaded')
+    
+    albums = list(albums_qs)  # materialize
+    for a in albums:
+        ps = list(a.photos.all())
+        a.chunks = [ps[i:i+4] for i in range(0, len(ps), 4)]
+
     if category_filter:
-        photo_list = photo_list.filter(category__slug=category_filter)
-        
-    # Set up pagination
-    paginator = Paginator(photo_list, 12)  # Show 12 photos per page
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    
+        albums_qs = albums_qs.filter(photos__category__slug=category_filter).distinct()
+        photos_qs = photos_qs.filter(category__slug=category_filter)
+
+    categories = Category.objects.all().order_by('name')
+
     context = {
-        'page_obj': page_obj,
+        'albums': albums_qs,
+        'standalone_photos': photos_qs,
         'categories': categories,
-        'category_filter': category_filter, # To keep track of the active filter
+        'category_filter': category_filter,
     }
-    
     return render(request, 'photos/gallery.html', context)
 
 def gallery_v2(request):
-    """
-    Second version of the gallery page with a custom banner.
-    """
-    photo_list = Photo.objects.order_by('-date_uploaded')
-    categories = Category.objects.all()
-    
-    # Photos for the banner collage
-    banner_photos = photo_list[:5]
-    
-    # Filter by category if a category slug is provided in the URL
     category_filter = request.GET.get('category')
+    categories = Category.objects.all().order_by('name')
+
+    albums_qs = Album.objects.prefetch_related(
+        Prefetch('photos', queryset=Photo.objects.select_related('category').order_by('-date_uploaded')),
+        'cover_photo',
+    )
+
+    photos_qs = Photo.objects.select_related('category').filter(album__isnull=True).order_by('-date_uploaded')
+
     if category_filter:
-        photo_list = photo_list.filter(category__slug=category_filter)
-        
-    # Set up pagination
-    paginator = Paginator(photo_list, 12)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    
-    context = {
+        albums_qs = albums_qs.filter(photos__category__slug=category_filter).distinct()
+        photos_qs = photos_qs.filter(category__slug=category_filter)
+
+    # materialize and attach chunks per album
+    albums = list(albums_qs)
+    for a in albums:
+        ps = list(a.photos.all())
+        a.chunks = [ps[i:i+4] for i in range(0, len(ps), 4)]
+
+    paginator = Paginator(photos_qs, 12)
+    page_obj = paginator.get_page(request.GET.get('page'))
+
+    banner_photos = Photo.objects.order_by('-date_uploaded')[:5]
+
+    return render(request, 'photos/gallery_v2.html', {
+        'albums': albums,
         'page_obj': page_obj,
         'categories': categories,
         'category_filter': category_filter,
         'banner_photos': banner_photos,
-    }
-    
-    return render(request, 'photos/gallery_v2.html', context)
+    })
 
 def service_detail(request, service_slug):
     """
@@ -90,19 +100,24 @@ def service_detail(request, service_slug):
     
     # Get all categories associated with this service that we will use as tabs
     service_categories = service.categories.all()
-    
-    # Prepare a dictionary to hold photos and videos grouped by category.
-    # This is perfect for creating the tabbed gallery in the template.
+
+    albums = Album.objects.prefetch_related('photos__category', 'cover_photo').filter(
+        photos__category__in=service_categories
+    ).distinct()
+
+    standalone_photos = Photo.objects.select_related('category').filter(
+        album__isnull=True,
+        category__in=service_categories
+    ).order_by('-date_uploaded')
+
+    # build media_by_category combining albums + standalone photos
     media_by_category = {}
-    for category in service_categories:
-        photos = Photo.objects.filter(category=category)
-        videos = Video.objects.filter(category=category)
-        # Only add the category to our dictionary if it has content
-        if photos.exists() or videos.exists():
-            media_by_category[category] = {
-                'photos': photos,
-                'videos': videos
-            }
+    for cat in service_categories:
+        media_by_category[cat] = {
+            'albums': [a for a in albums if a.category and a.category.id == cat.id],
+            'photos': list(standalone_photos.filter(category=cat)),
+            'videos': list(Video.objects.filter(category=cat)),
+        }
 
     context = {
         'service': service,

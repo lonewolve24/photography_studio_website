@@ -35,17 +35,13 @@
             <div class="col-lg-2 col-md-4 mb-4">
                 <h5 class="fw-bold mb-4">Services</h5>
                 <ul class="list-unstyled">
-                    {% for service in services %}
-                    {% if service.title == "Video Production" %}
-                    <li class="mb-2"><a href="{% url 'service_detail' service.slug %}" class="text-decoration-none text-muted">Video Production</a></li>
-                    {% elif service.title == "Photography" %}
-                    <li class="mb-2"><a href="{% url 'service_detail' service.slug %}" class="text-decoration-none text-muted">Photography</a></li>
-                    {% elif service.title == "Graphic Design"%}
-                    <li class="mb-2"><a href="{% url 'service_detail' service.slug %}" class="text-decoration-none text-muted">Graphic Design</a></li>
-                    {% elif service.title == "Voiceover Recording" %}
-                    <li class="mb-2"><a href="#" class="text-decoration-none text-muted">Voiceover Recording</a></li>
+                    {% if active_services %}
+                        {% for service in active_services|slice:":4" %}
+                        <li class="mb-2"><a href="{{ service.get_absolute_url }}" class="text-decoration-none text-muted">{{ service.title }}</a></li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="mb-2"><a href="#" class="text-decoration-none text-muted">No services available</a></li>
                     {% endif %}
-                    {% endfor %}
                 </ul>
             </div>
             
