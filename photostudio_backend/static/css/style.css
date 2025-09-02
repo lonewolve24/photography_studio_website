@@ -1779,3 +1779,23 @@ body.is-homepage {
       visibility: visible !important;
     }
   }
+
+/* ====== Clickable Service Cards ====== */
+.service-card-clickable {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.service-card-clickable:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+.service-card-clickable:hover .card-img-overlay {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+}
+
+.service-card-clickable .card-img-overlay {
+    background: linear-gradient(135deg, rgba(16, 52, 76, 0.8) 0%, rgba(236, 127, 0, 0.8) 100%);
+    transition: background 0.3s ease;
+}

@@ -11,6 +11,7 @@ def home(request):
     services = Service.objects.filter(is_active=True)
     context = {
         'latest_photos': latest_photos,
+        'services': services,
     }
     return render(request, 'photos/home.html', context)
 
@@ -94,12 +95,22 @@ def service_detail(request, service_slug):
     Renders a specific service page.
     - Fetches the service by its slug.
     - Gets all categories linked to this service.
-    - For each category, gets the associated photos and videos.
+    - For each category, gets the associated photos and videos filtered by service type.
     """
     service = get_object_or_404(Service, slug=service_slug, is_active=True)
     
     # Get all categories associated with this service that we will use as tabs
     service_categories = service.categories.all()
+
+    # Determine media type filtering based on service type
+    show_photos = True
+    show_videos = True
+    
+    if service.title == "Video Production":
+        show_photos = False  # Only show videos
+    elif service.title in ["Photography", "Graphic Design"]:
+        show_videos = False  # Only show photos
+    # For other services like "Voiceover Recording", show both by default
 
     albums = Album.objects.prefetch_related('photos__category', 'cover_photo').filter(
         photos__category__in=service_categories
@@ -113,15 +124,18 @@ def service_detail(request, service_slug):
     # build media_by_category combining albums + standalone photos
     media_by_category = {}
     for cat in service_categories:
-        media_by_category[cat] = {
-            'albums': [a for a in albums if a.category and a.category.id == cat.id],
-            'photos': list(standalone_photos.filter(category=cat)),
-            'videos': list(Video.objects.filter(category=cat)),
+        category_data = {
+            'albums': [a for a in albums if a.category and a.category.id == cat.id] if show_photos else [],
+            'photos': list(standalone_photos.filter(category=cat)) if show_photos else [],
+            'videos': list(Video.objects.filter(category=cat)) if show_videos else [],
         }
+        media_by_category[cat] = category_data
 
     context = {
         'service': service,
         'media_by_category': media_by_category,
+        'show_photos': show_photos,
+        'show_videos': show_videos,
     }
     
     return render(request, 'photos/service_detail.html', context)

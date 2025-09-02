@@ -36,7 +36,13 @@
     <div class="container">
         <div class="text-center mb-5">
             <h2 class="display-5 fw-bold mb-3">Portfolio</h2>
+            {% if show_photos and show_videos %}
             <p class="lead text-muted mb-0">Some examples of my {{ service.title|lower }} work</p>
+            {% elif show_photos %}
+            <p class="lead text-muted mb-0">Photo examples of my {{ service.title|lower }} work</p>
+            {% elif show_videos %}
+            <p class="lead text-muted mb-0">Video examples of my {{ service.title|lower }} work</p>
+            {% endif %}
         </div>
         
         <!-- Gallery Tabs -->
@@ -56,41 +62,85 @@
             <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="pane-{{ category.slug }}" role="tabpanel" aria-labelledby="tab-{{ category.slug }}">
                 <div class="row g-4">
                     <!-- Display Photos -->
-                    {% for photo in media.photos %}
-                    <div class="col-lg-3 col-md-4 col-6">
-                        <a href="{{ photo.image.url }}" class="glightbox" data-gallery="service-gallery">
-                            <div class="gallery-item position-relative">
-                                <img src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
-                                <div class="gallery-item-tag">
-                                    <span class="badge bg-primary">{{ photo.category.name }}</span>
+                    {% if show_photos %}
+                        {% for photo in media.photos %}
+                        <div class="col-lg-3 col-md-4 col-6">
+                            <a href="{{ photo.image.url }}" class="glightbox" data-gallery="service-gallery">
+                                <div class="gallery-item position-relative">
+                                    <img src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
+                                    <div class="gallery-item-tag">
+                                        <span class="badge bg-primary">{{ photo.category.name }}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                    {% endfor %}
+                            </a>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
 
                     <!-- Display Videos -->
-                    {% for video in media.videos %}
-                    <div class="col-lg-3 col-md-4 col-6">
-                        <a href="{{ video.video_file.url }}" class="glightbox" data-gallery="service-gallery" data-title="{{ video.title }}">
-                            <div class="gallery-item position-relative">
-                                {% if video.thumbnail %}
-                                <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="img-fluid rounded shadow gallery-img">
-                                {% else %}
-                                <div class="img-fluid rounded shadow gallery-img d-flex align-items-center justify-content-center" style="background-color: #343a40; color: white; height: 100%;">
-                                    <span>{{ video.title }}</span>
+                    {% if show_videos %}
+                        {% for video in media.videos %}
+                        <div class="col-lg-3 col-md-4 col-6">
+                            {% if video.is_youtube_video %}
+                                <a href="{{ video.youtube_url }}" class="glightbox" data-gallery="service-gallery" data-title="{{ video.title }}" data-type="video">
+                            {% else %}
+                                <a href="{{ video.video_file.url }}" class="glightbox" data-gallery="service-gallery" data-title="{{ video.title }}">
+                            {% endif %}
+                                <div class="gallery-item position-relative">
+                                    {% if video.thumbnail %}
+                                    <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="img-fluid rounded shadow gallery-img">
+                                    {% elif video.is_youtube_video and video.get_youtube_thumbnail_url %}
+                                    <img src="{{ video.get_youtube_thumbnail_url }}" alt="{{ video.title }}" class="img-fluid rounded shadow gallery-img">
+                                    {% else %}
+                                    <div class="img-fluid rounded shadow gallery-img d-flex align-items-center justify-content-center" style="background-color: #343a40; color: white; height: 200px;">
+                                        <span>{{ video.title }}</span>
+                                    </div>
+                                    {% endif %}
+                                    <div class="video-play-icon">
+                                        {% if video.is_youtube_video %}
+                                        <i class="fab fa-youtube" style="color: #FF0000;"></i>
+                                        {% else %}
+                                        <i class="fas fa-play-circle"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="gallery-item-tag">
+                                        <span class="badge bg-primary">{{ video.category.name }}</span>
+                                        {% if video.is_youtube_video %}
+                                        <span class="badge bg-danger ms-1">YouTube</span>
+                                        {% endif %}
+                                    </div>
                                 </div>
-                                {% endif %}
-                                <div class="video-play-icon">
-                                    <i class="fas fa-play-circle"></i>
-                                </div>
-                                <div class="gallery-item-tag">
-                                    <span class="badge bg-primary">{{ video.category.name }}</span>
-                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <!-- Show message if no media in this category -->
+                    {% if show_photos and show_videos %}
+                        {% if not media.photos and not media.videos %}
+                        <div class="col-12">
+                            <div class="text-center py-5">
+                                <p class="text-muted">No media available in the {{ category.name }} category yet.</p>
                             </div>
-                        </a>
-                    </div>
-                    {% endfor %}
+                        </div>
+                        {% endif %}
+                    {% elif show_photos %}
+                        {% if not media.photos %}
+                        <div class="col-12">
+                            <div class="text-center py-5">
+                                <p class="text-muted">No photos available in the {{ category.name }} category yet.</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% elif show_videos %}
+                        {% if not media.videos %}
+                        <div class="col-12">
+                            <div class="text-center py-5">
+                                <p class="text-muted">No videos available in the {{ category.name }} category yet.</p>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}

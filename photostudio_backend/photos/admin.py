@@ -44,8 +44,41 @@ class ServiceAdmin(admin.ModelAdmin):
     filter_horizontal = ('categories',)
 
 
+class VideoAdmin(admin.ModelAdmin):
+    list_display = ('thumbnail_preview', 'title', 'category', 'video_type', 'is_featured', 'date_added')
+    list_filter = ('category', 'tags', 'is_featured')
+    search_fields = ('title', 'description')
+    readonly_fields = ('thumbnail_preview',)
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'description', 'category', 'tags', 'is_featured')
+        }),
+        ('Video Source', {
+            'fields': ('video_file', 'youtube_url'),
+            'description': 'Choose either upload a video file OR provide a YouTube URL (not both)'
+        }),
+        ('Additional Info', {
+            'fields': ('thumbnail', 'duration')
+        }),
+    )
+    
+    def thumbnail_preview(self, obj):
+        if obj.thumbnail:
+            return format_html('<img src="{}" style="height: 50px; width: auto;" />', obj.thumbnail.url)
+        return "No Thumbnail"
+    thumbnail_preview.short_description = 'Thumbnail'
+    
+    def video_type(self, obj):
+        if obj.youtube_url:
+            return format_html('<span style="color: red;">📺 YouTube</span>')
+        elif obj.video_file:
+            return format_html('<span style="color: green;">📁 Uploaded</span>')
+        return "No Video"
+    video_type.short_description = 'Type'
+
+
 admin.site.register(Category)
 admin.site.register(Tag)
 admin.site.register(Photo, PhotoAdmin)
-admin.site.register(Video)
+admin.site.register(Video, VideoAdmin)
 admin.site.register(Service, ServiceAdmin)

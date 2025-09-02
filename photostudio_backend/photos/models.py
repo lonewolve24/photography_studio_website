@@ -151,7 +151,12 @@ class Video(models.Model):
         validators=[
             FileExtensionValidator(['mp4', 'mov', 'avi', 'webm']),
             validate_video_size
-        ]
+        ],
+        blank=True, null=True  # Make optional when using YouTube
+    )
+    youtube_url = models.URLField(
+        blank=True, null=True,
+        help_text="YouTube video URL (alternative to uploading video file)"
     )
     # For video, we'll need to generate a thumbnail or poster image
     thumbnail = models.ImageField(upload_to='videos/thumbnails/', blank=True, null=True)
@@ -161,6 +166,52 @@ class Video(models.Model):
     tags = models.ManyToManyField(Tag, related_name='videos', blank=True)
     is_featured = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now_add=True)
+    
+    def clean(self):
+        super().clean()
+        # Ensure either video_file or youtube_url is provided, but not both
+        if not self.video_file and not self.youtube_url:
+            raise ValidationError("Either upload a video file or provide a YouTube URL.")
+        if self.video_file and self.youtube_url:
+            raise ValidationError("Please provide either a video file OR a YouTube URL, not both.")
+    
+    def get_youtube_video_id(self):
+        """Extract YouTube video ID from the URL"""
+        if not self.youtube_url:
+            return None
+        
+        import re
+        # Handle various YouTube URL formats
+        patterns = [
+            r'youtube\.com/watch\?v=([^&]+)',
+            r'youtu\.be/([^?]+)',
+            r'youtube\.com/embed/([^?]+)',
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, self.youtube_url)
+            if match:
+                return match.group(1)
+        return None
+    
+    def get_youtube_thumbnail_url(self):
+        """Get YouTube thumbnail URL"""
+        video_id = self.get_youtube_video_id()
+        if video_id:
+            return f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg"
+        return None
+    
+    def get_video_url(self):
+        """Returns the appropriate video URL (YouTube or uploaded file)"""
+        if self.youtube_url:
+            return self.youtube_url
+        elif self.video_file:
+            return self.video_file.url
+        return None
+    
+    def is_youtube_video(self):
+        """Returns True if this is a YouTube video"""
+        return bool(self.youtube_url)
     
     def __str__(self):
         return self.title
