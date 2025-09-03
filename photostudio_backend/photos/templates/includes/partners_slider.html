@@ -1,0 +1,110 @@
+{% load static %}
+<!-- Partners Section Component -->
+<section class="py-5 my-5 partners-section">
+    <div class="container">
+        <div class="text-center mb-5">
+            <div class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3">
+                <i class="fas fa-handshake me-2"></i>Trusted Partners
+            </div>
+            <h2 class="display-5 fw-bold mb-3">Partners & Collaborations</h2>
+            <p class="lead text-muted">Working with amazing brands and organizations to create exceptional content</p>
+        </div>
+        
+        <div id="partnersCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <!-- First Slide -->
+                <div class="carousel-item active">
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="partner-card">
+                                <div class="partner-logo">
+                                    <img src="{% static 'images/partners/partner1.svg' %}" alt="Wedding Venues" class="img-fluid">
+                                </div>
+                                <h5 class="partner-name">Wedding Venues</h5>
+                                <p class="partner-category">Premium Venues</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="partner-card">
+                                <div class="partner-logo">
+                                    <img src="{% static 'images/partners/partner2.svg' %}" alt="Fashion Brands" class="img-fluid">
+                                </div>
+                                <h5 class="partner-name">Fashion Brands</h5>
+                                <p class="partner-category">Luxury Fashion</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="partner-card">
+                                <div class="partner-logo">
+                                    <img src="{% static 'images/partners/partner3.svg' %}" alt="Event Planners" class="img-fluid">
+                                </div>
+                                <h5 class="partner-name">Event Planners</h5>
+                                <p class="partner-category">Event Management</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Second Slide -->
+                <div class="carousel-item">
+                    <div class="row g-4 justify-content-center">
+                        <div class="col-lg-4 col-md-6">
+                            <div class="partner-card">
+                                <div class="partner-logo">
+                                    <img src="{% static 'images/partners/partner4.svg' %}" alt="Makeup Artists" class="img-fluid">
+                                </div>
+                                <h5 class="partner-name">Makeup Artists</h5>
+                                <p class="partner-category">Beauty & Style</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="partner-card">
+                                <div class="partner-logo">
+                                    <img src="{% static 'images/partners/partner5.svg' %}" alt="Jewelry Designers" class="img-fluid">
+                                </div>
+                                <h5 class="partner-name">Jewelry Designers</h5>
+                                <p class="partner-category">Fine Jewelry</p>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="partner-card">
+                                <div class="partner-logo">
+                                    <img src="{% static 'images/partners/partner6.svg' %}" alt="Corporate Clients" class="img-fluid">
+                                </div>
+                                <h5 class="partner-name">Corporate Clients</h5>
+                                <p class="partner-category">Business & Events</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Carousel Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#partnersCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#partnersCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+            
+            <!-- Carousel Indicators -->
+            <div class="carousel-indicators position-relative mt-4">
+                <button type="button" data-bs-target="#partnersCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Partners 1"></button>
+                <button type="button" data-bs-target="#partnersCarousel" data-bs-slide-to="1" aria-label="Partners 2"></button>
+            </div>
+        </div>
+        
+        <!-- Partner CTA -->
+        <div class="text-center mt-5">
+            <div class="partner-cta-card">
+                <h4 class="fw-bold mb-3">Interested in Partnering?</h4>
+                <p class="text-muted mb-4">Let's explore collaboration opportunities and create amazing content together</p>
+                <a href="{% url 'contact' %}" class="btn btn-outline-primary px-4 py-2">
+                    <i class="fas fa-envelope me-2"></i>Discuss Partnership
+                </a>
+            </div>
+        </div>
+    </div>
+</section> 

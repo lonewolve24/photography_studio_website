@@ -89,8 +89,8 @@
             <p class="lead text-muted">Comprehensive multimedia solutions to bring your vision to life</p>
         </div>
         
-        <!-- Include Reusable Services Grid -->
-        {% include 'includes/services_grid.html' with clickable=True show_cta_buttons=True %}
+        <!-- Include Compact Services Grid -->
+        {% include 'includes/services_grid_compact.html' with clickable=True show_cta_buttons=True %}
     </div>
 </section>
 
@@ -211,6 +211,9 @@
         </div>
     </div>
 </section>
+
+<!-- Include Reusable Partners Section -->
+{% include 'includes/partners_slider.html' %}
 
 <!-- Contact Section -->
 <section class="py-5 my-5">

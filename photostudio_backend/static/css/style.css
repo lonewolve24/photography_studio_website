@@ -225,12 +225,20 @@ body.is-homepage {
 
 /* ====== About Section ====== */
 .about-img {
-    border-radius: 50%;
-    width: 300px;
-    height: 300px;
+    width: 100%;
+    max-width: 450px;
+    height: 350px;
     object-fit: cover;
-    border: 5px solid white;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 3px solid rgba(16, 52, 76, 0.1);
+}
+
+.about-img:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+    border-color: rgba(16, 52, 76, 0.2);
 }
 
 /* ====== About Page Approach Cards ====== */
@@ -252,7 +260,7 @@ body.is-homepage {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-color), #6366f1);
+    background: var(--primary-color);
     color: white;
     display: flex;
     align-items: center;
@@ -282,7 +290,7 @@ body.is-homepage {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-color), #6366f1);
+    background: var(--primary-color);
     color: white;
     display: flex;
     align-items: center;
@@ -290,12 +298,12 @@ body.is-homepage {
     font-size: 2rem;
     margin: 0 auto;
     transition: all 0.3s ease;
-    box-shadow: 0 10px 25px rgba(51, 102, 255, 0.3);
+    box-shadow: 0 10px 25px rgba(16, 52, 76, 0.3);
 }
 
 .approach-card-new:hover .approach-icon-new {
-    transform: scale(1.1) rotate(5deg);
-    box-shadow: 0 15px 35px rgba(51, 102, 255, 0.4);
+    transform: scale(1.1);
+    box-shadow: 0 15px 35px rgba(16, 52, 76, 0.4);
 }
 
 /* ====== Services Section ====== */
@@ -344,7 +352,7 @@ body.is-homepage {
     width: 70px;
     height: 70px;
     border-radius: 15px;
-    background: linear-gradient(135deg, var(--primary-color), #6366f1);
+    background: var(--primary-color);
     color: white;
     display: flex;
     align-items: center;
@@ -393,7 +401,7 @@ body.is-homepage {
     width: 80px;
     height: 80px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-color), #6366f1);
+    background: var(--primary-color);
     color: white;
     display: flex;
     align-items: center;
@@ -429,13 +437,13 @@ body.is-homepage {
     left: 0;
     width: 100%;
     height: 4px;
-    background: linear-gradient(135deg, var(--primary-color), #6366f1);
+    background: var(--primary-color);
 }
 
 .service-card-unified:hover {
     transform: translateY(-10px);
     box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-    border-color: rgba(51, 102, 255, 0.2);
+    border-color: rgba(16, 52, 76, 0.2);
 }
 
 .service-icon-wrapper {
@@ -447,19 +455,19 @@ body.is-homepage {
     width: 85px;
     height: 85px;
     border-radius: 50%;
-    background: linear-gradient(135deg, var(--primary-color), #6366f1);
+    background: var(--primary-color);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 2rem;
     transition: all 0.3s ease;
-    box-shadow: 0 10px 25px rgba(51, 102, 255, 0.3);
+    box-shadow: 0 10px 25px rgba(16, 52, 76, 0.3);
 }
 
 .service-card-unified:hover .service-icon-unified {
-    transform: scale(1.1) rotate(5deg);
-    box-shadow: 0 15px 35px rgba(51, 102, 255, 0.4);
+    transform: scale(1.1);
+    box-shadow: 0 15px 35px rgba(16, 52, 76, 0.4);
 }
 
 .service-body {
@@ -481,7 +489,7 @@ body.is-homepage {
     display: flex;
     align-items: center;
     padding: 10px 12px;
-    background: rgba(51, 102, 255, 0.05);
+    background: rgba(16, 52, 76, 0.05);
     border-radius: 10px;
     transition: all 0.3s ease;
     font-size: 0.85rem;
@@ -489,7 +497,7 @@ body.is-homepage {
 }
 
 .service-list-item:hover {
-    background: rgba(51, 102, 255, 0.1);
+    background: rgba(16, 52, 76, 0.1);
     transform: translateX(3px);
 }
 
@@ -511,7 +519,7 @@ body.is-homepage {
     border-radius: 25px;
     padding: 40px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    border: 2px solid rgba(51, 102, 255, 0.1);
+    border: 2px solid rgba(16, 52, 76, 0.1);
     position: relative;
     overflow: hidden;
 }
@@ -523,7 +531,7 @@ body.is-homepage {
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(51, 102, 255, 0.03) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(16, 52, 76, 0.03) 0%, transparent 70%);
     pointer-events: none;
 }
 
@@ -1055,7 +1063,7 @@ body.is-homepage {
 .modern-service-card:hover {
     transform: translateY(-12px);
     box-shadow: 0 20px 45px rgba(0,0,0,0.15);
-    border-color: rgba(51, 102, 255, 0.1);
+    border-color: rgba(16, 52, 76, 0.1);
 }
 
 .service-card-header {
@@ -1079,22 +1087,22 @@ body.is-homepage {
 
 /* Service Type Specific Colors */
 .video-icon {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--primary-color);
     color: white;
 }
 
 .photo-icon {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: var(--primary-color);
     color: white;
 }
 
 .design-icon {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: var(--primary-color);
     color: white;
 }
 
 .voice-icon {
-    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    background: var(--primary-color);
     color: white;
 }
 
@@ -1161,14 +1169,14 @@ body.is-homepage {
     align-items: center;
     justify-content: center;
     padding: 12px 24px;
-    background: linear-gradient(135deg, var(--primary-color), #6366f1);
+    background: var(--primary-color);
     color: white;
     text-decoration: none;
     border-radius: 25px;
     font-weight: 600;
     font-size: 0.9rem;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(51, 102, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(16, 52, 76, 0.3);
     position: relative;
     overflow: hidden;
 }
@@ -1190,7 +1198,7 @@ body.is-homepage {
 
 .modern-btn:hover {
     transform: translateY(-3px);
-    box-shadow: 0 8px 25px rgba(51, 102, 255, 0.4);
+    box-shadow: 0 8px 25px rgba(16, 52, 76, 0.4);
     color: white;
     text-decoration: none;
 }
@@ -1210,32 +1218,21 @@ body.is-homepage {
 
 /* Modern CTA Section */
 .modern-cta-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 20px;
+    background: #ffffff;
+    border-radius: 12px;
     padding: 40px;
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.modern-cta-section::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    right: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    pointer-events: none;
+    color: var(--text-dark);
+    border: 1px solid #e9ecef;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .modern-cta-section h3 {
-    color: white;
+    color: var(--text-dark);
     font-size: 1.75rem;
 }
 
 .modern-cta-section .lead {
-    color: rgba(255,255,255,0.9);
+    color: var(--text-light);
 }
 
 .modern-cta-section .btn {
@@ -1250,8 +1247,9 @@ body.is-homepage {
 }
 
 .modern-cta-section .btn-primary:hover {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    opacity: 0.9;
 }
 
 .modern-cta-section .btn-outline-primary {
@@ -1383,7 +1381,7 @@ body.is-homepage {
 }
 
 .service-icon-clean {
-    color: var(--accent-color);
+    color: var(--primary-color);
     font-size: 24px;
     margin-bottom: 16px;
     background: none;
@@ -1428,7 +1426,7 @@ body.is-homepage {
     content: '•';
     position: absolute;
     left: 0;
-    color: var(--accent-color);
+    color: var(--primary-color);
     font-weight: bold;
     font-size: 16px;
 }
@@ -1445,7 +1443,7 @@ body.is-homepage {
 }
 
 .learn-more-btn:hover {
-    color: var(--accent-color);
+    color: var(--primary-color);
     text-decoration: none;
 }
 
@@ -1792,10 +1790,407 @@ body.is-homepage {
 }
 
 .service-card-clickable:hover .card-img-overlay {
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    background: rgba(16, 52, 76, 0.9);
 }
 
 .service-card-clickable .card-img-overlay {
-    background: linear-gradient(135deg, rgba(16, 52, 76, 0.8) 0%, rgba(236, 127, 0, 0.8) 100%);
+    background: rgba(16, 52, 76, 0.8);
     transition: background 0.3s ease;
+}
+
+/* ====== Partners Section ====== */
+.partners-section {
+    background-color: var(--background-light);
+    position: relative;
+    z-index: 1;
+}
+
+.partner-card {
+    background: white;
+    border-radius: 20px;
+    padding: 30px 20px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    z-index: 2;
+}
+
+.partner-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.15);
+    border-color: var(--primary-color);
+    z-index: 10;
+}
+
+.partner-logo {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary-color);
+    border-radius: 20px;
+    padding: 15px;
+    transition: all 0.3s ease;
+}
+
+.partner-card:hover .partner-logo {
+    transform: scale(1.05);
+    background: var(--primary-color);
+}
+
+.partner-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    transition: all 0.3s ease;
+}
+
+.partner-card:hover .partner-logo img {
+    transform: scale(1.02);
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+.partner-name {
+    color: var(--text-dark);
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 1.1rem;
+}
+
+.partner-category {
+    color: var(--text-light);
+    font-size: 0.9rem;
+    margin-bottom: 0;
+    opacity: 0.8;
+}
+
+/* Partners Carousel Container */
+#partnersCarousel {
+    position: relative;
+    padding: 0 60px;
+}
+
+#partnersCarousel .carousel-inner {
+    padding: 20px 0;
+}
+
+/* Partners Carousel Controls */
+#partnersCarousel .carousel-control-prev,
+#partnersCarousel .carousel-control-next {
+    width: 50px;
+    height: 50px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    z-index: 20;
+    position: absolute;
+}
+
+#partnersCarousel .carousel-control-prev {
+    left: -25px;
+}
+
+#partnersCarousel .carousel-control-next {
+    right: -25px;
+}
+
+#partnersCarousel .carousel-control-prev:hover,
+#partnersCarousel .carousel-control-next:hover {
+    opacity: 1;
+    background-color: var(--primary-color);
+    transform: translateY(-50%) scale(1.05);
+}
+
+/* Partners Carousel Indicators */
+#partnersCarousel .carousel-indicators {
+    z-index: 15;
+    position: relative;
+    bottom: -30px;
+}
+
+#partnersCarousel .carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin: 0 5px;
+    background-color: var(--primary-color);
+    opacity: 0.4;
+    transition: all 0.3s ease;
+}
+
+#partnersCarousel .carousel-indicators button.active {
+    opacity: 1;
+    background-color: var(--primary-color);
+    transform: scale(1.2);
+}
+
+/* Partner CTA Card */
+.partner-cta-card {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05);
+    border: 1px solid #dee2e6;
+    max-width: 600px;
+    margin: 0 auto;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.partner-cta-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.1);
+}
+
+.partner-cta-card h4,
+.partner-cta-card p,
+.partner-cta-card .btn {
+    /* No special positioning needed */
+}
+
+/* Responsive Design for Partners */
+@media (max-width: 992px) {
+    .partner-card {
+        padding: 25px 15px;
+    }
+    
+    .partner-logo {
+        width: 70px;
+        height: 70px;
+        padding: 12px;
+    }
+    
+    .partner-name {
+        font-size: 1rem;
+    }
+    
+    .partner-category {
+        font-size: 0.85rem;
+    }
+    
+    #partnersCarousel {
+        padding: 0 50px;
+    }
+    
+    #partnersCarousel .carousel-control-prev,
+    #partnersCarousel .carousel-control-next {
+        width: 45px;
+        height: 45px;
+    }
+    
+    #partnersCarousel .carousel-control-prev {
+        left: -22px;
+    }
+    
+    #partnersCarousel .carousel-control-next {
+        right: -22px;
+    }
+}
+
+@media (max-width: 768px) {
+    .partners-section {
+        padding: 3rem 0;
+    }
+    
+    .partner-card {
+        padding: 20px 15px;
+        margin-bottom: 20px;
+    }
+    
+    .partner-logo {
+        width: 60px;
+        height: 60px;
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .partner-name {
+        font-size: 0.95rem;
+    }
+    
+    .partner-category {
+        font-size: 0.8rem;
+    }
+    
+    .partner-cta-card {
+        padding: 30px 20px;
+    }
+    
+    #partnersCarousel {
+        padding: 0 40px;
+    }
+    
+    #partnersCarousel .carousel-control-prev,
+    #partnersCarousel .carousel-control-next {
+        width: 40px;
+        height: 40px;
+        display: block;
+    }
+    
+    #partnersCarousel .carousel-control-prev {
+        left: -20px;
+    }
+    
+    #partnersCarousel .carousel-control-next {
+        right: -20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .partner-card {
+        padding: 18px 12px;
+    }
+    
+    .partner-logo {
+        width: 55px;
+        height: 55px;
+        padding: 8px;
+        margin-bottom: 12px;
+    }
+    
+    .partner-name {
+        font-size: 0.9rem;
+    }
+    
+    .partner-category {
+        font-size: 0.75rem;
+    }
+    
+    .partner-cta-card {
+        padding: 25px 15px;
+    }
+    
+    .partner-cta-card h4 {
+        font-size: 1.2rem;
+    }
+    
+    .partner-cta-card p {
+        font-size: 0.9rem;
+    }
+}
+
+/* ====== Compact Service Cards ====== */
+.service-card-compact {
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background-color: #fff;
+    height: 100%;
+}
+
+.service-card-compact:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 1rem 2rem rgba(0,0,0,0.1);
+}
+
+.card-img-container-compact {
+    position: relative;
+    height: 180px;
+}
+
+.card-img-container-compact .card-img-top {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-img-container-compact .card-img-overlay {
+    background-color: rgba(16, 52, 76, 0.2);
+    transition: background-color 0.3s ease;
+}
+
+.service-card-compact:hover .card-img-overlay {
+    background-color: rgba(16, 52, 76, 0.6);
+}
+
+.card-img-container-compact .card-title-overlay {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.tags-section-compact .badge {
+    font-size: 0.8rem;
+    padding: 0.4em 0.8em;
+    margin-right: 0.4rem;
+    margin-bottom: 0.4rem;
+}
+
+.cta-section-compact {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 30px;
+    border: 1px solid #e9ecef;
+}
+
+/* Remove orange colors from buttons - use primary blue */
+.service-card-compact .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+.service-card-compact .btn-primary:hover {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    opacity: 0.9;
+}
+
+/* Responsive adjustments for compact cards */
+@media (max-width: 992px) {
+    .service-card-compact {
+        margin-bottom: 20px;
+    }
+    
+    .card-img-container-compact {
+        height: 160px;
+    }
+}
+
+@media (max-width: 768px) {
+    .col-lg-3.col-md-6 {
+        margin-bottom: 20px;
+    }
+    
+    .service-card-compact {
+        margin-bottom: 15px;
+    }
+    
+    .card-img-container-compact {
+        height: 140px;
+    }
+}
+
+/* Responsive adjustments for About Image */
+@media (max-width: 992px) {
+    .about-img {
+        max-width: 400px;
+        height: 300px;
+    }
+}
+
+@media (max-width: 768px) {
+    .about-img {
+        max-width: 350px;
+        height: 250px;
+        border-width: 2px;
+    }
+}
+
+@media (max-width: 576px) {
+    .about-img {
+        max-width: 300px;
+        height: 200px;
+        border-width: 2px;
+    }
 }
