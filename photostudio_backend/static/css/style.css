@@ -864,19 +864,35 @@ body.is-homepage {
     z-index: 10;
 }
 
+/* Video Play Icon in Gallery */
 .video-play-icon {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.video-play-icon i {
+    font-size: 1.5rem;
     color: white;
-    font-size: 3rem;
-    opacity: 0.8;
-    transition: opacity 0.3s;
 }
 
 .gallery-item:hover .video-play-icon {
-    opacity: 1;
+    background: rgba(0, 0, 0, 0.9);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* YouTube specific styling */
+.video-play-icon .fab.fa-youtube {
+    font-size: 1.8rem;
 }
 
 .pricing-card {
@@ -2193,4 +2209,55 @@ body.is-homepage {
         height: 200px;
         border-width: 2px;
     }
+}
+
+/* Gallery Category Filter Buttons */
+.gallery-category-btn {
+    font-weight: 700 !important;
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    margin: 0 5px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.gallery-category-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* Active category button */
+.gallery-category-btn.btn-primary {
+    font-weight: 800 !important;
+    box-shadow: 0 4px 12px rgba(16, 52, 76, 0.3);
+}
+
+/* Service Detail Page Category Tabs */
+.service-detail .nav-pills .nav-link,
+.nav-pills.service-detail .nav-link {
+    font-weight: 600;
+    font-size: 1.1rem;
+    padding: 12px 24px;
+    margin: 0 5px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--primary-color);
+    border: 2px solid transparent;
+}
+
+.service-detail .nav-pills .nav-link:hover {
+    background-color: rgba(16, 52, 76, 0.1);
+    border-color: rgba(16, 52, 76, 0.2);
+    transform: translateY(-2px);
+}
+
+.service-detail .nav-pills .nav-link.active {
+    font-weight: 700;
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+    box-shadow: 0 4px 12px rgba(16, 52, 76, 0.3);
 }

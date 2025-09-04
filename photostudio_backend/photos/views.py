@@ -28,6 +28,7 @@ def contact(request):
 
 def gallery(request):
     category_filter = request.GET.get('category')
+    media_type_filter = request.GET.get('media_type')
 
     albums_qs = Album.objects.prefetch_related(
         Prefetch('photos', queryset=Photo.objects.select_related('category').order_by('-date_uploaded')),
@@ -36,28 +37,46 @@ def gallery(request):
         'cover_photo',
     )
     photos_qs = Photo.objects.select_related('category').filter(album__isnull=True).order_by('-date_uploaded')
+    videos_qs = Video.objects.select_related('category').order_by('-date_added')
     
-    albums = list(albums_qs)  # materialize
+    # Apply media type filtering
+    if media_type_filter == 'photos':
+        albums_qs = albums_qs
+        photos_qs = photos_qs
+        videos_qs = Video.objects.none()  # Don't show videos
+    elif media_type_filter == 'videos':
+        albums_qs = Album.objects.none()  # Don't show albums
+        photos_qs = Photo.objects.none()  # Don't show photos
+        videos_qs = videos_qs
+    # If no media type filter, show all (default behavior)
+    
+    # Apply category filtering
+    if category_filter:
+        albums_qs = albums_qs.filter(photos__category__slug=category_filter).distinct()
+        photos_qs = photos_qs.filter(category__slug=category_filter)
+        videos_qs = videos_qs.filter(category__slug=category_filter)
+
+    # Materialize albums and create chunks
+    albums = list(albums_qs)
     for a in albums:
         ps = list(a.photos.all())
         a.chunks = [ps[i:i+4] for i in range(0, len(ps), 4)]
 
-    if category_filter:
-        albums_qs = albums_qs.filter(photos__category__slug=category_filter).distinct()
-        photos_qs = photos_qs.filter(category__slug=category_filter)
-
     categories = Category.objects.all().order_by('name')
 
     context = {
-        'albums': albums_qs,
+        'albums': albums,
         'standalone_photos': photos_qs,
+        'videos': videos_qs,
         'categories': categories,
         'category_filter': category_filter,
+        'media_type_filter': media_type_filter,
     }
     return render(request, 'photos/gallery.html', context)
 
 def gallery_v2(request):
     category_filter = request.GET.get('category')
+    media_type_filter = request.GET.get('media_type')
     categories = Category.objects.all().order_by('name')
 
     albums_qs = Album.objects.prefetch_related(
@@ -66,10 +85,23 @@ def gallery_v2(request):
     )
 
     photos_qs = Photo.objects.select_related('category').filter(album__isnull=True).order_by('-date_uploaded')
+    videos_qs = Video.objects.select_related('category').order_by('-date_added')
+
+    # Apply media type filtering
+    if media_type_filter == 'photos':
+        albums_qs = albums_qs
+        photos_qs = photos_qs
+        videos_qs = Video.objects.none()  # Don't show videos
+    elif media_type_filter == 'videos':
+        albums_qs = Album.objects.none()  # Don't show albums
+        photos_qs = Photo.objects.none()  # Don't show photos
+        videos_qs = videos_qs
+    # If no media type filter, show all (default behavior)
 
     if category_filter:
         albums_qs = albums_qs.filter(photos__category__slug=category_filter).distinct()
         photos_qs = photos_qs.filter(category__slug=category_filter)
+        videos_qs = videos_qs.filter(category__slug=category_filter)
 
     # materialize and attach chunks per album
     albums = list(albums_qs)
@@ -87,7 +119,9 @@ def gallery_v2(request):
         'page_obj': page_obj,
         'categories': categories,
         'category_filter': category_filter,
+        'media_type_filter': media_type_filter,
         'banner_photos': banner_photos,
+        'videos': videos_qs,
     })
 
 def service_detail(request, service_slug):
@@ -127,7 +161,7 @@ def service_detail(request, service_slug):
         category_data = {
             'albums': [a for a in albums if a.category and a.category.id == cat.id] if show_photos else [],
             'photos': list(standalone_photos.filter(category=cat)) if show_photos else [],
-            'videos': list(Video.objects.filter(category=cat)) if show_videos else [],
+            'videos': list(Video.objects.filter(category=cat).order_by('-date_added')) if show_videos else [],
         }
         media_by_category[cat] = category_data
 

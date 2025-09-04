@@ -19,12 +19,29 @@
 <!-- Gallery Section -->
 <section class="py-5 my-5">
     <div class="container">
-        <!-- Filter Buttons -->
+        <!-- Media Type Filter -->
+        <div class="row mb-4">
+            <div class="col-12 text-center">
+                <div class="btn-group" role="group" aria-label="Media type filter">
+                    <a href="{% url 'gallery' %}{% if category_filter %}?category={{ category_filter }}{% endif %}" class="btn gallery-category-btn {% if not media_type_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                        <i class="fas fa-images me-2"></i>All Media
+                    </a>
+                    <a href="?{% if category_filter %}category={{ category_filter }}&{% endif %}media_type=photos" class="btn gallery-category-btn {% if media_type_filter == 'photos' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                        <i class="fas fa-camera me-2"></i>Photos
+                    </a>
+                    <a href="?{% if category_filter %}category={{ category_filter }}&{% endif %}media_type=videos" class="btn gallery-category-btn {% if media_type_filter == 'videos' %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                        <i class="fas fa-video me-2"></i>Videos
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Filter Buttons -->
         <div class="row mb-5">
             <div class="col-12 text-center">
-                <a href="{% url 'gallery' %}" class="btn {% if not category_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">All</a>
+                <a href="{% url 'gallery' %}{% if media_type_filter %}?media_type={{ media_type_filter }}{% endif %}" class="btn gallery-category-btn {% if not category_filter %}btn-primary{% else %}btn-outline-primary{% endif %}">All</a>
                 {% for category in categories %}
-                <a href="?category={{ category.slug }}" class="btn {% if category_filter == category.slug %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ category.name }}</a>
+                <a href="?category={{ category.slug }}{% if media_type_filter %}&media_type={{ media_type_filter }}{% endif %}" class="btn gallery-category-btn {% if category_filter == category.slug %}btn-primary{% else %}btn-outline-primary{% endif %}">{{ category.name }}</a>
                 {% endfor %}
             </div>
         </div>
@@ -81,6 +98,42 @@
               </a>
             </div>
           {% endfor %}
+
+          {# Videos #}
+          {% for video in videos %}
+            <div class="col-lg-4 col-md-6">
+              {% if video.is_youtube_video %}
+                <a href="{{ video.youtube_url }}" class="glightbox" data-gallery="videos" data-title="{{ video.title }}" data-type="video">
+              {% else %}
+                <a href="{{ video.video_file.url }}" class="glightbox" data-gallery="videos" data-title="{{ video.title }}">
+              {% endif %}
+                <div class="gallery-item position-relative">
+                  {% if video.thumbnail %}
+                    <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="img-fluid rounded shadow gallery-img">
+                  {% elif video.is_youtube_video and video.get_youtube_thumbnail_url %}
+                    <img src="{{ video.get_youtube_thumbnail_url }}" alt="{{ video.title }}" class="img-fluid rounded shadow gallery-img">
+                  {% else %}
+                    <div class="img-fluid rounded shadow gallery-img d-flex align-items-center justify-content-center" style="background-color: #343a40; color: white; height: 200px;">
+                      <span>{{ video.title }}</span>
+                    </div>
+                  {% endif %}
+                  <div class="video-play-icon">
+                    {% if video.is_youtube_video %}
+                      <i class="fab fa-youtube" style="color: #FF0000;"></i>
+                    {% else %}
+                      <i class="fas fa-play-circle"></i>
+                    {% endif %}
+                  </div>
+                  <div class="gallery-item-tag">
+                    <span class="badge bg-primary">{{ video.category.name }}</span>
+                    {% if video.is_youtube_video %}
+                      <span class="badge bg-danger ms-1">YouTube</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </a>
+            </div>
+          {% endfor %}
         </div>
 
         <!-- Pagination -->
@@ -88,7 +141,7 @@
             <ul class="pagination justify-content-center">
                 {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if category_filter %}&category={{ category_filter }}{% endif %}" aria-label="Previous">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if media_type_filter %}&media_type={{ media_type_filter }}{% endif %}" aria-label="Previous">
                         <span aria-hidden="true">&laquo; Previous</span>
                     </a>
                 </li>
@@ -98,7 +151,7 @@
 
                 {% if page_obj.has_next %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if category_filter %}&category={{ category_filter }}{% endif %}" aria-label="Next">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if category_filter %}&category={{ category_filter }}{% endif %}{% if media_type_filter %}&media_type={{ media_type_filter }}{% endif %}" aria-label="Next">
                         <span aria-hidden="true">Next &raquo;</span>
                     </a>
                 </li>
