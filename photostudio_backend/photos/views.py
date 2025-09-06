@@ -4,13 +4,18 @@ from django.core.paginator import Paginator
 from .models import Photo, Service, Category,  Video, Album
 from django.db.models import Prefetch
 from django.db.models import Q
+import random
 
 # Create your views here.
 def home(request):
-    latest_photos = Photo.objects.order_by('-date_uploaded')[:9]
+    # Get all photos and shuffle them, then take first 8
+    all_photos = list(Photo.objects.all())
+    random.shuffle(all_photos)
+    featured_photos = all_photos[:8]
+    
     services = Service.objects.filter(is_active=True)
     context = {
-        'latest_photos': latest_photos,
+        'latest_photos': featured_photos,
         'services': services,
     }
     return render(request, 'photos/home.html', context)
