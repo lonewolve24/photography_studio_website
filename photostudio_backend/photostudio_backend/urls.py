@@ -20,15 +20,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from django.views.generic import TemplateView
-from photos.sitemap import StaticViewSitemap, ServiceSitemap, CategorySitemap, PhotoSitemap, VideoSitemap, AlbumSitemap
+from photos.simple_sitemap import StaticViewSitemap
 
 sitemaps = {
     'static': StaticViewSitemap,
-    'services': ServiceSitemap,
-    'categories': CategorySitemap,
-    'photos': PhotoSitemap,
-    'videos': VideoSitemap,
-    'albums': AlbumSitemap,
 }
 
 urlpatterns = [
