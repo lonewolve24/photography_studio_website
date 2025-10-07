@@ -4,7 +4,112 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}PhotoStudio - Professional Photography Services{% endblock %}</title>
+    <title>{% block title %}Shotz - Professional Photography & Video Production Services in The Gambia{% endblock %}</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block description %}Professional photography and video production services in The Gambia. Specializing in weddings, events, portraits, and commercial photography. Book your session today!{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}photography, video production, wedding photography, event photography, portrait photography, commercial photography, The Gambia, Banjul, professional photographer{% endblock %}">
+    <meta name="author" content="Shotz Photography">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="en">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="{% block og_title %}Shotz - Professional Photography & Video Production Services{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Professional photography and video production services in The Gambia. Specializing in weddings, events, portraits, and commercial photography.{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.shotz.gm{{ request.get_full_path }}">
+    <meta property="og:image" content="{% block og_image %}https://www.shotz.gm{% static 'images/services/logo/shotz_logo.jpg' %}{% endblock %}">
+    <meta property="og:site_name" content="Shotz Photography">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}Shotz - Professional Photography & Video Production Services{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Professional photography and video production services in The Gambia. Specializing in weddings, events, portraits, and commercial photography.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}https://www.shotz.gm{% static 'images/services/logo/shotz_logo.jpg' %}{% endblock %}">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.shotz.gm{{ request.get_full_path }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/jpeg" href="{% static 'images/services/logo/shotz_logo.jpg' %}">
+    <link rel="apple-touch-icon" href="{% static 'images/services/logo/shotz_logo.jpg' %}">
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Shotz Photography",
+        "description": "Professional photography and video production services in The Gambia",
+        "url": "https://www.shotz.gm",
+        "logo": "https://www.shotz.gm{% static 'images/services/logo/shotz_logo.jpg' %}",
+        "image": "https://www.shotz.gm{% static 'images/services/logo/shotz_logo.jpg' %}",
+        "telephone": "+220-303-0676",
+        "email": "info@shotz.gm",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "GM",
+            "addressLocality": "Banjul",
+            "addressRegion": "Banjul"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "13.4549",
+            "longitude": "-16.5790"
+        },
+        "openingHours": "Mo-Fr 09:00-18:00",
+        "priceRange": "$$",
+        "serviceArea": {
+            "@type": "GeoCircle",
+            "geoMidpoint": {
+                "@type": "GeoCoordinates",
+                "latitude": "13.4549",
+                "longitude": "-16.5790"
+            },
+            "geoRadius": "50000"
+        },
+        "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Photography Services",
+            "itemListElement": [
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Wedding Photography",
+                        "description": "Professional wedding photography services"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Event Photography",
+                        "description": "Corporate and social event photography"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Portrait Photography",
+                        "description": "Professional portrait and headshot photography"
+                    }
+                },
+                {
+                    "@type": "Offer",
+                    "itemOffered": {
+                        "@type": "Service",
+                        "name": "Video Production",
+                        "description": "Professional video production and editing services"
+                    }
+                }
+            ]
+        }
+    }
+    </script>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome for icons -->

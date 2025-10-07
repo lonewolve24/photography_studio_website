@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://www.shotz.gm/sitemap.xml
+
+# Disallow admin area
+Disallow: /admin/
+
+# Allow all other content
+Allow: /gallery/
+Allow: /services/
+Allow: /about/
+Allow: /contact/
