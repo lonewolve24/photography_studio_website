@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-mx+gia=)s5m+yv!+-^()lsrn-as)rdcl$^rfko8lo0xwk(0u@9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-CSRF_TRUSTED_ORIGINS = ['https://photographystudiowebsite-production.up.railway.app', 'http://127.0.0.1:8080', 'https://www.shotz.gm/']
+CSRF_TRUSTED_ORIGINS = ['https://photographystudiowebsite-production.up.railway.app', 'http://127.0.0.1:8080', 'https://www.shotz.gm']
 
 ALLOWED_HOSTS = ['*']
 
