@@ -22,7 +22,11 @@
         <div class="row align-items-center">
             <div class="col-lg-6 mb-4 mb-lg-0">
                 <div class="position-relative">
-                    <img src="{% static 'images/services/about/about_pic.jpg' %}" alt="About Shotz" class="img-fluid rounded-4 shadow-lg">
+                    {% if about_section and about_section.image %}
+                        <img src="{{ about_section.image.url }}" alt="About Shotz" class="img-fluid rounded-4 shadow-lg">
+                    {% else %}
+                        <img src="{% static 'images/services/about/about_pic.jpg' %}" alt="About Shotz" class="img-fluid rounded-4 shadow-lg">
+                    {% endif %}
                     <div class="position-absolute top-0 start-0 w-100 h-100 bg-primary bg-opacity-10 rounded-4"></div>
                 </div>
             </div>
@@ -31,12 +35,23 @@
                     <i class="fas fa-camera me-2"></i>Est. August 2022
                 </div>
                 <h2 class="display-5 fw-bold mb-4">Our Story</h2>
-                <p class="lead mb-4">
-                    Shotz is a dynamic multimedia brand specializing in high-quality photography and videography services with a signature intimate and storytelling style.
-                </p>
-                <p class="mb-4">
-                    Founded in August 2022 in Brusubi Phase 2, Shotz operates as a Sole Proprietorship dedicated to helping individuals, brands, and organizations visually tell their stories in the most authentic, artistic, and emotionally engaging way possible.
-                </p>
+                {% if about_section %}
+                    <p class="lead mb-4">
+                        {{ about_section.description }}
+                    </p>
+                    {% if about_section.bio %}
+                        <p class="mb-4">
+                            {{ about_section.bio }}
+                        </p>
+                    {% endif %}
+                {% else %}
+                    <p class="lead mb-4">
+                        Shotz is a dynamic multimedia brand specializing in high-quality photography and videography services with a signature intimate and storytelling style.
+                    </p>
+                    <p class="mb-4">
+                        Founded in August 2022 in Brusubi Phase 2, Shotz operates as a Sole Proprietorship dedicated to helping individuals, brands, and organizations visually tell their stories in the most authentic, artistic, and emotionally engaging way possible.
+                    </p>
+                {% endif %}
                 
                 <div class="row g-4 mb-4">
                     <div class="col-12">
@@ -48,7 +63,11 @@
                             </div>
                             <div>
                                 <h6 class="fw-bold mb-1">Vision</h6>
-                                <p class="mb-0 text-muted">To become the leading multimedia brand in West Africa, known for excellence in storytelling through visual content.</p>
+                                {% if about_section and about_section.vision %}
+                                    <p class="mb-0 text-muted">{{ about_section.vision }}</p>
+                                {% else %}
+                                    <p class="mb-0 text-muted">To become the leading multimedia brand in West Africa, known for excellence in storytelling through visual content.</p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
@@ -61,7 +80,11 @@
                             </div>
                             <div>
                                 <h6 class="fw-bold mb-1">Mission</h6>
-                                <p class="mb-0 text-muted">To deliver intimate, artistic, and emotionally resonant photography and videography services that connect audiences and elevate brands.</p>
+                                {% if about_section and about_section.mission %}
+                                    <p class="mb-0 text-muted">{{ about_section.mission }}</p>
+                                {% else %}
+                                    <p class="mb-0 text-muted">To deliver intimate, artistic, and emotionally resonant photography and videography services that connect audiences and elevate brands.</p>
+                                {% endif %}
                             </div>
                         </div>
                     </div>

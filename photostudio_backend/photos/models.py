@@ -62,6 +62,7 @@ class Photo(models.Model):
     album = models.ForeignKey( 'Album', null=True, blank=True, on_delete=models.SET_NULL, related_name='photos' ) # keeps photos if album is deleted; they become standalonerelated_name='photos',)
     tags = models.ManyToManyField(Tag, blank=True, related_name='photos')
     date_uploaded = models.DateTimeField(auto_now_add=True)
+    is_featured = models.BooleanField(default=False, help_text="Check this to display in home page gallery")
 
     class Meta:
 
@@ -233,6 +234,15 @@ class Service(models.Model):
     # A service can be linked to multiple categories
     categories = models.ManyToManyField(Category, blank=True, related_name='services')
     
+    # Tags for the service
+    tags = models.ManyToManyField(Tag, blank=True, related_name='services')
+    
+    # Key features (one per line)
+    key_features = models.TextField(
+        blank=True,
+        help_text="Enter each feature on a new line. Example:\n4K/8K video production\nDrone cinematography\nProfessional lighting\nMulti-camera setups"
+    )
+    
     class Meta:
         ordering = ['order']
     
@@ -241,3 +251,176 @@ class Service(models.Model):
     
     def get_absolute_url(self):
         return reverse('service_detail', kwargs={'service_slug': self.slug})
+    
+    def get_features_list(self):
+        """Returns list of features from the text field"""
+        if self.key_features:
+            return [f.strip() for f in self.key_features.split('\n') if f.strip()]
+        return []
+
+# ============================================================================
+# DYNAMIC HOME PAGE CONTENT MODELS
+# ============================================================================
+
+class SocialMediaLink(models.Model):
+    """Store social media links - reusable across site"""
+    PLATFORM_CHOICES = [
+        ('instagram', 'Instagram'),
+        ('facebook', 'Facebook'),
+        ('twitter', 'Twitter'),
+        ('youtube', 'YouTube'),
+        ('linkedin', 'LinkedIn'),
+        ('tiktok', 'TikTok'),
+        ('pinterest', 'Pinterest'),
+        ('custom', 'Custom URL'),
+    ]
+    
+    platform = models.CharField(max_length=20, choices=PLATFORM_CHOICES)
+    url = models.URLField()
+    is_active = models.BooleanField(default=True)
+    order = models.IntegerField(default=0)
+    
+    class Meta:
+        ordering = ['order']
+    
+    def __str__(self):
+        return f"{self.get_platform_display()} - {self.url}"
+
+
+class SiteSettings(models.Model):
+    """Global site settings like contact info, hours, etc."""
+    # Contact Information
+    email = models.EmailField()
+    phone = models.CharField(max_length=20)
+    address_line1 = models.CharField(max_length=255)
+    address_line2 = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    zip_code = models.CharField(max_length=20)
+    
+    # Business Hours
+    monday_friday_open = models.TimeField(default='09:00')
+    monday_friday_close = models.TimeField(default='18:00')
+    saturday_open = models.TimeField(default='10:00')
+    saturday_close = models.TimeField(default='16:00')
+    
+    # Additional Info
+    tagline = models.CharField(max_length=255, blank=True, help_text="e.g., 'The Intimate Multimedia Brand'")
+    
+    # Timestamps
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name_plural = "Site Settings"
+    
+    def __str__(self):
+        return "Site Settings"
+    
+    def get_full_address(self):
+        """Returns formatted full address"""
+        parts = [self.address_line1]
+        if self.address_line2:
+            parts.append(self.address_line2)
+        parts.extend([self.city, self.state, self.zip_code])
+        return ", ".join(parts)
+
+
+class HeroSlide(models.Model):
+    """Hero section slides with image and text"""
+    title = models.CharField(max_length=255)
+    subtitle = models.CharField(max_length=500, blank=True)
+    image = models.ImageField(
+        upload_to='hero/',
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png']),
+            validate_image_size
+        ]
+    )
+    order = models.IntegerField(default=0, help_text="Order of display in hero carousel")
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['order']
+    
+    def __str__(self):
+        return self.title
+
+
+class AboutSection(models.Model):
+    """About section content on home page"""
+    name = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, help_text="e.g., 'Professional Photographer'")
+    description = models.TextField(help_text="Main description paragraph")
+    bio = models.TextField(blank=True, help_text="Additional biography/story")
+    image = models.ImageField(
+        upload_to='about/',
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png']),
+            validate_image_size
+        ]
+    )
+    vision = models.TextField(blank=True, help_text="Company vision statement")
+    mission = models.TextField(blank=True, help_text="Company mission statement")
+    cta_text = models.CharField(max_length=50, default="Read My Story")
+    cta_url = models.CharField(max_length=255, blank=True)
+    is_active = models.BooleanField(default=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        verbose_name_plural = "About Section"
+    
+    def __str__(self):
+        return f"About - {self.name}"
+
+
+class Testimonial(models.Model):
+    """Client testimonials with carousel"""
+    client_name = models.CharField(max_length=255)
+    client_type = models.CharField(max_length=100, blank=True, null=True, help_text="e.g., 'Wedding Clients', 'Corporate Client'")
+    testimonial_text = models.TextField()
+    client_image = models.ImageField(
+        upload_to='testimonials/',
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png']),
+            validate_image_size
+        ],
+        blank=True,
+        null=True
+    )
+    rating = models.IntegerField(default=5, choices=[(i, f"{i} Stars") for i in range(1, 6)])
+    order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['order']
+    
+    def __str__(self):
+        return f"Testimonial from {self.client_name}"
+
+
+class Partner(models.Model):
+    """Partner/Collaboration logos and info"""
+    name = models.CharField(max_length=255)
+    category = models.CharField(max_length=255, blank=True, null=True, help_text="e.g., 'Wedding Venues', 'Fashion Brands'")
+    description = models.CharField(max_length=500, blank=True)
+    logo = models.ImageField(
+        upload_to='partners/',
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'svg']),
+            validate_image_size
+        ]
+    )
+    website_url = models.URLField(blank=True)
+    order = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['order']
+    
+    def __str__(self):
+        return f"{self.name} ({self.category})"

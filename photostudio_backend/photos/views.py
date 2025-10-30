@@ -1,27 +1,61 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseNotFound
 from django.core.paginator import Paginator
-from .models import Photo, Service, Category,  Video, Album
+from .models import Photo, Service, Category,  Video, Album, HeroSlide, AboutSection, Testimonial, Partner, SiteSettings, SocialMediaLink
 from django.db.models import Prefetch
 from django.db.models import Q
-import random
 
 # Create your views here.
 def home(request):
-    # Get all photos and shuffle them, then take first 8
-    all_photos = list(Photo.objects.all())
-    random.shuffle(all_photos)
-    featured_photos = all_photos[:8]
+    """Home page with dynamic content from database"""
+    # Get all active hero slides
+    hero_slides = HeroSlide.objects.filter(is_active=True)
+    
+    # Get about section
+    about_section = AboutSection.objects.filter(is_active=True).first()
+    
+    # Get all active testimonials
+    testimonials = Testimonial.objects.filter(is_active=True)
+    
+    # Get all active partners
+    partners = Partner.objects.filter(is_active=True)
+    
+    # Get site settings
+    site_settings = SiteSettings.objects.first()
+    
+    # Get active social media links
+    social_links = SocialMediaLink.objects.filter(is_active=True)
+    
+    # Get featured photos for gallery preview on home page
+    featured_photos = Photo.objects.filter(is_featured=True).order_by('-date_uploaded')[:8]
     
     services = Service.objects.filter(is_active=True)
+    
     context = {
+        'hero_slides': hero_slides,
+        'about_section': about_section,
+        'testimonials': testimonials,
+        'partners': partners,
+        'site_settings': site_settings,
+        'social_links': social_links,
         'latest_photos': featured_photos,
         'services': services,
     }
     return render(request, 'photos/home.html', context)
 
 def about(request):
-    return render(request, 'photos/about.html')
+    """About page with dynamic content from database"""
+    about_section = AboutSection.objects.filter(is_active=True).first()
+    site_settings = SiteSettings.objects.first()
+    social_links = SocialMediaLink.objects.filter(is_active=True)
+    
+    context = {
+        'about_section': about_section,
+        'site_settings': site_settings,
+        'social_links': social_links,
+    }
+    return render(request, 'photos/about.html', context)
+
 
 def services(request):
     # Get all active services

@@ -8,201 +8,68 @@
 -->
 
 <div class="row g-4 justify-content-center">
-    <!-- Video Production -->
+    <!-- Dynamically loop through services instead of hardcoding -->
+    {% for service in services %}
     <div class="col-lg-3 col-md-6">
+        <!-- Clickable wrapper -->
         {% if clickable %}
-            {% for service in services %}
-            {% if service.title == "Video Production" %}
-            <a href="{% url 'service_detail' service.slug %}" class="text-decoration-none">
-            {% endif %}
-            {% endfor %}
+            <a href="{{ service.get_absolute_url }}" class="text-decoration-none">
         {% endif %}
         
         <div class="card service-card-compact h-100 {% if clickable %}service-card-clickable{% endif %}">
             <div class="card-img-container-compact">
-                <img src="{% static 'images/services/service_pic/Videography.jpg' %}" class="card-img-top" alt="Video Production">
+                <!-- Use service cover image or default -->
+                {% if service.cover_image %}
+                    <img src="{{ service.cover_image.url }}" class="card-img-top" alt="{{ service.title }}">
+                {% else %}
+                    <img src="{% static 'images/services/service_pic/default_service.jpg' %}" class="card-img-top" alt="{{ service.title }}">
+                {% endif %}
+                
                 <div class="card-img-overlay d-flex align-items-center justify-content-center">
                     <div class="text-center text-white">
-                        <i class="fas fa-video fa-2x mb-2"></i>
-                        <h5 class="card-title-overlay mb-0">Video Production</h5>
+                        <!-- Icon based on service type -->
+                        {% if 'Video' in service.title %}
+                            <i class="fas fa-video fa-2x mb-2"></i>
+                        {% elif 'Photography' in service.title %}
+                            <i class="fas fa-camera fa-2x mb-2"></i>
+                        {% elif 'Graphic' in service.title %}
+                            <i class="fas fa-palette fa-2x mb-2"></i>
+                        {% elif 'Voice' in service.title %}
+                            <i class="fas fa-microphone fa-2x mb-2"></i>
+                        {% else %}
+                            <i class="fas fa-star fa-2x mb-2"></i>
+                        {% endif %}
+                        <h5 class="card-title-overlay mb-0">{{ service.title }}</h5>
                     </div>
                 </div>
             </div>
+            
             <div class="card-body p-4">
-                <h5 class="fw-bold mb-3">Video Production</h5>
-                <p class="text-muted mb-3">Professional video services for all your creative needs.</p>
-                <div class="tags-section-compact mb-4">
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary-emphasis">Commercials</span>
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary-emphasis">Music Videos</span>
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary-emphasis">Wedding Films</span>
-                </div>
-                {% for service in services %}
-                {% if service.title == "Video Production" %}
-                    {% if clickable %}
-                        <div class="btn btn-primary w-100">Explore <i class="fas fa-arrow-right ms-2"></i></div>
-                    {% else %}
-                        <a href="{% url 'service_detail' service.slug %}" class="btn btn-primary w-100">Explore <i class="fas fa-arrow-right ms-2"></i></a>
-                    {% endif %}
-                {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-        
-        {% if clickable %}
-            {% for service in services %}
-            {% if service.title == "Video Production" %}
-            </a>
-            {% endif %}
-            {% endfor %}
-        {% endif %}
-    </div>
-    
-    <!-- Photography Services -->
-    <div class="col-lg-3 col-md-6">
-        {% if clickable %}
-            {% for service in services %}
-            {% if service.title == "Photography" %}
-            <a href="{% url 'service_detail' service.slug %}" class="text-decoration-none">
-            {% endif %}
-            {% endfor %}
-        {% endif %}
-        
-        <div class="card service-card-compact h-100 {% if clickable %}service-card-clickable{% endif %}">
-            <div class="card-img-container-compact">
-                <img src="{% static 'images/services/service_pic/Photography.jpg' %}" class="card-img-top" alt="Photography Services">
-                <div class="card-img-overlay d-flex align-items-center justify-content-center">
-                    <div class="text-center text-white">
-                        <i class="fas fa-camera fa-2x mb-2"></i>
-                        <h5 class="card-title-overlay mb-0">Photography</h5>
+                <h5 class="fw-bold mb-3">{{ service.title }}</h5>
+                <p class="text-muted mb-3">{{ service.subtitle }}</p>
+                
+                <!-- Dynamic Tags -->
+                {% if service.tags.all %}
+                    <div class="tags-section-compact mb-4">
+                        {% for tag in service.tags.all %}
+                            <span class="badge bg-secondary bg-opacity-10 text-secondary-emphasis">{{ tag.name }}</span>
+                        {% endfor %}
                     </div>
-                </div>
-            </div>
-            <div class="card-body p-4">
-                <h5 class="fw-bold mb-3">Photography Services</h5>
-                <p class="text-muted mb-3">Capturing moments with artistic vision and technical excellence.</p>
-                <div class="tags-section-compact mb-4">
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary-emphasis">Portraits</span>
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary-emphasis">Events</span>
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary-emphasis">Weddings</span>
-                </div>
-                {% for service in services %}
-                {% if service.title == "Photography" %}
-                    {% if clickable %}
-                        <div class="btn btn-primary w-100">Explore <i class="fas fa-arrow-right ms-2"></i></div>
-                    {% else %}
-                        <a href="{% url 'service_detail' service.slug %}" class="btn btn-primary w-100">Explore <i class="fas fa-arrow-right ms-2"></i></a>
-                    {% endif %}
                 {% endif %}
-                {% endfor %}
+                
+                <!-- Explore Button - Uses absolute URL -->
+                <a href="{{ service.get_absolute_url }}" class="btn btn-primary w-100">
+                    Explore <i class="fas fa-arrow-right ms-2"></i>
+                </a>
             </div>
         </div>
         
+        <!-- Close clickable wrapper -->
         {% if clickable %}
-            {% for service in services %}
-            {% if service.title == "Photography" %}
             </a>
-            {% endif %}
-            {% endfor %}
         {% endif %}
     </div>
-    
-    <!-- Graphic Design -->
-    <div class="col-lg-3 col-md-6">
-        {% if clickable %}
-            {% for service in services %}
-            {% if service.title == "Graphic Design" %}
-            <a href="{% url 'service_detail' service.slug %}" class="text-decoration-none">
-            {% endif %}
-            {% endfor %}
-        {% endif %}
-        
-        <div class="card service-card-compact h-100 {% if clickable %}service-card-clickable{% endif %}">
-            <div class="card-img-container-compact">
-                <img src="{% static 'images/services/service_pic/Graphic_Design.jpg' %}" class="card-img-top" alt="Graphic Design">
-                <div class="card-img-overlay d-flex align-items-center justify-content-center">
-                    <div class="text-center text-white">
-                        <i class="fas fa-palette fa-2x mb-2"></i>
-                        <h5 class="card-title-overlay mb-0">Graphic Design</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body p-4">
-                <h5 class="fw-bold mb-3">Graphic Design</h5>
-                <p class="text-muted mb-3">Visual storytelling that makes your brand stand out.</p>
-                <div class="tags-section-compact mb-4">
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary-emphasis">Branding</span>
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary-emphasis">Marketing</span>
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary-emphasis">Digital</span>
-                </div>
-                {% for service in services %}
-                {% if service.title == "Graphic Design" %}
-                    {% if clickable %}
-                        <div class="btn btn-primary w-100">Explore <i class="fas fa-arrow-right ms-2"></i></div>
-                    {% else %}
-                        <a href="{% url 'service_detail' service.slug %}" class="btn btn-primary w-100">Explore <i class="fas fa-arrow-right ms-2"></i></a>
-                    {% endif %}
-                {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-        
-        {% if clickable %}
-            {% for service in services %}
-            {% if service.title == "Graphic Design" %}
-            </a>
-            {% endif %}
-            {% endfor %}
-        {% endif %}
-    </div>
-    
-    <!-- Voice Over -->
-    <div class="col-lg-3 col-md-6">
-        {% if clickable %}
-            {% for service in services %}
-            {% if service.title == "Voiceover Recording" %}
-            <a href="{% url 'service_detail' service.slug %}" class="text-decoration-none">
-            {% endif %}
-            {% endfor %}
-        {% endif %}
-        
-        <div class="card service-card-compact h-100 {% if clickable %}service-card-clickable{% endif %}">
-            <div class="card-img-container-compact">
-                <img src="{% static 'images/services/service_pic/Voice_recorder.jpg' %}" class="card-img-top" alt="Voice Over">
-                <div class="card-img-overlay d-flex align-items-center justify-content-center">
-                    <div class="text-center text-white">
-                        <i class="fas fa-microphone fa-2x mb-2"></i>
-                        <h5 class="card-title-overlay mb-0">Voice Over</h5>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body p-4">
-                <h5 class="fw-bold mb-3">Voice Over</h5>
-                <p class="text-muted mb-3">Professional voice talent for your audio projects.</p>
-                <div class="tags-section-compact mb-4">
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary-emphasis">Commercials</span>
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary-emphasis">Narration</span>
-                    <span class="badge bg-secondary bg-opacity-10 text-secondary-emphasis">Character</span>
-                </div>
-                {% for service in services %}
-                {% if service.title == "Voiceover Recording" %}
-                    {% if clickable %}
-                        <div class="btn btn-primary w-100">Explore <i class="fas fa-arrow-right ms-2"></i></div>
-                    {% else %}
-                        <a href="{% url 'service_detail' service.slug %}" class="btn btn-primary w-100">Explore <i class="fas fa-arrow-right ms-2"></i></a>
-                    {% endif %}
-                {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-        
-        {% if clickable %}
-            {% for service in services %}
-            {% if service.title == "Voiceover Recording" %}
-            </a>
-            {% endif %}
-            {% endfor %}
-        {% endif %}
-    </div>
+    {% endfor %}
 </div>
 
 {% if show_cta_buttons %}
