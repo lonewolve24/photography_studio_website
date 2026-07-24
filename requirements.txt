@@ -1,0 +1,1 @@
+-r photostudio_backend/requirements.txt

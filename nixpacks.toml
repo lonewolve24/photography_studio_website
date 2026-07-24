@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["python311", "gcc", "postgresql"]
+
+[phases.install]
+cmds = ["pip install -r requirements.txt"]
+
+[start]
+cmd = "cd photostudio_backend && python manage.py migrate && python manage.py collectstatic --noinput && gunicorn photostudio_backend.wsgi --bind 0.0.0.0:$PORT --timeout 120"
