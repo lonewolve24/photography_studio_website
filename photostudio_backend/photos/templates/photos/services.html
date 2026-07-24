@@ -4,124 +4,225 @@
 {% block title %}Services - PhotoStudio{% endblock %}
 
 {% block content %}
-<!-- Services Header Banner -->
-<section class="page-header" style="background-color: var(--secondary-color);">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h1 class="display-3 fw-bold mb-3" style="color: white !important;">Services</h1>
-                <p class="lead mb-0" style="color: white !important;">Professional photography services tailored to your unique vision and needs</p>
-            </div>
-        </div>
+<style>
+    /* Fullscreen Hero */
+    .services-hero {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        z-index: 1000;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+    }
+    .services-hero::before {
+        content: '';
+        position: absolute; top:0; left:0; width:100%; height:100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1;
+    }
+    .hero-content-wrapper {
+        position: relative; z-index: 2; text-align: center; color: white;
+    }
+    
+    /* When blinds open, hero scales up and fades out */
+    .services-hero.hide {
+        transform: scale(1.1);
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    /* The Blinds Overlay */
+    .services-blinds-container {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        z-index: 999; display: flex; flex-direction: column;
+        pointer-events: none;
+    }
+    .blind-panel {
+        flex: 1;
+        background-color: var(--primary-color);
+        transform-origin: top;
+        transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .services-blinds-container.open .blind-panel {
+        transform: scaleY(0);
+    }
+    .blind-panel:nth-child(1) { transition-delay: 0.1s; }
+    .blind-panel:nth-child(2) { transition-delay: 0.2s; }
+    .blind-panel:nth-child(3) { transition-delay: 0.3s; }
+    .blind-panel:nth-child(4) { transition-delay: 0.4s; }
+    .blind-panel:nth-child(5) { transition-delay: 0.5s; }
+    .blind-panel:nth-child(6) { transition-delay: 0.6s; }
+
+    /* The Actual Content Container */
+    .services-main-content {
+        position: relative;
+        z-index: 1;
+        background: var(--primary-color);
+        opacity: 0; /* hidden until blinds open */
+        transition: opacity 0.1s;
+    }
+    .services-main-content.visible {
+        opacity: 1;
+    }
+
+    /* The Big Grid */
+    .services-big-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0;
+        width: 100%;
+        margin-bottom: -50px; /* counteract footer margin */
+    }
+    @media (max-width: 768px) {
+        .services-big-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+    .service-big-card {
+        aspect-ratio: 1/1;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .service-big-card img {
+        width: 100%; height: 100%; object-fit: cover;
+        transition: transform 0.8s ease;
+    }
+    .service-big-card:hover img {
+        transform: scale(1.05);
+    }
+    .service-big-overlay {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(16, 52, 76, 0.8); /* Primary color semi-transparent */
+        display: flex; flex-direction: column; justify-content: center; align-items: center;
+        opacity: 0; transition: opacity 0.4s ease;
+    }
+    .service-big-card:hover .service-big-overlay {
+        opacity: 1;
+    }
+    .service-big-title {
+        color: white; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: bold;
+        transform: translateY(20px); transition: transform 0.4s ease;
+        text-align: center; margin: 0;
+    }
+    .service-big-subtitle {
+        color: var(--accent-color); font-size: clamp(1rem, 2vw, 1.5rem); margin-top: 15px;
+        transform: translateY(20px); transition: transform 0.4s ease; transition-delay: 0.1s;
+        text-transform: uppercase; letter-spacing: 2px;
+    }
+    .service-big-card:hover .service-big-title,
+    .service-big-card:hover .service-big-subtitle {
+        transform: translateY(0);
+    }
+    
+    /* Footer adjustments */
+    footer {
+        position: relative;
+        z-index: 2;
+    }
+</style>
+
+<!-- Blinds Container (Fixed over the content) -->
+<div class="services-blinds-container" id="servicesBlinds">
+    <div class="blind-panel"></div>
+    <div class="blind-panel"></div>
+    <div class="blind-panel"></div>
+    <div class="blind-panel"></div>
+    <div class="blind-panel"></div>
+    <div class="blind-panel"></div>
+</div>
+
+<!-- Hero Section (Fixed on top initially) -->
+{% if random_photo %}
+<section class="services-hero" id="servicesHero" style="background-image: url('{{ random_photo.image.url }}');">
+{% else %}
+<section class="services-hero" id="servicesHero" style="background-image: url('{% static 'images/services/hero_images/hero_image1.jpg' %}');">
+{% endif %}
+    <div class="hero-content-wrapper">
+        <h1 class="display-1 fw-bold mb-4" style="text-shadow: 2px 2px 15px rgba(0,0,0,0.8); font-size: clamp(3rem, 8vw, 6rem);">Our Services</h1>
+        <button id="openBlindsBtn" class="btn btn-outline-light rounded-pill px-5 py-3 fw-bold mt-3" style="font-size: 1.2rem; border-width: 2px; letter-spacing: 1px; backdrop-filter: blur(5px);">
+            View Our Services
+            <i class="fas fa-arrow-down ms-2"></i>
+        </button>
     </div>
 </section>
 
-<!-- Services Grid Section -->
-<section class="py-5 my-5 bg-light">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3">Our Creative Services</h2>
-            <p class="lead text-muted">Comprehensive multimedia solutions to bring your vision to life</p>
-        </div>
-        
-        <!-- Include Reusable Services Grid -->
-        {% include 'includes/services_grid.html' with clickable=False show_cta_buttons=False %}
-    </div>
-</section>
-
-<!-- Why Choose Us Section -->
-<section class="py-5 my-5">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-6 mb-4 mb-lg-0">
-                <img src="{% static 'images/services/testimonials/why-choose.jpg' %}" alt="Why Choose PhotoStudio" class="img-fluid rounded shadow">
-            </div>
-            <div class="col-lg-6">
-                <h2 class="display-5 fw-bold mb-4">Why Choose Me</h2>
-                <p class="lead mb-4">What sets my photography services apart</p>
-                
-                <div class="feature-item d-flex mb-4">
-                    <div class="feature-icon-small me-3 text-primary">
-                        <i class="fas fa-check-circle fa-2x"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold mb-2">Experience & Expertise</h5>
-                        <p class="mb-0">With over 15 years of photography experience across various genres, I bring technical mastery and creative vision to every project.</p>
-                    </div>
-                </div>
-                
-                <div class="feature-item d-flex mb-4">
-                    <div class="feature-icon-small me-3 text-primary">
-                        <i class="fas fa-check-circle fa-2x"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold mb-2">Personalized Approach</h5>
-                        <p class="mb-0">I tailor my services to meet your specific needs and preferences, ensuring the final results align perfectly with your vision.</p>
-                    </div>
-                </div>
-                
-                <div class="feature-item d-flex mb-4">
-                    <div class="feature-icon-small me-3 text-primary">
-                        <i class="fas fa-check-circle fa-2x"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold mb-2">Quality Equipment</h5>
-                        <p class="mb-0">I use professional-grade cameras, lenses, and lighting equipment to ensure the highest quality images in any setting.</p>
-                    </div>
-                </div>
-                
-                <div class="feature-item d-flex mb-4">
-                    <div class="feature-icon-small me-3 text-primary">
-                        <i class="fas fa-check-circle fa-2x"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold mb-2">Attention to Detail</h5>
-                        <p class="mb-0">From composition to lighting to post-processing, I pay meticulous attention to every detail to create exceptional imagery.</p>
-                    </div>
-                </div>
-                
-                <div class="feature-item d-flex">
-                    <div class="feature-icon-small me-3 text-primary">
-                        <i class="fas fa-check-circle fa-2x"></i>
-                    </div>
-                    <div>
-                        <h5 class="fw-bold mb-2">Client Satisfaction</h5>
-                        <p class="mb-0">Your happiness is my priority. I maintain open communication throughout the process and am committed to exceeding your expectations.</p>
-                    </div>
+<!-- The Main Content Grid -->
+<div class="services-main-content" id="servicesContent">
+    <div class="services-big-grid">
+        {% for service in services %}
+            <div class="service-big-card" onclick="window.location.href='{{ service.get_absolute_url }}'">
+                {% if service.cover_image %}
+                    <img src="{{ service.cover_image.url }}" alt="{{ service.title }}">
+                {% else %}
+                    <div style="width: 100%; height: 100%; background: var(--secondary-color);"></div>
+                {% endif %}
+                <div class="service-big-overlay">
+                    <h3 class="service-big-title">{{ service.title }}</h3>
+                    <div class="service-big-subtitle">View Projects</div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-
-<!-- Get In Touch Section -->
-<section class="py-5 my-5 bg-light">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center">
-                <h2 class="display-5 fw-bold mb-4">Ready to Book Your Session?</h2>
-                <p class="lead mb-5">
-                    Contact me today to discuss your project and check availability. I look forward to capturing your special moments!
-                </p>
-
-                <div class="text-center my-4">
-                    <img src="{% static 'images/services/logo/shotz_logo_white.jpg' %}" alt="Shotz Logo" class="rounded-circle border border-4" style="width: 150px; height: 150px; object-fit: cover; border-color: var(--primary-color) !important; padding: 5px; background: #fff;">
-                </div>
-
-                <div>
-                    <a href="#" class="btn btn-primary px-4 py-2 fw-bold">
-                        Get in Touch
-                        <i class="fas fa-arrow-right ms-2"></i>
-                    </a>
-                </div>
+        {% empty %}
+            <div class="col-12 text-center py-5 text-white">
+                <p class="lead mt-5">No services available right now.</p>
             </div>
-        </div>
+        {% endfor %}
     </div>
-</section>
+</div>
+
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    // Any JavaScript specific to the Services page can go here
+    document.addEventListener('DOMContentLoaded', function() {
+        const openBtn = document.getElementById('openBlindsBtn');
+        const hero = document.getElementById('servicesHero');
+        const blinds = document.getElementById('servicesBlinds');
+        const content = document.getElementById('servicesContent');
+        
+        // Setup initial state: hide navbar and lock scrolling
+        const navbar = document.querySelector('.navbar');
+        if (navbar) {
+            navbar.style.transform = 'translateY(-100%)';
+            navbar.style.transition = 'transform 0.5s ease';
+        }
+        document.body.style.overflow = 'hidden';
+
+        if (openBtn) {
+            openBtn.addEventListener('click', function() {
+                // 1. Make content visible behind blinds
+                content.classList.add('visible');
+                
+                // 2. Hide hero smoothly
+                hero.classList.add('hide');
+                
+                // 3. Open the blinds (staggered animation)
+                // Small delay to sync with hero fading out
+                setTimeout(() => {
+                    blinds.classList.add('open');
+                }, 300);
+                
+                // 4. Bring navbar down and unlock scrolling once animation finishes
+                setTimeout(() => {
+                    if (navbar) {
+                        navbar.style.transform = 'translateY(0)';
+                        navbar.classList.add('scrolled'); // Force solid background if needed
+                    }
+                    document.body.style.overflow = 'auto';
+                    window.scrollTo(0, 0); // Ensure we are at the top
+                }, 1200);
+                
+                // 5. Cleanup DOM
+                setTimeout(() => {
+                    blinds.style.display = 'none';
+                    hero.style.display = 'none';
+                }, 1800);
+            });
+        }
+    });
 </script>
-{% endblock %} 
+{% endblock %}
