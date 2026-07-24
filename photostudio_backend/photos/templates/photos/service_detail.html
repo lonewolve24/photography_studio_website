@@ -4,175 +4,266 @@
 {% block title %}{{ service.title }} - PhotoStudio{% endblock %}
 
 {% block content %}
-<!-- Service Header Banner -->
-<section class="page-header" style="background-image: url('{% if service.cover_image %}{{ service.cover_image.url }}{% else %}{% static 'images/services/default-header.jpg' %}{% endif %}');">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 text-center text-white">
-                <h1 class="display-3 fw-bold mb-3">{{ service.title }}</h1>
-                <p class="lead mb-0">{{ service.subtitle }}</p>
-            </div>
-        </div>
-    </div>
-</section>
+<style>
+    /* Fullscreen Hero for Service Detail */
+    .services-hero {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
+        z-index: 1000;
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1), opacity 0.8s ease;
+    }
+    .services-hero::before {
+        content: '';
+        position: absolute; top:0; left:0; width:100%; height:100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 1;
+    }
+    .hero-content-wrapper {
+        position: relative; z-index: 2; text-align: center; color: white;
+    }
+    
+    /* When blinds open, hero scales up and fades out */
+    .services-hero.hide {
+        transform: scale(1.1);
+        opacity: 0;
+        pointer-events: none;
+    }
 
-<!-- Service Description Section -->
-<section class="py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="card border-0 shadow-sm p-4">
-                    <h2 class="fw-bold mb-4">About This Service</h2>
-                    <p class="lead mb-0">{{ service.description|linebreaks }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    /* The Blinds Overlay */
+    .services-blinds-container {
+        position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+        z-index: 999; display: flex; flex-direction: column;
+        pointer-events: none;
+    }
+    .blind-panel {
+        flex: 1;
+        background-color: var(--primary-color);
+        transform-origin: top;
+        transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .services-blinds-container.open .blind-panel {
+        transform: scaleY(0);
+    }
+    .blind-panel:nth-child(1) { transition-delay: 0.1s; }
+    .blind-panel:nth-child(2) { transition-delay: 0.2s; }
+    .blind-panel:nth-child(3) { transition-delay: 0.3s; }
+    .blind-panel:nth-child(4) { transition-delay: 0.4s; }
+    .blind-panel:nth-child(5) { transition-delay: 0.5s; }
+    .blind-panel:nth-child(6) { transition-delay: 0.6s; }
 
-<!-- Gallery Section with Tabs -->
-{% if media_by_category %}
-<section class="py-5 bg-light service-detail">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3">Portfolio</h2>
-            {% if show_photos and show_videos %}
-            <p class="lead text-muted mb-0">Some examples of my {{ service.title|lower }} work</p>
-            {% elif show_photos %}
-            <p class="lead text-muted mb-0">Photo examples of my {{ service.title|lower }} work</p>
-            {% elif show_videos %}
-            <p class="lead text-muted mb-0">Video examples of my {{ service.title|lower }} work</p>
-            {% endif %}
-        </div>
-        
-        <!-- Gallery Tabs -->
-        <ul class="nav nav-pills justify-content-center mb-5" id="galleryTabs" role="tablist">
-            {% for category, media in media_by_category.items %}
-            <li class="nav-item" role="presentation">
-                <button class="nav-link {% if forloop.first %}active{% endif %}" id="tab-{{ category.slug }}" data-bs-toggle="pill" data-bs-target="#pane-{{ category.slug }}" type="button" role="tab" aria-controls="pane-{{ category.slug }}" aria-selected="{% if forloop.first %}true{% else %}false{% endif %}">
-                    {{ category.name }}
-                </button>
-            </li>
-            {% endfor %}
-        </ul>
-        
-        <!-- Gallery Content -->
-        <div class="tab-content" id="galleryTabsContent">
-            {% for category, media in media_by_category.items %}
-            <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="pane-{{ category.slug }}" role="tabpanel" aria-labelledby="tab-{{ category.slug }}">
-                <div class="row g-4">
-                    <!-- Display Photos -->
-                    {% if show_photos %}
-                        {% for photo in media.photos %}
-                        <div class="col-lg-3 col-md-4 col-6">
-                            <a href="{{ photo.image.url }}" class="glightbox" data-gallery="service-gallery">
-                                <div class="gallery-item position-relative">
-                                    <img src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
-                                    <div class="gallery-item-tag">
-                                        <span class="badge bg-primary">{{ photo.category.name }}</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
+    /* The Actual Content Container */
+    .services-main-content {
+        position: relative;
+        z-index: 1;
+        background: var(--white);
+        opacity: 0; /* hidden until blinds open */
+        transition: opacity 0.1s;
+    }
+    .services-main-content.visible {
+        opacity: 1;
+    }
 
-                    <!-- Display Videos -->
-                    {% if show_videos %}
-                        {% for video in media.videos %}
-                        <div class="col-lg-3 col-md-4 col-6">
-                            {% if video.is_youtube_video %}
-                                <a href="{{ video.youtube_url }}" class="glightbox" data-gallery="service-gallery" data-title="{{ video.title }}" data-type="video">
-                            {% else %}
-                                <a href="{{ video.video_file.url }}" class="glightbox" data-gallery="service-gallery" data-title="{{ video.title }}">
-                            {% endif %}
-                                <div class="gallery-item position-relative">
-                                    {% if video.thumbnail %}
-                                    <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}" class="img-fluid rounded shadow gallery-img">
-                                    {% elif video.is_youtube_video and video.get_youtube_thumbnail_url %}
-                                    <img src="{{ video.get_youtube_thumbnail_url }}" alt="{{ video.title }}" class="img-fluid rounded shadow gallery-img">
-                                    {% else %}
-                                    <div class="img-fluid rounded shadow gallery-img d-flex align-items-center justify-content-center" style="background-color: #343a40; color: white; height: 200px;">
-                                        <span>{{ video.title }}</span>
-                                    </div>
-                                    {% endif %}
-                                    <div class="video-play-icon">
-                                        {% if video.is_youtube_video %}
-                                        <i class="fab fa-youtube" style="color: #FF0000;"></i>
-                                        {% else %}
-                                        <i class="fas fa-play-circle"></i>
-                                        {% endif %}
-                                    </div>
-                                    <div class="gallery-item-tag">
-                                        <span class="badge bg-primary">{{ video.category.name }}</span>
-                                        {% if video.is_youtube_video %}
-                                        <span class="badge bg-danger ms-1">YouTube</span>
-                                        {% endif %}
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
-                    
-                    <!-- Show message if no media in this category -->
-                    {% if show_photos and show_videos %}
-                        {% if not media.photos and not media.videos %}
-                        <div class="col-12">
-                            <div class="text-center py-5">
-                                <p class="text-muted" >No media available in the {{ category.name }} category yet.</p>
-                            </div>
-                        </div>
-                        {% endif %}
-                    {% elif show_photos %}
-                        {% if not media.photos %}
-                        <div class="col-12">
-                            <div class="text-center py-5">
-                                <p class="text-muted">No photos available in the {{ category.name }} category yet.</p>
-                            </div>
-                        </div>
-                        {% endif %}
-                    {% elif show_videos %}
-                        {% if not media.videos %}
-                        <div class="col-12">
-                            <div class="text-center py-5">
-                                <p class="text-muted">No videos available in the {{ category.name }} category yet.</p>
-                            </div>
-                        </div>
-                        {% endif %}
-                    {% endif %}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
+    /* Grid for service media (like homepage featured) */
+    .service-gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+        width: 100vw;
+        margin-left: calc(-50vw + 50%);
+    }
+    @media (max-width: 992px) {
+        .service-gallery-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 576px) {
+        .service-gallery-grid { grid-template-columns: 1fr; }
+    }
+
+    .service-gallery-item {
+        aspect-ratio: 1/1;
+        position: relative;
+        overflow: hidden;
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+    .service-gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+    .service-gallery-item:hover img {
+        transform: scale(1.08);
+    }
+    
+    .service-gallery-overlay {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(16, 52, 76, 0.7); /* Primary color */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+    .service-gallery-item:hover .service-gallery-overlay {
+        opacity: 1;
+    }
+    
+    .service-gallery-overlay h4 {
+        color: white;
+        transform: translateY(20px);
+        transition: transform 0.3s ease;
+        margin-bottom: 5px;
+        text-align: center;
+        padding: 0 15px;
+    }
+    .service-gallery-item:hover .service-gallery-overlay h4 {
+        transform: translateY(0);
+    }
+    
+    .video-play-icon-large {
+        font-size: 3rem;
+        color: white;
+        margin-bottom: 15px;
+        transform: scale(0.8);
+        transition: transform 0.3s ease;
+    }
+    .service-gallery-item:hover .video-play-icon-large {
+        transform: scale(1);
+    }
+</style>
+
+<!-- Blinds Container (Fixed over the content) -->
+<div class="services-blinds-container" id="servicesBlinds">
+    <div class="blind-panel"></div>
+    <div class="blind-panel"></div>
+    <div class="blind-panel"></div>
+    <div class="blind-panel"></div>
+    <div class="blind-panel"></div>
+    <div class="blind-panel"></div>
+</div>
+
+<!-- Service Header Banner (100vh) -->
+{% if random_photo %}
+<section class="services-hero" id="servicesHero" style="background-image: url('{{ random_photo.image.url }}');">
+{% else %}
+<section class="services-hero" id="servicesHero" style="background-image: url('{% if service.cover_image %}{{ service.cover_image.url }}{% else %}{% static 'images/services/default-header.jpg' %}{% endif %}');">
 {% endif %}
+    <div class="hero-content-wrapper container" style="padding: 0 20px; max-width: 900px;">
+        <h1 class="display-1 fw-bold mb-3" style="text-shadow: 2px 2px 15px rgba(0,0,0,0.8); font-size: clamp(3rem, 8vw, 6rem);">{{ service.title }}</h1>
+        <p class="lead fw-bold mb-3" style="text-shadow: 1px 1px 5px rgba(0,0,0,0.8); font-size: clamp(1.2rem, 2vw, 1.8rem); color: var(--accent-color, #ec7f00);">{{ service.subtitle }}</p>
+        
+        <!-- Description moved to pre-stage hero -->
+        <div class="mb-4 description-pre-stage" style="text-shadow: 1px 1px 5px rgba(0,0,0,0.9); font-size: clamp(1rem, 1.5vw, 1.2rem); line-height: 1.6; color: rgba(255,255,255,0.95);">
+            {{ service.description|linebreaksbr }}
+        </div>
 
+        <button id="openBlindsBtn" class="btn btn-outline-light rounded-pill px-5 py-3 fw-bold mt-2" style="font-size: 1.2rem; border-width: 2px; letter-spacing: 1px; backdrop-filter: blur(5px);">
+            View Gallery
+            <i class="fas fa-arrow-down ms-2"></i>
+        </button>
+    </div>
+</section>
 
-<!-- Call to Action Section -->
-<section class="py-5">
-    <div class="container">
-        <div class="row justify-content-center">
-            <div class="col-lg-10">
-                <div class="modern-cta-section text-center p-5 rounded-3" style="background-color: var(--background-light);">
-                    <h3 class="fw-bold mb-3">Ready to Start Your Project?</h3>
-                    <p class="lead text-muted mb-4">Let's discuss how we can help bring your creative vision to life with professional quality and artistic flair.</p>
-                    
-                    <div class="d-flex justify-content-center gap-3 flex-wrap">
-                        <a href="{% url 'contact' %}" class="btn btn-primary px-4 py-3">
-                            <i class="fas fa-calendar me-2"></i>Book Consultation
+<!-- The Main Content Container (hidden until blinds open) -->
+<div class="services-main-content" id="servicesContent">
+    
+    <!-- Full-width Gallery Section -->
+    <section id="service-gallery" class="bg-dark pb-0" style="padding-top: 80px;">
+        <!-- Gallery Content -->
+        {% if show_photos or show_videos %}
+        <div class="service-gallery-grid">
+            
+            <!-- Display Photos -->
+            {% if show_photos %}
+                {% for category, media in media_by_category.items %}
+                    {% for photo in media.photos %}
+                        <a href="{{ photo.image.url }}" class="glightbox service-gallery-item" data-gallery="service-gallery">
+                            <img src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" alt="{{ photo.title }}">
+                            <div class="service-gallery-overlay">
+                                <h4>{{ photo.title|default:category.name }}</h4>
+                                <span class="badge bg-primary mt-2">{{ category.name }}</span>
+                            </div>
                         </a>
-                        <a href="{% url 'services' %}" class="btn btn-outline-primary px-4 py-3">
-                            View All Services
-                            <i class="fas fa-arrow-right ms-2"></i>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+
+            <!-- Display Videos -->
+            {% if show_videos %}
+                {% for category, media in media_by_category.items %}
+                    {% for video in media.videos %}
+                        {% if video.is_youtube_video %}
+                            <a href="{{ video.youtube_url }}" class="glightbox service-gallery-item" data-gallery="service-gallery" data-title="{{ video.title }}" data-type="video">
+                        {% else %}
+                            <a href="{{ video.video_file.url }}" class="glightbox service-gallery-item" data-gallery="service-gallery" data-title="{{ video.title }}">
+                        {% endif %}
+                        
+                            {% if video.thumbnail %}
+                                <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}">
+                            {% elif video.is_youtube_video and video.get_youtube_thumbnail_url %}
+                                <img src="{{ video.get_youtube_thumbnail_url }}" alt="{{ video.title }}">
+                            {% else %}
+                                <div style="width: 100%; height: 100%; background-color: #343a40; display: flex; align-items: center; justify-content: center; color: white;">
+                                    <span>{{ video.title }}</span>
+                                </div>
+                            {% endif %}
+                            
+                            <div class="service-gallery-overlay">
+                                <i class="fas fa-play-circle video-play-icon-large"></i>
+                                <h4>{{ video.title }}</h4>
+                                <div class="mt-2">
+                                    <span class="badge bg-primary">{{ category.name }}</span>
+                                    {% if video.is_youtube_video %}
+                                    <span class="badge bg-danger ms-1">YouTube</span>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </a>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            
+        </div>
+        {% else %}
+            <div class="container py-5 text-center text-white">
+                <p class="lead">No media available for this service yet.</p>
+            </div>
+        {% endif %}
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="py-5" style="background-color: var(--text-dark); color: white;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="modern-cta-section text-center p-5 rounded-3" style="background-color: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                        <h3 class="fw-bold mb-3">Ready to Start Your Project?</h3>
+                        <p class="lead mb-4" style="color: rgba(255,255,255,0.7);">Let's discuss how we can help bring your creative vision to life with professional quality and artistic flair.</p>
+                        
+                        <div class="d-flex justify-content-center gap-3 flex-wrap">
+                            <a href="{% url 'contact' %}" class="btn btn-outline-light px-4 py-3">
+                                <i class="fas fa-calendar me-2"></i>Book Consultation
+                            </a>
+                            <a href="{% url 'services' %}" class="btn btn-outline-light px-4 py-3" style="opacity: 0.8;">
+                                View All Services
+                                <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>
 {% endblock %}
 
 {% block extra_js %}
@@ -184,6 +275,52 @@
         selector: '.glightbox',
         loop: true,
         touchNavigation: true,
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const openBtn = document.getElementById('openBlindsBtn');
+        const hero = document.getElementById('servicesHero');
+        const blinds = document.getElementById('servicesBlinds');
+        const content = document.getElementById('servicesContent');
+        
+        // Setup initial state: hide navbar and lock scrolling
+        const navbar = document.querySelector('.navbar');
+        if (navbar) {
+            navbar.style.transform = 'translateY(-100%)';
+            navbar.style.transition = 'transform 0.5s ease';
+        }
+        document.body.style.overflow = 'hidden';
+
+        if (openBtn) {
+            openBtn.addEventListener('click', function() {
+                // 1. Make content visible behind blinds
+                content.classList.add('visible');
+                
+                // 2. Hide hero smoothly
+                hero.classList.add('hide');
+                
+                // 3. Open the blinds (staggered animation)
+                setTimeout(() => {
+                    blinds.classList.add('open');
+                }, 300);
+                
+                // 4. Bring navbar down and unlock scrolling once animation finishes
+                setTimeout(() => {
+                    if (navbar) {
+                        navbar.style.transform = 'translateY(0)';
+                        navbar.classList.add('scrolled'); // Force solid background if needed
+                    }
+                    document.body.style.overflow = 'auto';
+                    window.scrollTo(0, 0); // Ensure we are at the top
+                }, 1200);
+                
+                // 5. Cleanup DOM
+                setTimeout(() => {
+                    blinds.style.display = 'none';
+                    hero.style.display = 'none';
+                }, 1800);
+            });
+        }
     });
 </script>
 {% endblock %} 

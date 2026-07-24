@@ -35,8 +35,12 @@
                                         View Services
                                     </a>
                                 </div>
-                                
-            </div>
+                            </div>
+                            
+                            <!-- Animated Scroll Arrow - Clickable -->
+                            <a href="#about-section" class="scroll-down-arrow" style="position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); z-index: 3; cursor: pointer; text-decoration: none; animation: bounce-arrow 2s infinite;">
+                                <div style="width: 30px; height: 30px; border-right: 3px solid rgba(255,255,255,0.9); border-bottom: 3px solid rgba(255,255,255,0.9); transform: rotate(45deg); transition: all 0.3s ease;"></div>
+                            </a>
                         </div>
                     </div>
                 {% endfor %}
@@ -66,45 +70,98 @@
 
 <!-- DYNAMIC ABOUT SECTION -->
 {% if about_section %}
-<section class="py-5 my-5">
+<section id="about-section" class="py-5 my-5 overflow-hidden">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-5 mb-4 mb-lg-0 text-center">
-                    <img src="{{ about_section.image.url }}" alt="{{ about_section.name }}" class="img-fluid rounded shadow about-img" style="max-width: 100%; height: auto;">
-            </div>
-            <div class="col-lg-7">
-                    <h2 class="display-5 fw-bold mb-3" style="color: var(--accent-color);">About {{ about_section.name }}</h2>
-                    <h5 class="text-muted mb-4">{{ about_section.title }}</h5>
-                    
-                    <!-- Main Description -->
-                    <div class="mb-3">
-                        {{ about_section.description|linebreaks }}
-                    </div>
-                    
-                    <!-- Extended Bio -->
-                    {% if about_section.bio %}
-                        <div class="mb-4">
-                            {{ about_section.bio|linebreaks }}
-                        </div>
-                    {% endif %}
-                    
-                    <!-- CTA Button -->
-                    {% if about_section.cta_text and about_section.cta_url %}
-                        <a href="{{ about_section.cta_url }}" class="btn btn-outline-primary px-4">
-                            {{ about_section.cta_text }}
-                    <i class="fas fa-arrow-right ms-2"></i>
-                </a>
-                    {% endif %}
+            <!-- Text Content (Left Side) -->
+            <div class="col-lg-5 mb-5 mb-lg-0 pe-lg-5">
+                <h2 class="display-4 fw-bold mb-3" style="color: var(--text-dark); letter-spacing: -1px;">{{ about_section.name }}</h2>
+                <h4 class="mb-4 fw-semibold" style="color: var(--accent-color);">{{ about_section.title }}</h4>
+                
+                <!-- Main Description -->
+                <div class="lead text-muted mb-4" style="line-height: 1.8; font-size: 1.1rem;">
+                    {{ about_section.description|linebreaks }}
                 </div>
+                
+                <!-- Extended Bio -->
+                {% if about_section.bio %}
+                    <div class="text-muted mb-5" style="line-height: 1.7;">
+                        {{ about_section.bio|linebreaks }}
+                    </div>
+                {% endif %}
+                
+                <!-- CTA Button -->
+                {% if about_section.cta_text and about_section.cta_url %}
+                    <a href="{{ about_section.cta_url }}" class="btn btn-primary rounded-pill px-5 py-3 shadow-sm fw-bold text-uppercase" style="letter-spacing: 1px; transition: transform 0.3s ease;">
+                        {{ about_section.cta_text }}
+                    </a>
+                {% endif %}
+            </div>
+
+            <!-- Image Collage (Right Side) -->
+            <div class="col-lg-7">
+                <div class="position-relative w-100" style="min-height: 550px; padding: 20px;">
+                    <!-- Decorative Background Blobs -->
+                    <div style="position: absolute; top: -10%; right: 0; width: 350px; height: 350px; background-color: var(--primary-color); opacity: 0.08; border-radius: 50%; z-index: 0;"></div>
+                    <div style="position: absolute; bottom: -5%; left: 5%; width: 250px; height: 250px; background-color: var(--accent-color); opacity: 0.12; border-radius: 50%; z-index: 0;"></div>
+                    <div style="position: absolute; top: 40%; left: -10%; width: 150px; height: 150px; background-color: #34d399; opacity: 0.15; border-radius: 50%; z-index: 0;"></div>
+
+                    <!-- The Collage Grid -->
+                    <div class="row g-4 align-items-center position-relative" style="z-index: 1;">
+                        <!-- Column 1 -->
+                        <div class="col-4">
+                            <div class="about-collage-item shadow-lg" style="border-radius: 200px; aspect-ratio: 1/2.2; transform: translateY(30px); overflow: hidden; transition: transform 0.4s ease;">
+                                <img src="{{ about_section.image.url }}" alt="{{ about_section.name }}" class="w-100 h-100" style="object-fit: cover; transition: transform 0.6s ease;">
+                            </div>
+                        </div>
+                        
+                        <!-- Column 2 -->
+                        <div class="col-4">
+                            <div class="about-collage-item shadow-lg mb-4" style="border-radius: 200px; aspect-ratio: 1/1.5; transform: translateY(-20px); overflow: hidden; transition: transform 0.4s ease;">
+                                {% if latest_photos|length > 0 %}
+                                    <img src="{% if latest_photos.0.thumbnail %}{{ latest_photos.0.thumbnail.url }}{% else %}{{ latest_photos.0.image.url }}{% endif %}" class="w-100 h-100" style="object-fit: cover; transition: transform 0.6s ease;">
+                                {% else %}
+                                    <div class="w-100 h-100" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));"></div>
+                                {% endif %}
+                            </div>
+                            <div class="about-collage-item shadow-lg" style="border-radius: 50%; aspect-ratio: 1/1; overflow: hidden; transition: transform 0.4s ease;">
+                                {% if latest_photos|length > 1 %}
+                                    <img src="{% if latest_photos.1.thumbnail %}{{ latest_photos.1.thumbnail.url }}{% else %}{{ latest_photos.1.image.url }}{% endif %}" class="w-100 h-100" style="object-fit: cover; transition: transform 0.6s ease;">
+                                {% else %}
+                                    <div class="w-100 h-100" style="background: var(--accent-color); opacity: 0.8;"></div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <!-- Column 3 -->
+                        <div class="col-4">
+                            <div class="about-collage-item shadow-lg mb-4" style="border-radius: 50%; aspect-ratio: 1/1; transform: translateY(-40px); overflow: hidden; transition: transform 0.4s ease;">
+                                {% if latest_photos|length > 2 %}
+                                    <img src="{% if latest_photos.2.thumbnail %}{{ latest_photos.2.thumbnail.url }}{% else %}{{ latest_photos.2.image.url }}{% endif %}" class="w-100 h-100" style="object-fit: cover; transition: transform 0.6s ease;">
+                                {% else %}
+                                    <div class="w-100 h-100" style="background: var(--primary-color); opacity: 0.6;"></div>
+                                {% endif %}
+                            </div>
+                            <div class="about-collage-item shadow-lg" style="border-radius: 200px; aspect-ratio: 1/1.8; transform: translateY(20px); overflow: hidden; transition: transform 0.4s ease;">
+                                {% if latest_photos|length > 3 %}
+                                    <img src="{% if latest_photos.3.thumbnail %}{{ latest_photos.3.thumbnail.url }}{% else %}{{ latest_photos.3.image.url }}{% endif %}" class="w-100 h-100" style="object-fit: cover; transition: transform 0.6s ease;">
+                                {% else %}
+                                    <div class="w-100 h-100 bg-secondary"></div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 {% endif %}
 
-<!-- Services Section -->
-<section class="py-5 my-5 services-section-bg">
-    <div class="container">
-        <div class="text-center mb-5">
+<!-- Services Section - 2x2 Grid No Gap -->
+<section id="services" class="py-5 my-5" style="width: 100vw; margin-left: calc(-50vw + 50%);">
+    <div class="container-fluid p-0">
+        <div class="text-center mb-5 px-3">
             <div class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3">
                 <i class="fas fa-star me-2"></i>What We Offer
             </div>
@@ -112,41 +169,71 @@
             <p class="lead text-muted">Comprehensive multimedia solutions to bring your vision to life</p>
         </div>
         
-        <!-- Include Compact Services Grid -->
-        {% include 'includes/services_grid_compact.html' with clickable=True show_cta_buttons=True %}
+        <!-- 2x2 Grid No Gap with Images -->
+        <div class="services-grid-no-gap" style="display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 0;">
+            {% for service in active_services|slice:":4" %}
+            <a href="{% url 'service_detail' service.slug %}" class="service-card-image" style="position: relative; aspect-ratio: 16/9; overflow: hidden; display: block; text-decoration: none;">
+                <!-- Service Background Image -->
+                {% if service.cover_image %}
+                    <img src="{{ service.cover_image.url }}" alt="{{ service.title }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
+                {% else %}
+                    <!-- Fallback if no cover image is set -->
+                    {% with default_photo=latest_photos|first %}
+                    {% if default_photo %}
+                        <img src="{% if default_photo.thumbnail %}{{ default_photo.thumbnail.url }}{% else %}{{ default_photo.image.url }}{% endif %}" alt="{{ service.title }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
+                    {% else %}
+                        <div style="width: 100%; height: 100%; background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));"></div>
+                    {% endif %}
+                    {% endwith %}
+                {% endif %}
+                
+                <!-- Always visible text -->
+                <div class="service-always-visible" style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 40%); display: flex; align-items: flex-end; padding: 40px; transition: opacity 0.3s ease;">
+                    <h3 style="font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 700; margin: 0; text-transform: uppercase; letter-spacing: 1px; color: white;">{{ service.title }}</h3>
+                </div>
+
+                <!-- Hover Overlay -->
+                <div class="service-hover-overlay" style="position: absolute; inset: 0; background: rgba(0,0,0,0.75); opacity: 0; transition: opacity 0.3s ease; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 40px;">
+                    <!-- Text Overlay -->
+                    <h3 style="font-size: clamp(1.5rem, 2.5vw, 2rem); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 1px; color: white; transform: translateY(-20px); transition: transform 0.4s ease;" class="hover-title">{{ service.title }}</h3>
+                    <p style="font-size: clamp(0.9rem, 1.2vw, 1rem); color: var(--accent-color); font-weight: 600; margin: 0; transform: translateY(20px); transition: transform 0.4s ease;" class="hover-subtitle">{{ service.subtitle|default:service.description|truncatewords:8 }}</p>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
     </div>
 </section>
 
-<!-- Portfolio/Gallery Section -->
-<section class="py-5 my-5">
-    <div class="container">
-        <div class="text-center mb-5">
+<!-- Portfolio/Gallery Section - Full Grid No Gap -->
+<section class="py-5 my-5" style="width: 100vw; margin-left: calc(-50vw + 50%);">
+    <div class="container-fluid p-0">
+        <div class="text-center mb-5 px-3">
             <h2 class="display-5 fw-bold mb-3">Featured Work</h2>
             <p class="lead text-muted">A glimpse into my creative portfolio</p>
         </div>
         
-        <div class="row g-4">
+        <!-- Full Grid No Gap (3 columns) -->
+        <div class="gallery-grid-no-gap" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;">
             {% if latest_photos %}
                 {% for photo in latest_photos %}
-                <div class="col-lg-4 col-md-6">
-                    <a href="{{ photo.image.url }}" class="glightbox" data-gallery="home-gallery">
-                        <div class="gallery-item position-relative">
-                            <img src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" alt="{{ photo.title }}" class="img-fluid rounded shadow gallery-img">
-                            <div class="gallery-item-tag">
-                                <span class="badge bg-primary">{{ photo.category.name }}</span>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                <a href="{{ photo.image.url }}" class="glightbox gallery-item-no-gap" data-gallery="home-gallery" style="position: relative; aspect-ratio: 1/1; overflow: hidden; display: block;">
+                    <img src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}" alt="{{ photo.title }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease;">
+                    
+                    <!-- Hover Overlay -->
+                    <div class="gallery-hover-overlay" style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); opacity: 0; transition: opacity 0.3s ease; display: flex; flex-direction: column; justify-content: flex-end; padding: 30px;">
+                        <span style="color: var(--accent-color); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; margin-bottom: 8px;">{{ photo.category.name }}</span>
+                        <h5 style="color: white; font-size: 1.2rem; font-weight: 600; margin: 0;">{{ photo.title }}</h5>
+                    </div>
+                </a>
                 {% endfor %}
             {% else %}
-                <div class="col-12">
-                    <p class="text-center text-muted">No photos have been uploaded yet.</p>
+                <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+                    <p class="text-muted">No photos have been uploaded yet.</p>
                 </div>
             {% endif %}
         </div>
         
-        <div class="text-center mt-5">
+        <div class="text-center mt-5 px-3">
             <a href="{% url 'gallery' %}" class="btn btn-outline-primary px-4 py-2">View Full Gallery</a>
         </div>
     </div>
@@ -154,59 +241,70 @@
 
 <!-- DYNAMIC TESTIMONIALS SECTION -->
 {% if testimonials %}
-<section class="testimonial-section py-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3">Client Testimonials</h2>
-            <p class="lead">Read what my clients have to say about their experience</p>
-        </div>
-        
-            <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-            <div class="carousel-inner">
-                    {% for testimonial in testimonials %}
+<section class="testimonial-section-modern py-5 position-relative overflow-hidden" style="background-color: var(--background-light); min-height: 600px; display: flex; align-items: center;">
+    <!-- Abstract Background Elements -->
+    <div style="position: absolute; top: -100px; left: -100px; width: 300px; height: 300px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-color), transparent); opacity: 0.1; filter: blur(40px);"></div>
+    <div style="position: absolute; bottom: -100px; right: -100px; width: 400px; height: 400px; border-radius: 50%; background: linear-gradient(135deg, var(--primary-color), transparent); opacity: 0.08; filter: blur(50px);"></div>
+
+    <div class="container position-relative" style="z-index: 2;">
+        <div class="row align-items-center">
+            <!-- Left Side: Title & Info -->
+            <div class="col-lg-4 mb-5 mb-lg-0 text-center text-lg-start">
+                <span class="text-uppercase fw-bold" style="color: var(--accent-color); letter-spacing: 2px; font-size: 0.9rem;">Kind Words</span>
+                <h2 class="display-4 fw-bold mt-2 mb-4" style="color: var(--text-dark); letter-spacing: -1px; line-height: 1.2;">What My<br>Clients Say.</h2>
+                <p class="lead text-muted mb-4" style="font-size: 1.1rem; line-height: 1.6;">Don't just take my word for it. Here is what people are saying about their experience working with me.</p>
+                <div class="d-flex gap-2 justify-content-center justify-content-lg-start">
+                    <button class="btn btn-outline-dark rounded-circle" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease;">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <button class="btn btn-dark rounded-circle" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next" style="width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; background-color: var(--text-dark); transition: all 0.3s ease;">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Side: Carousel -->
+            <div class="col-lg-8">
+                <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
+                    <div class="carousel-inner" style="padding: 20px;">
+                        {% for testimonial in testimonials %}
                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                    <div class="testimonial-card mx-auto" style="max-width: 800px;">
-                        <div class="text-center mb-4">
-                            <i class="fas fa-quote-right fa-3x opacity-25"></i>
-                        </div>
-                        <p class="lead fst-italic text-center mb-4">
-                                    {{ testimonial.testimonial_text }}
-                                </p>
+                            <div class="modern-testimonial-card bg-white p-5 rounded-4 shadow-lg position-relative" style="border-left: 4px solid var(--accent-color);">
+                                <i class="fas fa-quote-right position-absolute" style="top: 30px; right: 40px; font-size: 4rem; color: var(--background-light); opacity: 0.5;"></i>
                                 
                                 <!-- Star Rating -->
-                                <div class="text-center mb-4">
+                                <div class="mb-4">
                                     {% for star in "x"|rjust:testimonial.rating %}
-                                        <i class="fas fa-star" style="color: gold;"></i>
+                                        <i class="fas fa-star" style="color: var(--accent-color); font-size: 1.2rem;"></i>
                                     {% endfor %}
                                 </div>
                                 
-                        <div class="d-flex align-items-center justify-content-center">
+                                <p class="fs-4 fst-italic mb-5" style="color: var(--text-dark); line-height: 1.6; position: relative; z-index: 1;">
+                                    "{{ testimonial.testimonial_text }}"
+                                </p>
+                                
+                                <div class="d-flex align-items-center">
                                     {% if testimonial.client_image %}
-                                        <img src="{{ testimonial.client_image.url }}" alt="{{ testimonial.client_name }}" class="client-img me-3" style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;">
+                                        <img src="{{ testimonial.client_image.url }}" alt="{{ testimonial.client_name }}" class="rounded-circle shadow-sm" style="width: 70px; height: 70px; object-fit: cover; border: 3px solid white;">
+                                    {% else %}
+                                        <div class="rounded-circle shadow-sm d-flex justify-content-center align-items-center" style="width: 70px; height: 70px; background-color: var(--primary-color); color: white; font-size: 1.5rem; font-weight: bold; border: 3px solid white;">
+                                            {{ testimonial.client_name|make_list|first|upper }}
+                                        </div>
                                     {% endif %}
-                            <div>
-                                        <h5 class="mb-0">{{ testimonial.client_name }}</h5>
-                                        <p class="mb-0 opacity-75">{{ testimonial.client_type }}</p>
-                    </div>
-                </div>
+                                    <div class="ms-4">
+                                        <h5 class="mb-1 fw-bold" style="color: var(--text-dark);">{{ testimonial.client_name }}</h5>
+                                        <p class="mb-0 fw-semibold" style="color: var(--accent-color); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">{{ testimonial.client_type }}</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    {% endfor %}
+                        {% endfor %}
+                    </div>
                 </div>
-                
-                {% if testimonials.count > 1 %}
-            <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-                {% endif %}
             </div>
         </div>
-    </section>
+    </div>
+</section>
 {% endif %}
 
 <!-- DYNAMIC PARTNERS SECTION -->
@@ -239,90 +337,99 @@
 </section>
 {% endif %}
 
-<!-- DYNAMIC CONTACT SECTION -->
-<section class="py-5 my-5">
-    <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3">Get In Touch</h2>
-            <p class="lead text-muted">Ready to capture your special moments? Contact me to discuss your project</p>
-        </div>
-        
-        <div class="row">
-            <!-- Contact Info (from SiteSettings) -->
-            <div class="col-lg-4 mb-4 mb-lg-0">
-                <h4 class="fw-bold mb-4">Contact Information</h4>
-                <p class="text-muted mb-3">Fill out the form or reach out directly using the information below</p>
+<!-- MODERN CONTACT SECTION -->
+<section class="contact-section-modern position-relative" style="background: var(--text-dark); color: white; padding: 120px 0;">
+    <!-- Abstract Background -->
+    <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; opacity: 0.1; pointer-events: none;">
+        <div style="position: absolute; top: -20%; right: -10%; width: 50vw; height: 50vw; border-radius: 50%; background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);"></div>
+        <div style="position: absolute; bottom: -20%; left: -10%; width: 40vw; height: 40vw; border-radius: 50%; background: radial-gradient(circle, var(--primary-color) 0%, transparent 70%);"></div>
+    </div>
+
+    <div class="container position-relative" style="z-index: 2;">
+        <div class="row align-items-center g-5">
+            <!-- Left Side: Contact Info & Value Prop -->
+            <div class="col-lg-5 mb-5 mb-lg-0">
+                <span class="text-uppercase fw-bold" style="color: var(--accent-color); letter-spacing: 2px; font-size: 0.9rem;">Let's Connect</span>
+                <h2 class="display-3 fw-bold mt-2 mb-4" style="color: white; letter-spacing: -1px; line-height: 1.1;">Ready to<br>Capture Magic?</h2>
+                <p class="lead mb-5" style="color: rgba(255,255,255,0.7); font-size: 1.15rem; line-height: 1.7; max-width: 400px;">
+                    Whether it's a wedding, a corporate event, or a personal portrait session, I'm here to turn your vision into timeless art. Let's discuss your next project.
+                </p>
                 
                 {% if site_settings %}
-                <div class="mb-4">
-                        <h5 class="fw-bold">📧 Email</h5>
-                        <p class="text-muted"><a href="mailto:{{ site_settings.email }}" class="text-decoration-none text-muted">{{ site_settings.email }}</a></p>
+                <div class="d-flex flex-column gap-4">
+                    <div class="d-flex align-items-center group-hover-lift" style="transition: transform 0.3s ease;">
+                        <div class="icon-box d-flex align-items-center justify-content-center rounded-circle" style="width: 60px; height: 60px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                            <i class="fas fa-envelope fs-4" style="color: var(--accent-color);"></i>
+                        </div>
+                        <div class="ms-4">
+                            <p class="mb-0 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 1px; color: rgba(255,255,255,0.5);">Email Me</p>
+                            <a href="mailto:{{ site_settings.email }}" class="fs-5 fw-medium text-white text-decoration-none hover-accent" style="transition: color 0.3s ease;">{{ site_settings.email }}</a>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center group-hover-lift" style="transition: transform 0.3s ease;">
+                        <div class="icon-box d-flex align-items-center justify-content-center rounded-circle" style="width: 60px; height: 60px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+                            <i class="fas fa-phone fs-4" style="color: var(--accent-color);"></i>
+                        </div>
+                        <div class="ms-4">
+                            <p class="mb-0 text-uppercase fw-semibold" style="font-size: 0.8rem; letter-spacing: 1px; color: rgba(255,255,255,0.5);">Call Me</p>
+                            <a href="tel:{{ site_settings.phone }}" class="fs-5 fw-medium text-white text-decoration-none hover-accent" style="transition: color 0.3s ease;">{{ site_settings.phone }}</a>
+                        </div>
+                    </div>
                 </div>
-                
-                <div class="mb-4">
-                        <h5 class="fw-bold">📞 Phone</h5>
-                        <p class="text-muted"><a href="tel:{{ site_settings.phone }}" class="text-decoration-none text-muted">{{ site_settings.phone }}</a></p>
-                </div>
-                
-                <div class="mb-4">
-                        <h5 class="fw-bold">📍 Studio Address</h5>
-                        <p class="text-muted mb-0">{{ site_settings.address_line1 }}</p>
-                        {% if site_settings.address_line2 %}
-                            <p class="text-muted mb-0">{{ site_settings.address_line2 }}</p>
-                        {% endif %}
-                        <p class="text-muted">{{ site_settings.city }}, {{ site_settings.state }} {{ site_settings.zip_code }}</p>
-                </div>
-                
-                <div>
-                        <h5 class="fw-bold">⏰ Business Hours</h5>
-                        <p class="text-muted mb-0">Monday - Friday: {{ site_settings.monday_friday_open|time:"g:i A" }} - {{ site_settings.monday_friday_close|time:"g:i A" }}</p>
-                        <p class="text-muted">Saturday: {{ site_settings.saturday_open|time:"g:i A" }} - {{ site_settings.saturday_close|time:"g:i A" }}</p>
-                </div>
-                {% else %}
-                    <p class="text-muted">Contact information not configured yet. Please update Site Settings in admin.</p>
                 {% endif %}
             </div>
             
-            <!-- Contact Form -->
-            <div class="col-lg-8">
-                <form method="post" action="{% url 'contact' %}">
-                    {% csrf_token %}
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Your name" required>
+            <!-- Right Side: Contact Form -->
+            <div class="col-lg-7">
+                <div class="contact-form-wrapper p-5 rounded-4" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px);">
+                    <form method="post" action="{% url 'contact' %}" class="modern-form">
+                        {% csrf_token %}
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <div class="form-floating-custom">
+                                    <input type="text" class="form-control-custom w-100" id="name" name="name" placeholder="Your Name" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-floating-custom">
+                                    <input type="email" class="form-control-custom w-100" id="email" name="email" placeholder="Your Email" required>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-floating-custom">
+                                    <input type="tel" class="form-control-custom w-100" id="phone" name="phone" placeholder="Phone Number">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-floating-custom select-wrapper position-relative">
+                                    <select class="form-control-custom w-100" id="service" name="service" style="appearance: none; cursor: pointer;">
+                                        <option value="" disabled selected>Select Service...</option>
+                                        {% for service in active_services %}
+                                            <option value="{{ service.slug }}" style="color: black;">{{ service.title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <i class="fas fa-chevron-down position-absolute" style="right: 0; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.5); pointer-events: none;"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <div class="form-floating-custom">
+                                    <textarea class="form-control-custom w-100" id="message" name="message" rows="4" placeholder="Tell me about your project..." required style="resize: none;"></textarea>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 mt-5">
+                                <button type="submit" class="btn btn-primary w-100 rounded-pill py-3 fw-bold text-uppercase d-flex align-items-center justify-content-center gap-2" style="font-size: 1.1rem; letter-spacing: 1px; transition: all 0.3s ease;">
+                                    Send Message <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
                         </div>
-                        
-                        <div class="col-md-6">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="your.email@example.com" required>
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label for="phone" class="form-label">Phone (Optional)</label>
-                            <input type="tel" class="form-control" id="phone" name="phone" placeholder="Your phone number">
-                        </div>
-                        
-                        <div class="col-md-6">
-                            <label for="service" class="form-label">Service Interest</label>
-                            <select class="form-select" id="service" name="service">
-                                <option selected>Select a service</option>
-                                {% for service in active_services %}
-                                    <option value="{{ service.slug }}">{{ service.title }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        
-                        <div class="col-12">
-                            <label for="message" class="form-label">Message</label>
-                            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell me about your project and requirements..." required></textarea>
-                        </div>
-                        
-                        <div class="col-12 mt-4">
-                            <button type="submit" class="btn btn-primary px-4 py-2">Send Message</button>
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -338,6 +445,24 @@
         selector: '.glightbox',
         loop: true,
         touchNavigation: true,
+    });
+    
+    // Smooth scroll for arrow click
+    document.addEventListener('DOMContentLoaded', function() {
+        const scrollArrow = document.querySelector('.scroll-down-arrow');
+        if (scrollArrow) {
+            scrollArrow.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        }
     });
 </script>
 {% endblock %}

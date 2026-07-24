@@ -27,7 +27,7 @@ def home(request):
     social_links = SocialMediaLink.objects.filter(is_active=True)
     
     # Get featured photos for gallery preview on home page
-    featured_photos = Photo.objects.filter(is_featured=True).order_by('-date_uploaded')[:8]
+    featured_photos = Photo.objects.filter(is_featured=True).order_by('-date_uploaded')[:15]
     
     services = Service.objects.filter(is_active=True)
     
@@ -49,10 +49,14 @@ def about(request):
     site_settings = SiteSettings.objects.first()
     social_links = SocialMediaLink.objects.filter(is_active=True)
     
+    # Get a few recent photos for the collage
+    recent_photos = Photo.objects.order_by('-date_uploaded')[:4]
+    
     context = {
         'about_section': about_section,
         'site_settings': site_settings,
         'social_links': social_links,
+        'recent_photos': recent_photos,
     }
     return render(request, 'photos/about.html', context)
 
@@ -60,7 +64,8 @@ def about(request):
 def services(request):
     # Get all active services
     services_list = Service.objects.filter(is_active=True)
-    return render(request, 'photos/services.html', {'services': services_list})
+    random_photo = Photo.objects.order_by('?').first()
+    return render(request, 'photos/services.html', {'services': services_list, 'random_photo': random_photo})
 
 def contact(request):
     return render(request, 'photos/contact.html')
@@ -80,14 +85,10 @@ def gallery(request):
     
     # Apply media type filtering
     if media_type_filter == 'photos':
-        albums_qs = albums_qs
-        photos_qs = photos_qs
         videos_qs = Video.objects.none()  # Don't show videos
     elif media_type_filter == 'videos':
         albums_qs = Album.objects.none()  # Don't show albums
         photos_qs = Photo.objects.none()  # Don't show photos
-        videos_qs = videos_qs
-    # If no media type filter, show all (default behavior)
     
     # Apply category filtering
     if category_filter:
@@ -95,21 +96,36 @@ def gallery(request):
         photos_qs = photos_qs.filter(category__slug=category_filter)
         videos_qs = videos_qs.filter(category__slug=category_filter)
 
-    # Materialize albums and create chunks
-    albums = list(albums_qs)
-    for a in albums:
-        ps = list(a.photos.all())
-        a.chunks = [ps[i:i+4] for i in range(0, len(ps), 4)]
-
     categories = Category.objects.all().order_by('name')
 
+    # Combine into a single list for unified pagination
+    all_media = list(albums_qs) + list(photos_qs) + list(videos_qs)
+    
+    def get_date(item):
+        if hasattr(item, 'date_uploaded'):
+            return item.date_uploaded
+        elif hasattr(item, 'date_created'):
+            return item.date_created
+        elif hasattr(item, 'date_added'):
+            return item.date_added
+        from django.utils import timezone
+        return timezone.now()
+
+    all_media.sort(key=get_date, reverse=True)
+
+    paginator = Paginator(all_media, 12)  # Show 12 items per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Random photo for hero banner
+    random_photo = Photo.objects.order_by('?').first()
+
     context = {
-        'albums': albums,
-        'standalone_photos': photos_qs,
-        'videos': videos_qs,
+        'page_obj': page_obj,
         'categories': categories,
         'category_filter': category_filter,
         'media_type_filter': media_type_filter,
+        'random_photo': random_photo,
     }
     return render(request, 'photos/gallery.html', context)
 
@@ -209,6 +225,7 @@ def service_detail(request, service_slug):
         'media_by_category': media_by_category,
         'show_photos': show_photos,
         'show_videos': show_videos,
+        'random_photo': Photo.objects.order_by('?').first()
     }
     
     return render(request, 'photos/service_detail.html', context)
