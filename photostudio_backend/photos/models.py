@@ -196,10 +196,10 @@ class Video(models.Model):
         return None
     
     def get_youtube_thumbnail_url(self):
-        """Get YouTube thumbnail URL"""
+        """Get YouTube thumbnail URL — mqdefault is true 16:9, no black bars."""
         video_id = self.get_youtube_video_id()
         if video_id:
-            return f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg"
+            return f"https://img.youtube.com/vi/{video_id}/mqdefault.jpg"
         return None
     
     def get_video_url(self):

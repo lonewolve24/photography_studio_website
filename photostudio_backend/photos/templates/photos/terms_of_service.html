@@ -1,0 +1,37 @@
+{% extends 'legal_base.html' %}
+
+{% block title %}Terms of Service | Shotz{% endblock %}
+{% block page_title %}Terms of Service{% endblock %}
+{% block page_subtitle_text %}Rules for using the Shotz website{% endblock %}
+
+{% block legal_content %}
+<p class="text-muted">These Terms of Service (“Terms”) govern your use of the Shotz website. By using this site, you agree to these Terms.</p>
+
+<h2 class="h4 fw-bold mt-4">Use of the website</h2>
+<p>You may use this website for lawful purposes only. You agree not to misuse the site, attempt unauthorized access, or interfere with its normal operation.</p>
+
+<h2 class="h4 fw-bold mt-4">Services and bookings</h2>
+<p>Information on this website about our photography, videography, and related services is provided for general information. Submitting a contact or booking enquiry does not create a confirmed booking until we agree terms with you directly.</p>
+<p>Pricing, availability, deliverables, and project timelines will be confirmed in writing before work begins.</p>
+
+<h2 class="h4 fw-bold mt-4">Intellectual property</h2>
+<p>All content on this website — including photographs, videos, graphics, text, logos, and design — is owned by Shotz or used with permission. You may not copy, reproduce, or distribute site content without our prior written consent, except for personal, non-commercial viewing.</p>
+
+<h2 class="h4 fw-bold mt-4">Client work and portfolio use</h2>
+<p>Unless otherwise agreed in writing, Shotz may display completed client work in our portfolio, gallery, and marketing materials. Specific usage rights for commissioned work will be outlined in your project agreement.</p>
+
+<h2 class="h4 fw-bold mt-4">Third-party links</h2>
+<p>Our site may link to third-party websites or embed third-party services. We are not responsible for the content or practices of those external sites.</p>
+
+<h2 class="h4 fw-bold mt-4">Disclaimer</h2>
+<p>This website is provided on an “as is” basis. We do not guarantee that the site will always be available, error-free, or free from harmful components, though we work to keep it secure and reliable.</p>
+
+<h2 class="h4 fw-bold mt-4">Limitation of liability</h2>
+<p>To the fullest extent permitted by law, Shotz is not liable for indirect or consequential losses arising from your use of this website.</p>
+
+<h2 class="h4 fw-bold mt-4">Changes to these Terms</h2>
+<p>We may update these Terms from time to time. Continued use of the website after changes are posted means you accept the updated Terms.</p>
+
+<h2 class="h4 fw-bold mt-4">Contact</h2>
+<p>For questions about these Terms, please <a href="{% url 'contact' %}">contact us</a>{% if site_settings and site_settings.email %} or email <a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a>{% endif %}.</p>
+{% endblock %}

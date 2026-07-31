@@ -2421,3 +2421,110 @@ body.is-homepage {
         font-size: 1.3rem !important;
     }
 }
+
+/* ====== Legal Pages ====== */
+.legal-page-header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: var(--white);
+    padding: 150px 0 80px;
+    min-height: 320px;
+    display: flex;
+    align-items: center;
+}
+
+.legal-page-header h1,
+.legal-page-header p {
+    color: var(--white) !important;
+}
+
+.legal-page-content h2,
+.legal-page-content h3 {
+    color: var(--text-dark);
+}
+
+.legal-page-content a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+.legal-page-content a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+.legal-page-content ul {
+    padding-left: 1.25rem;
+}
+
+.legal-page-content li {
+    margin-bottom: 0.5rem;
+}
+
+/* ====== Cookie Consent Banner ====== */
+.cookie-consent-banner {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1100;
+    background: rgba(16, 52, 76, 0.97);
+    color: var(--white);
+    box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.18);
+    transform: translateY(110%);
+    transition: transform 0.35s ease;
+    padding: 1rem 0;
+}
+
+.cookie-consent-banner.is-visible {
+    transform: translateY(0);
+}
+
+.cookie-consent-inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.cookie-consent-text {
+    flex: 1 1 320px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.cookie-consent-text a {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+.cookie-consent-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.cookie-consent-actions .btn-outline-light {
+    border-color: rgba(255, 255, 255, 0.65);
+    color: var(--white);
+}
+
+.cookie-consent-actions .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--white);
+}
+
+@media (max-width: 576px) {
+    .cookie-consent-inner {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .cookie-consent-actions {
+        width: 100%;
+    }
+
+    .cookie-consent-actions .btn {
+        flex: 1 1 auto;
+    }
+}
