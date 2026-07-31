@@ -11,4 +11,7 @@ urlpatterns = [
     path('gallery/v2/', views.gallery, name='gallery_v2'),
     path('services/<str:service_slug>/', views.service_detail, name='service_detail'),
     path('seo-checklist/', TemplateView.as_view(template_name='seo_checklist.html'), name='seo_checklist'),
+    path('privacy/', TemplateView.as_view(template_name='photos/privacy_policy.html'), name='privacy_policy'),
+    path('cookies/', TemplateView.as_view(template_name='photos/cookie_policy.html'), name='cookie_policy'),
+    path('terms/', TemplateView.as_view(template_name='photos/terms_of_service.html'), name='terms_of_service'),
 ]

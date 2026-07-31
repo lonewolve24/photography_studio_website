@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="page-header legal-page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="display-4 fw-bold mb-2">{% block page_title %}Legal{% endblock %}</h1>
+                {% block page_subtitle %}
+                <p class="lead mb-0">{% block page_subtitle_text %}{% endblock %}</p>
+                {% endblock %}
+                <p class="small mt-3 mb-0 opacity-75">Last updated: {% block last_updated %}31 July 2026{% endblock %}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 legal-page-content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                {% block legal_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

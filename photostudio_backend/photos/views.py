@@ -258,11 +258,20 @@ def service_detail(request, service_slug):
         }
         media_by_category[cat] = category_data
 
+    title_lower = service.title.lower()
+    if 'photography' in title_lower:
+        gallery_button_label = 'View Photos'
+    elif 'video' in title_lower or 'videography' in title_lower:
+        gallery_button_label = 'View Videos'
+    else:
+        gallery_button_label = 'View Our Work'
+
     context = {
         'service': service,
         'media_by_category': media_by_category,
         'show_photos': show_photos,
         'show_videos': show_videos,
+        'gallery_button_label': gallery_button_label,
         'random_photo': Photo.objects.order_by('?').first()
     }
     

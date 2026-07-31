@@ -167,7 +167,7 @@
         </div>
 
         <button id="openBlindsBtn" class="btn btn-outline-light rounded-pill px-5 py-3 fw-bold mt-2" style="font-size: 1.2rem; border-width: 2px; letter-spacing: 1px; backdrop-filter: blur(5px);">
-            View Gallery
+            {{ gallery_button_label }}
             <i class="fas fa-arrow-down ms-2"></i>
         </button>
     </div>
@@ -210,7 +210,7 @@
                             {% if video.thumbnail %}
                                 <img src="{{ video.thumbnail.url }}" alt="{{ video.title }}">
                             {% elif video.is_youtube_video and video.get_youtube_thumbnail_url %}
-                                <img src="{{ video.get_youtube_thumbnail_url }}" alt="{{ video.title }}">
+                                <img src="{{ video.get_youtube_thumbnail_url }}" alt="{{ video.title }}" style="width:100%;height:100%;object-fit:cover;object-position:center;">
                             {% else %}
                                 <div style="width: 100%; height: 100%; background-color: #343a40; display: flex; align-items: center; justify-content: center; color: white;">
                                     <span>{{ video.title }}</span>
