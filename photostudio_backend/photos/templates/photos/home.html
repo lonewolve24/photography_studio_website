@@ -7,7 +7,7 @@
 <!-- DYNAMIC HERO SECTION (Full Width - No White Space) -->
 <section class="hero-slider" style="width: 100vw; margin-left: calc(-50vw + 50%); margin-bottom: 0; padding: 0;">
     {% if hero_slides %}
-        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000" style="width: 100%; height: 100vh;">
+        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="2000" data-bs-pause="false" style="width: 100%; height: 100vh;">
             <div class="carousel-inner" style="height: 100%;">
                 {% for slide in hero_slides %}
                     <div class="carousel-item {% if forloop.first %}active{% endif %}" style="height: 100%;">
@@ -83,7 +83,7 @@
     <div class="container position-relative" style="z-index:2;">
         <div class="row align-items-center">
             <!-- Text Content (Left Side) -->
-            <div class="col-lg-5 mb-5 mb-lg-0 pe-lg-5">
+            <div class="col-lg-5 mb-5 mb-lg-0 pe-lg-5 scroll-reveal scroll-reveal-left">
                 <!-- Eyebrow label -->
                 <span class="d-inline-block text-uppercase fw-bold mb-3" style="color:var(--accent-color);letter-spacing:3px;font-size:0.8rem;">About Shotz</span>
 
@@ -121,7 +121,7 @@
             </div>
 
             <!-- Image Collage (Right Side) -->
-            <div class="col-lg-7">
+            <div class="col-lg-7 scroll-reveal scroll-reveal-right" data-reveal-delay="150">
                 <div class="position-relative w-100" style="min-height: 550px; padding: 20px;">
                     <!-- Decorative Background Blobs (tuned for dark bg) -->
                     <div style="position: absolute; top: -10%; right: 0; width: 350px; height: 350px; background-color: var(--accent-color); opacity: 0.06; border-radius: 50%; z-index: 0;"></div>
@@ -183,7 +183,7 @@
 <!-- Services Section - 2x2 Grid No Gap -->
 <section id="services" class="py-5 my-5" style="width: 100vw; margin-left: calc(-50vw + 50%);">
     <div class="container-fluid p-0">
-        <div class="text-center mb-5 px-3">
+        <div class="text-center mb-5 px-3 scroll-reveal">
             <div class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill mb-3">
                 <i class="fas fa-star me-2"></i>What We Offer
             </div>
@@ -192,7 +192,7 @@
         </div>
         
         <!-- 2x2 Grid No Gap with Images -->
-        <div class="services-grid-no-gap" style="display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 0;">
+        <div class="services-grid-no-gap scroll-reveal-stagger" style="display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 0;">
             {% for service in active_services|slice:":4" %}
             <a href="{% url 'service_detail' service.slug %}" class="service-card-image" style="position: relative; aspect-ratio: 16/9; overflow: hidden; display: block; text-decoration: none;">
                 <!-- Service Background Image -->
@@ -229,13 +229,13 @@
 <!-- Portfolio/Gallery Section - Full Grid No Gap -->
 <section class="py-5 my-5" style="width: 100vw; margin-left: calc(-50vw + 50%);">
     <div class="container-fluid p-0">
-        <div class="text-center mb-5 px-3">
+        <div class="text-center mb-5 px-3 scroll-reveal">
             <h2 class="display-5 fw-bold mb-3">Featured Work</h2>
             <p class="lead text-muted">A glimpse into my creative portfolio</p>
         </div>
         
         <!-- Full Grid No Gap (3 columns) -->
-        <div class="gallery-grid-no-gap" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;">
+        <div class="gallery-grid-no-gap scroll-reveal-stagger" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;">
             {% if latest_photos %}
                 {% for photo in latest_photos %}
                 <a href="{{ photo.image.url }}" class="glightbox gallery-item-no-gap" data-gallery="home-gallery" style="position: relative; aspect-ratio: 1/1; overflow: hidden; display: block;">
@@ -271,7 +271,7 @@
     <div class="container position-relative" style="z-index: 2;">
         <div class="row align-items-center">
             <!-- Left Side: Title & Info -->
-            <div class="col-lg-4 mb-5 mb-lg-0 text-center text-lg-start">
+            <div class="col-lg-4 mb-5 mb-lg-0 text-center text-lg-start scroll-reveal scroll-reveal-left">
                 <span class="text-uppercase fw-bold" style="color: var(--accent-color); letter-spacing: 2px; font-size: 0.9rem;">Kind Words</span>
                 <h2 class="display-4 fw-bold mt-2 mb-4" style="color: var(--text-dark); letter-spacing: -1px; line-height: 1.2;">What My<br>Clients Say.</h2>
                 <p class="lead text-muted mb-4" style="font-size: 1.1rem; line-height: 1.6;">Don't just take my word for it. Here is what people are saying about their experience working with me.</p>
@@ -286,7 +286,7 @@
             </div>
 
             <!-- Right Side: Carousel -->
-            <div class="col-lg-8">
+            <div class="col-lg-8 scroll-reveal scroll-reveal-right" data-reveal-delay="150">
                 <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
                     <div class="carousel-inner" style="padding: 20px;">
                         {% for testimonial in testimonials %}
@@ -333,12 +333,12 @@
 {% if partners %}
     <section class="py-5 my-5" style="background: #f8f9fa;">
         <div class="container">
-            <div class="text-center mb-5">
+            <div class="text-center mb-5 scroll-reveal">
                 <h2 class="display-5 fw-bold mb-3">Partners & Collaborations</h2>
                 <p class="lead text-muted">Working with amazing brands and organizations to create exceptional content</p>
             </div>
             
-            <div class="row g-4">
+            <div class="row g-4 scroll-reveal-stagger">
                 {% for partner in partners %}
                     <div class="col-lg-4 col-md-6">
                         <div class="partner-card text-center p-4 bg-white rounded shadow-sm h-100">
@@ -370,7 +370,7 @@
     <div class="container position-relative" style="z-index: 2;">
         <div class="row align-items-center g-5">
             <!-- Left Side: Contact Info & Value Prop -->
-            <div class="col-lg-5 mb-5 mb-lg-0">
+            <div class="col-lg-5 mb-5 mb-lg-0 scroll-reveal scroll-reveal-left">
                 <span class="text-uppercase fw-bold" style="color: var(--accent-color); letter-spacing: 2px; font-size: 0.9rem;">Let's Connect</span>
                 <h2 class="display-3 fw-bold mt-2 mb-4" style="color: white; letter-spacing: -1px; line-height: 1.1;">Ready to<br>Capture Magic?</h2>
                 <p class="lead mb-5" style="color: rgba(255,255,255,0.7); font-size: 1.15rem; line-height: 1.7; max-width: 400px;">
@@ -417,7 +417,7 @@
             </div>
             
             <!-- Right Side: Contact Form -->
-            <div class="col-lg-7">
+            <div class="col-lg-7 scroll-reveal scroll-reveal-right" data-reveal-delay="150">
                 <div class="contact-form-wrapper p-5 rounded-4" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); backdrop-filter: blur(10px);">
                     <form method="post" action="{% url 'contact' %}" class="modern-form">
                         {% csrf_token %}
@@ -500,8 +500,18 @@
         touchNavigation: true,
     });
     
-    // Smooth scroll for arrow click
+    // Hero carousel — auto-advance every 2 seconds
     document.addEventListener('DOMContentLoaded', function() {
+        const heroCarouselEl = document.getElementById('heroCarousel');
+        if (heroCarouselEl && typeof bootstrap !== 'undefined') {
+            bootstrap.Carousel.getOrCreateInstance(heroCarouselEl, {
+                interval: 2000,
+                ride: 'carousel',
+                pause: false,
+                wrap: true
+            });
+        }
+
         const scrollArrow = document.querySelector('.scroll-down-arrow');
         if (scrollArrow) {
             scrollArrow.addEventListener('click', function(e) {

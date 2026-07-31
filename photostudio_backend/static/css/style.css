@@ -223,6 +223,82 @@ body.is-homepage {
     z-index: 2;
 }
 
+.carousel-item.active .hero-slide {
+    animation: heroSlideZoom 2s ease-out forwards;
+}
+
+#heroCarousel .carousel-item {
+    overflow: hidden;
+}
+
+@keyframes heroSlideZoom {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.06);
+    }
+}
+
+/* ====== Scroll Reveal Animations ====== */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition:
+        opacity 0.75s ease var(--reveal-delay, 0ms),
+        transform 0.75s ease var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
+}
+
+.scroll-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.scroll-reveal-left {
+    transform: translateX(-36px);
+}
+
+.scroll-reveal-left.is-visible {
+    transform: translateX(0);
+}
+
+.scroll-reveal-right {
+    transform: translateX(36px);
+}
+
+.scroll-reveal-right.is-visible {
+    transform: translateX(0);
+}
+
+.scroll-reveal-fade {
+    transform: none;
+}
+
+.scroll-reveal-scale {
+    transform: scale(0.96);
+}
+
+.scroll-reveal-scale.is-visible {
+    transform: scale(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .scroll-reveal,
+    .scroll-reveal-left,
+    .scroll-reveal-right,
+    .scroll-reveal-fade,
+    .scroll-reveal-scale {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+
+    .carousel-item.active .hero-slide {
+        animation: none;
+    }
+}
+
 /* ====== About Section ====== */
 .about-img {
     width: 100%;
