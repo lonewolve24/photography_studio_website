@@ -197,8 +197,8 @@ body.is-homepage {
 
 /* ====== Hero Section ====== */
 .hero-slide {
-    height: 70vh;
-    min-height: 500px;
+    height: 100vh;
+    min-height: 600px;
     background-size: cover;
     background-position: center;
     color: white;

@@ -1,9 +1,21 @@
-from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponseNotFound
+import logging
+import threading
+
+from django.contrib import messages
 from django.core.paginator import Paginator
-from .models import Photo, Service, Category,  Video, Album, HeroSlide, AboutSection, Testimonial, Partner, SiteSettings, SocialMediaLink
-from django.db.models import Prefetch
-from django.db.models import Q
+from django.db.models import Prefetch, Q
+from django.http import HttpResponseNotFound
+from django.shortcuts import redirect, render, get_object_or_404
+
+from .forms import ContactForm
+from .models import (
+    Photo, Service, Category, Video, Album,
+    HeroSlide, AboutSection, Testimonial, Partner,
+    SiteSettings, SocialMediaLink,
+)
+from .resend_email import send_contact_notification
+
+logger = logging.getLogger(__name__)
 
 # Create your views here.
 def home(request):
@@ -68,7 +80,33 @@ def services(request):
     return render(request, 'photos/services.html', {'services': services_list, 'random_photo': random_photo})
 
 def contact(request):
-    return render(request, 'photos/contact.html')
+    service_choices = [
+        (service.slug, service.title)
+        for service in Service.objects.filter(is_active=True).order_by('order')
+    ]
+    form = ContactForm(request.POST or None, service_choices=service_choices)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            # Fire email in background — user does not wait for it
+            data = dict(form.cleaned_data)
+            thread = threading.Thread(
+                target=send_contact_notification,
+                args=(data,),
+                daemon=True,
+            )
+            thread.start()
+
+            # Redirect immediately with thank-you message
+            messages.success(
+                request,
+                'Thank you! Your message has been received. We\'ll be in touch soon.',
+            )
+            return redirect('home')
+        else:
+            messages.error(request, 'Please check the form and try again.')
+
+    return render(request, 'photos/contact.html', {'form': form})
 
 def gallery(request):
     category_filter = request.GET.get('category')
