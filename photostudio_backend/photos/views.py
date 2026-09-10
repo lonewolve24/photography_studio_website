@@ -12,6 +12,7 @@ from .models import (
     Photo, Service, Category, Video, Album,
     HeroSlide, AboutSection, Testimonial, Partner,
     SiteSettings, SocialMediaLink,
+    TeamMember, BlogPost,
 )
 from .resend_email import send_contact_notification
 
@@ -38,10 +39,15 @@ def home(request):
     # Get active social media links
     social_links = SocialMediaLink.objects.filter(is_active=True)
     
-    # Get featured photos for gallery preview on home page
+    # Featured photos still used in the about collage on home
     featured_photos = Photo.objects.filter(is_featured=True).order_by('-date_uploaded')[:15]
     
     services = Service.objects.filter(is_active=True)
+
+    # Blog cards — latest published posts flagged for home
+    home_posts = BlogPost.objects.filter(
+        published=True, show_on_home=True
+    ).order_by('-published_at', '-created_at')[:6]
     
     context = {
         'hero_slides': hero_slides,
@@ -52,6 +58,7 @@ def home(request):
         'social_links': social_links,
         'latest_photos': featured_photos,
         'services': services,
+        'home_posts': home_posts,
     }
     return render(request, 'photos/home.html', context)
 
@@ -60,6 +67,7 @@ def about(request):
     about_section = AboutSection.objects.filter(is_active=True).first()
     site_settings = SiteSettings.objects.first()
     social_links = SocialMediaLink.objects.filter(is_active=True)
+    team_members = TeamMember.objects.filter(is_active=True)
     
     # Get a few recent photos for the collage
     recent_photos = Photo.objects.order_by('-date_uploaded')[:4]
@@ -69,6 +77,7 @@ def about(request):
         'site_settings': site_settings,
         'social_links': social_links,
         'recent_photos': recent_photos,
+        'team_members': team_members,
     }
     return render(request, 'photos/about.html', context)
 
@@ -276,3 +285,32 @@ def service_detail(request, service_slug):
     }
     
     return render(request, 'photos/service_detail.html', context)
+
+
+def blog_list(request):
+    """Listing page for all published blog posts."""
+    posts = BlogPost.objects.filter(published=True).order_by('-published_at', '-created_at')
+    random_photo = Photo.objects.order_by('?').first()
+    context = {
+        'posts': posts,
+        'random_photo': random_photo,
+    }
+    return render(request, 'photos/blog.html', context)
+
+
+def blog_detail(request, slug):
+    """Single blog post / event story article."""
+    post = get_object_or_404(BlogPost, slug=slug, published=True)
+    gallery_photos = post.get_gallery_photos()
+
+    # Sidebar: other recent posts (excluding current)
+    related_posts = BlogPost.objects.filter(published=True).exclude(pk=post.pk).order_by(
+        '-published_at', '-created_at'
+    )[:3]
+
+    context = {
+        'post': post,
+        'gallery_photos': gallery_photos,
+        'related_posts': related_posts,
+    }
+    return render(request, 'photos/blog_detail.html', context)

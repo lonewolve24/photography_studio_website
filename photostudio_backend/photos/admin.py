@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Category, Tag, Photo, Video, Service, Album
+from .models import Category, Tag, Photo, Video, Service, Album, TeamMember, BlogPost
 
 
 class PhotoInline(admin.TabularInline):
@@ -275,3 +275,92 @@ class PartnerAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" style="height: 60px; width: auto; object-fit: contain;" />', obj.logo.url)
         return "No Logo"
     logo_preview.short_description = 'Logo Preview'
+
+
+# ============================================================================
+# TEAM MEMBERS ADMIN
+# ============================================================================
+
+@admin.register(TeamMember)
+class TeamMemberAdmin(admin.ModelAdmin):
+    """Admin for studio team members shown on the About page."""
+    list_display = ('photo_preview', 'name', 'role', 'is_active', 'order')
+    list_filter = ('is_active',)
+    list_editable = ('order', 'is_active')
+    search_fields = ('name', 'role')
+    readonly_fields = ('photo_preview',)
+
+    fieldsets = (
+        ('Basic Info', {
+            'fields': ('name', 'role', 'photo', 'photo_preview', 'bio'),
+        }),
+        ('Social Media Links', {
+            'fields': ('instagram', 'linkedin', 'twitter', 'facebook'),
+            'description': 'Paste the full profile URL for each platform you want to show.',
+        }),
+        ('Display Settings', {
+            'fields': ('order', 'is_active'),
+        }),
+    )
+
+    def photo_preview(self, obj):
+        if obj.photo:
+            return format_html(
+                '<img src="{}" style="height: 60px; width: 60px; border-radius: 50%; object-fit: cover;" />',
+                obj.photo.url,
+            )
+        return "No Photo"
+    photo_preview.short_description = 'Photo'
+
+
+# ============================================================================
+# BLOG POSTS ADMIN
+# ============================================================================
+
+@admin.register(BlogPost)
+class BlogPostAdmin(admin.ModelAdmin):
+    """Admin for blog / event story posts."""
+    list_display = ('cover_preview', 'title', 'published', 'show_on_home', 'published_at', 'updated_at')
+    list_filter = ('published', 'show_on_home')
+    list_editable = ('published', 'show_on_home')
+    search_fields = ('title', 'excerpt', 'body')
+    prepopulated_fields = {'slug': ('title',)}
+    readonly_fields = ('cover_preview', 'created_at', 'updated_at')
+    filter_horizontal = ('extra_photos',)
+
+    fieldsets = (
+        ('Post Content', {
+            'fields': ('title', 'slug', 'excerpt', 'body'),
+        }),
+        ('Cover Image', {
+            'fields': ('cover_image', 'cover_preview'),
+        }),
+        ('Gallery — Event Photos', {
+            'fields': ('album', 'extra_photos'),
+            'description': (
+                'Link an existing Album to pull its photos into the article gallery. '
+                'Use "Extra photos" to add individual picks on top of (or instead of) the album.'
+            ),
+        }),
+        ('SEO', {
+            'fields': ('meta_title', 'meta_description'),
+            'classes': ('collapse',),
+            'description': 'Leave blank to inherit from post title.',
+        }),
+        ('Publishing', {
+            'fields': ('published', 'show_on_home', 'published_at'),
+        }),
+        ('Timestamps', {
+            'fields': ('created_at', 'updated_at'),
+            'classes': ('collapse',),
+        }),
+    )
+
+    def cover_preview(self, obj):
+        if obj.cover_image:
+            return format_html(
+                '<img src="{}" style="height: 80px; width: 120px; object-fit: cover; border-radius: 4px;" />',
+                obj.cover_image.url,
+            )
+        return "No Cover"
+    cover_preview.short_description = 'Cover'

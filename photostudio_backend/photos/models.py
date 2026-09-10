@@ -4,6 +4,7 @@ from django.forms import ValidationError
 from imagekit.models import ProcessedImageField
 from imagekit.processors import ResizeToFill
 from django.urls import reverse
+from ckeditor.fields import RichTextField
 
 def validate_image_size(file):
 
@@ -424,3 +425,126 @@ class Partner(models.Model):
     
     def __str__(self):
         return f"{self.name} ({self.category})"
+
+
+# ============================================================================
+# TEAM MEMBERS
+# ============================================================================
+
+class TeamMember(models.Model):
+    """Studio team members displayed on the About page."""
+    name = models.CharField(max_length=255)
+    role = models.CharField(max_length=255, help_text="e.g. Lead Photographer")
+    photo = models.ImageField(
+        upload_to='team/',
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png']),
+            validate_image_size,
+        ]
+    )
+    bio = models.TextField(blank=True, help_text="Short paragraph about this team member")
+
+    # Social media links
+    instagram = models.URLField(blank=True, help_text="Full Instagram profile URL")
+    linkedin = models.URLField(blank=True, help_text="Full LinkedIn profile URL")
+    twitter = models.URLField(blank=True, help_text="Full Twitter / X profile URL")
+    facebook = models.URLField(blank=True, help_text="Full Facebook profile URL")
+
+    order = models.IntegerField(default=0, help_text="Lower numbers appear first")
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ['order', 'name']
+        verbose_name = "Team Member"
+        verbose_name_plural = "Team Members"
+
+    def __str__(self):
+        return f"{self.name} — {self.role}"
+
+
+# ============================================================================
+# BLOG / EVENT STORIES
+# ============================================================================
+
+class BlogPost(models.Model):
+    """
+    An editorial post about an event Shotz covered or any article.
+    Can link to an existing Album for the gallery section of the article.
+    """
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True, help_text="Auto-generated from title — keep URL-friendly")
+    excerpt = models.TextField(
+        help_text="Short teaser shown on cards (1–2 sentences)"
+    )
+    body = RichTextField(
+        help_text="Article body — supports rich text formatting"
+    )
+    cover_image = models.ImageField(
+        upload_to='blog/covers/',
+        validators=[
+            FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png']),
+            validate_image_size,
+        ],
+        help_text="Used for the card and hero image"
+    )
+
+    # Gallery — link to existing album and/or pick individual photos
+    album = models.ForeignKey(
+        'Album',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        related_name='blog_posts',
+        help_text="Event album — photos shown in the article gallery"
+    )
+    extra_photos = models.ManyToManyField(
+        'Photo',
+        blank=True,
+        related_name='blog_posts',
+        help_text="Individual photos to include alongside (or instead of) the album"
+    )
+
+    # SEO
+    meta_title = models.CharField(
+        max_length=160, blank=True,
+        help_text="Leave blank to use post title"
+    )
+    meta_description = models.TextField(
+        blank=True,
+        help_text="Shown in Google snippet — aim for 150–160 chars"
+    )
+
+    # Publishing
+    published = models.BooleanField(default=False, help_text="Only published posts appear on the site")
+    show_on_home = models.BooleanField(default=True, help_text="Include in the blog cards on the home page")
+    published_at = models.DateTimeField(
+        null=True, blank=True,
+        help_text="Set a date to display on the post (does not auto-publish)"
+    )
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-published_at', '-created_at']
+        verbose_name = "Blog Post"
+        verbose_name_plural = "Blog Posts"
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('blog_detail', kwargs={'slug': self.slug})
+
+    def get_seo_title(self):
+        return self.meta_title or self.title
+
+    def get_gallery_photos(self):
+        """Returns combined ordered list: album photos first, then extra picks."""
+        photos = []
+        if self.album:
+            photos.extend(list(self.album.photos.select_related('category').order_by('-date_uploaded')))
+        extras = list(self.extra_photos.exclude(
+            pk__in=[p.pk for p in photos]
+        ).order_by('-date_uploaded'))
+        photos.extend(extras)
+        return photos
