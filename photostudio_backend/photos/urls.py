@@ -10,6 +10,9 @@ urlpatterns = [
     path('gallery/', views.gallery, name='gallery'),
     path('gallery/v2/', views.gallery, name='gallery_v2'),
     path('services/<str:service_slug>/', views.service_detail, name='service_detail'),
+    # Blog / event stories
+    path('blog/', views.blog_list, name='blog_list'),
+    path('blog/<slug:slug>/', views.blog_detail, name='blog_detail'),
     path('seo-checklist/', TemplateView.as_view(template_name='seo_checklist.html'), name='seo_checklist'),
     path('privacy/', TemplateView.as_view(template_name='photos/privacy_policy.html'), name='privacy_policy'),
     path('cookies/', TemplateView.as_view(template_name='photos/cookie_policy.html'), name='cookie_policy'),

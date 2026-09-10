@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.get_seo_title }} | Shotz Blog{% endblock %}
+{% block description %}{% if post.meta_description %}{{ post.meta_description }}{% else %}{{ post.excerpt|truncatewords:30 }}{% endif %}{% endblock %}
+
+{% block og_title %}{{ post.get_seo_title }}{% endblock %}
+{% block og_description %}{{ post.excerpt|truncatewords:30 }}{% endblock %}
+{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{{ post.cover_image.url }}{% endblock %}
+{% block twitter_title %}{{ post.get_seo_title }}{% endblock %}
+{% block twitter_description %}{{ post.excerpt|truncatewords:30 }}{% endblock %}
+{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{{ post.cover_image.url }}{% endblock %}
+
+{% block content %}
+
+<!-- Hero -->
+<section style="position:relative; min-height:520px; display:flex; align-items:flex-end;
+                background-image:url('{{ post.cover_image.url }}');
+                background-size:cover; background-position:center;">
+    <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.25) 60%, transparent 100%);"></div>
+    <div class="container position-relative pb-5 pt-5" style="z-index:2; margin-top:60px;">
+        <div class="row">
+            <div class="col-lg-8">
+                {% if post.published_at %}
+                <p class="mb-3" style="color:var(--accent-color); font-size:0.85rem; font-weight:600; text-transform:uppercase; letter-spacing:2px;">
+                    <i class="far fa-calendar-alt me-2"></i>{{ post.published_at|date:"F j, Y" }}
+                </p>
+                {% endif %}
+                <h1 class="display-4 fw-bold mb-3" style="color:#fff; line-height:1.15;">{{ post.title }}</h1>
+                <p class="lead mb-0" style="color:rgba(255,255,255,0.8); font-size:1.15rem;">{{ post.excerpt }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Breadcrumb -->
+<div style="background:#f9f9f9; border-bottom:1px solid rgba(0,0,0,0.07);">
+    <div class="container py-3">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0" style="font-size:0.85rem;">
+                <li class="breadcrumb-item"><a href="{% url 'home' %}" style="color:var(--accent-color);">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'blog_list' %}" style="color:var(--accent-color);">Blog</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ post.title|truncatewords:6 }}</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<!-- Article Body -->
+<section class="py-5">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="blog-article-body"
+                     style="font-size:1.08rem; line-height:1.85; color:#333;">
+                    {{ post.body|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Event Gallery -->
+{% if gallery_photos %}
+<section class="py-5" style="background-color:var(--background-light);">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="text-uppercase fw-bold"
+                  style="color:var(--accent-color); letter-spacing:2px; font-size:0.85rem;">Event Gallery</span>
+            <h2 class="display-6 fw-bold mt-2 mb-0" style="color:var(--text-dark);">Photos from the Event</h2>
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;">
+            {% for photo in gallery_photos %}
+            <a href="{{ photo.image.url }}"
+               class="glightbox"
+               data-gallery="blog-gallery"
+               data-title="{{ photo.title }}"
+               style="position:relative; aspect-ratio:1/1; overflow:hidden; display:block; border-radius:4px;">
+                <img src="{% if photo.thumbnail %}{{ photo.thumbnail.url }}{% else %}{{ photo.image.url }}{% endif %}"
+                     alt="{{ photo.title }}"
+                     style="width:100%; height:100%; object-fit:cover; transition:transform 0.4s ease;">
+                <div style="position:absolute; inset:0; background:rgba(0,0,0,0); transition:background 0.3s ease;"
+                     onmouseover="this.style.background='rgba(0,0,0,0.25)'"
+                     onmouseout="this.style.background='rgba(0,0,0,0)'">
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- CTA Strip -->
+<section class="py-5" style="background-color:var(--primary-color);">
+    <div class="container text-center">
+        <h3 class="fw-bold mb-3" style="color:#fff;">Want Shotz at your next event?</h3>
+        <p class="mb-4" style="color:rgba(255,255,255,0.8);">
+            Let's create moments that last forever. Reach out and let's talk.
+        </p>
+        <a href="{% url 'contact' %}" class="btn btn-outline-light px-5 py-2 fw-bold">
+            Book a Session <i class="fas fa-arrow-right ms-2"></i>
+        </a>
+    </div>
+</section>
+
+<!-- More Stories -->
+{% if related_posts %}
+<section class="py-5">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="text-uppercase fw-bold"
+                  style="color:var(--accent-color); letter-spacing:2px; font-size:0.85rem;">Keep Reading</span>
+            <h2 class="display-6 fw-bold mt-2 mb-0" style="color:var(--text-dark);">More Stories</h2>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            {% for p in related_posts %}
+            <div class="col-lg-4 col-md-6">
+                <a href="{% url 'blog_detail' p.slug %}" class="blog-card-link text-decoration-none d-block h-100">
+                    <div class="blog-card h-100 overflow-hidden rounded-3 shadow-sm">
+                        <div style="position:relative; overflow:hidden; aspect-ratio:4/3;">
+                            <img src="{{ p.cover_image.url }}"
+                                 alt="{{ p.title }}"
+                                 class="blog-card-img"
+                                 style="width:100%; height:100%; object-fit:cover; transition:transform 0.5s ease;">
+                            <div class="blog-card-arrow"
+                                 style="position:absolute; top:12px; right:12px; width:34px; height:34px;
+                                        background:rgba(255,255,255,0.15); backdrop-filter:blur(6px);
+                                        border-radius:50%; display:flex; align-items:center;
+                                        justify-content:center; transition:all 0.3s ease; z-index:2;">
+                                <i class="fas fa-arrow-right" style="color:#fff; font-size:0.75rem; transform: rotate(-45deg);"></i>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-white">
+                            {% if p.published_at %}
+                            <p class="mb-1" style="color:var(--accent-color); font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:1px;">
+                                {{ p.published_at|date:"F j, Y" }}
+                            </p>
+                            {% endif %}
+                            <h5 class="blog-card-title fw-bold mb-0"
+                                style="color:var(--text-dark); font-size:1rem; line-height:1.35; transition:color 0.3s ease;">
+                                {{ p.title }}
+                            </h5>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="{% url 'blog_list' %}" class="btn btn-outline-primary px-4 py-2">
+                View All Stories <i class="fas fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<!-- GLightbox for gallery -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css"/>
+<script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+<script>
+    GLightbox({ selector: '.glightbox', loop: true, touchNavigation: true });
+</script>
+
+<style>
+/* Article typography */
+.blog-article-body h2,
+.blog-article-body h3 { color: var(--text-dark); margin-top: 2rem; margin-bottom: 0.75rem; }
+.blog-article-body p { margin-bottom: 1.4rem; }
+.blog-article-body img { max-width: 100%; border-radius: 8px; margin: 1.5rem 0; }
+.blog-article-body blockquote {
+    border-left: 4px solid var(--accent-color);
+    padding: 12px 20px;
+    background: rgba(236,127,0,0.05);
+    border-radius: 0 6px 6px 0;
+    font-style: italic;
+    margin: 2rem 0;
+}
+
+/* Blog card hovers (shared with blog listing) */
+.blog-card-link:hover .blog-card-title { color: var(--accent-color) !important; }
+.blog-card-link:hover .blog-card-img  { transform: scale(1.05); }
+.blog-card-link:hover .blog-card-arrow {
+    background: var(--accent-color) !important;
+    transform: translate(3px, -3px);
+}
+.blog-card {
+    border: 1px solid rgba(0,0,0,0.06);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.blog-card-link:hover .blog-card {
+    box-shadow: 0 16px 40px rgba(0,0,0,0.12) !important;
+    transform: translateY(-4px);
+}
+</style>
+{% endblock %}

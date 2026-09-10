@@ -60,7 +60,24 @@ INSTALLED_APPS = [
     'corsheaders',
     'photos',
     'imagekit',
+    'ckeditor',
 ]
+
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline', 'Strike'],
+            ['NumberedList', 'BulletedList', '-', 'Blockquote'],
+            ['Link', 'Unlink'],
+            ['RemoveFormat', 'Source'],
+            ['Styles', 'Format', 'FontSize'],
+        ],
+        'height': 400,
+        'width': '100%',
+        'extraPlugins': ','.join(['autogrow']),
+    }
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

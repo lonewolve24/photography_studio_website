@@ -27,6 +27,10 @@ body.is-homepage {
     padding-top: 0; /* Homepage hero starts at the very top */
 }
 
+body.is-blogpage {
+    padding-top: 0; /* Blog pages — hero flush under transparent nav */
+}
+
 body.scrolled {
     padding-top: 76px; /* Add padding when navbar becomes fixed */
 }
@@ -41,6 +45,9 @@ body {
 }
 body.is-homepage {
     padding-top: 0; /* Homepage hero starts at the top, no padding needed */
+}
+body.is-blogpage {
+    padding-top: 0;
 }
 
 /* ====== Default Solid Navbar (for all pages except homepage) ====== */
