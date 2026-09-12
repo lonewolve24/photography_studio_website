@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 from django.utils import timezone
 from django.utils.text import slugify
 
-from photos.models import Album, BlogPost, Photo, TeamMember
+from photos.models import Album, BlogPost, Partner, Photo, TeamMember
 
 
 SEED_TEAM_NAMES = [
@@ -20,6 +20,13 @@ SEED_POST_SLUGS = [
     'intimate-wedding-at-senegambia',
     'family-portraits-that-feel-like-home',
     'graduation-day-stories',
+]
+
+SEED_PARTNER_NAMES = [
+    'Kairaba Beach Hotel',
+    'Senegambia Fashion House',
+    'Atlantic Events',
+    'Banjul Bridal Studio',
 ]
 
 
@@ -42,7 +49,7 @@ def _pick(items, index):
 
 class Command(BaseCommand):
     help = (
-        'Seed dummy Team Members and Blog Posts using existing uploaded photos. '
+        'Seed dummy Team Members, Blog Posts, and Partners using existing uploaded photos. '
         'Safe to run on Railway after deploy so the client can preview the new sections.'
     )
 
@@ -64,21 +71,38 @@ class Command(BaseCommand):
         if options['force']:
             TeamMember.objects.filter(name__in=SEED_TEAM_NAMES).delete()
             BlogPost.objects.filter(slug__in=SEED_POST_SLUGS).delete()
-            self.stdout.write(self.style.WARNING('Removed previous dummy team/blog records.'))
+            Partner.objects.filter(name__in=SEED_PARTNER_NAMES).delete()
+            self.stdout.write(self.style.WARNING('Removed previous dummy team/blog/partner records.'))
 
         existing_team = TeamMember.objects.filter(name__in=SEED_TEAM_NAMES).exists()
         existing_posts = BlogPost.objects.filter(slug__in=SEED_POST_SLUGS).exists()
-        if (existing_team or existing_posts) and not options['force']:
+        existing_partners = Partner.objects.filter(name__in=SEED_PARTNER_NAMES).exists()
+
+        if existing_team and existing_posts and existing_partners and not options['force']:
             self.stdout.write(self.style.WARNING(
-                'Dummy team/blog data already exists. Re-run with --force to replace it.'
+                'Dummy team/blog/partner data already exists. Re-run with --force to replace it.'
             ))
             return
 
-        self._seed_team(photos)
-        self._seed_posts(photos)
+        if not existing_team or options['force']:
+            self._seed_team(photos)
+        else:
+            self.stdout.write('  Team dummy data already present — skipped.')
+
+        if not existing_posts or options['force']:
+            self._seed_posts(photos)
+        else:
+            self.stdout.write('  Blog dummy data already present — skipped.')
+
+        if not existing_partners or options['force']:
+            self._seed_partners(photos)
+        else:
+            self.stdout.write('  Partner dummy data already present — skipped.')
+
         self.stdout.write(self.style.SUCCESS(
-            f'Done. Team members: {TeamMember.objects.filter(name__in=SEED_TEAM_NAMES).count()} | '
-            f'Blog posts: {BlogPost.objects.filter(slug__in=SEED_POST_SLUGS).count()}'
+            f'Done. Team: {TeamMember.objects.filter(name__in=SEED_TEAM_NAMES).count()} | '
+            f'Posts: {BlogPost.objects.filter(slug__in=SEED_POST_SLUGS).count()} | '
+            f'Partners: {Partner.objects.filter(name__in=SEED_PARTNER_NAMES).count()}'
         ))
         self.stdout.write('The client can edit or replace these in Admin.')
 
@@ -229,3 +253,47 @@ class Command(BaseCommand):
                 f'{post.extra_photos.count()} extra photos'
                 f'{", album linked" if post.album_id else ""})'
             )
+
+    def _seed_partners(self, photos):
+        partner_specs = [
+            {
+                'name': 'Kairaba Beach Hotel',
+                'category': 'Wedding Venues',
+                'description': 'Coastal venue partner for destination weddings.',
+                'website_url': 'https://example.com',
+                'order': 1,
+                'logo_index': 2,
+            },
+            {
+                'name': 'Senegambia Fashion House',
+                'category': 'Fashion Brands',
+                'description': 'Lookbooks, campaigns, and editorial collaborations.',
+                'website_url': 'https://example.com',
+                'order': 2,
+                'logo_index': 5,
+            },
+            {
+                'name': 'Atlantic Events',
+                'category': 'Event Management',
+                'description': 'Corporate and social event coverage partner.',
+                'website_url': 'https://example.com',
+                'order': 3,
+                'logo_index': 8,
+            },
+            {
+                'name': 'Banjul Bridal Studio',
+                'category': 'Bridal & Beauty',
+                'description': 'Bridal styling partner for wedding-day coverage.',
+                'website_url': 'https://example.com',
+                'order': 4,
+                'logo_index': 11,
+            },
+        ]
+
+        for spec in partner_specs:
+            logo_index = spec.pop('logo_index')
+            source = _pick(photos, logo_index)
+            partner = Partner(**spec, is_active=True)
+            filename = Path(source.image.name).name
+            _copy_image(source.image, partner, 'logo', filename)
+            self.stdout.write(f'  Partner: {partner.name} (logo index {logo_index})')
