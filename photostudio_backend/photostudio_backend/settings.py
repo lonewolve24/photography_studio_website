@@ -63,6 +63,8 @@ INSTALLED_APPS = [
     'ckeditor',
 ]
 
+SILENCED_SYSTEM_CHECKS = ['ckeditor.W001']
+
 CKEDITOR_CONFIGS = {
     'default': {
         'toolbar': 'Custom',
