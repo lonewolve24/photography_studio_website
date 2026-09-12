@@ -9,27 +9,25 @@
             </p>
         </div>
 
-        <div class="row g-4 justify-content-center scroll-reveal-stagger">
+        <div class="row g-4 justify-content-center align-items-start scroll-reveal-stagger">
             {% for member in team_members %}
             <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="team-card text-center p-4 rounded-4 h-100"
+                <div class="team-card text-center p-4 rounded-4"
                      style="background: #fff; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 6px 24px rgba(0,0,0,0.04); transition: box-shadow 0.3s ease, transform 0.3s ease;">
-                    <div class="mb-4 mx-auto" style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 4px solid var(--accent-color); box-shadow: 0 4px 16px rgba(236,127,0,0.2);">
+                    <div class="mb-4 mx-auto team-card-photo-wrap" style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 4px solid var(--accent-color); box-shadow: 0 4px 16px rgba(236,127,0,0.2);">
                         {% if member.photo %}
-                        <img src="{{ member.photo.url }}" alt="{{ member.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                        <img src="{{ member.photo.url }}" alt="{{ member.name }}" class="team-card-photo" style="width: 100%; height: 100%; object-fit: cover;">
                         {% endif %}
                     </div>
-                    <h5 class="fw-bold mb-1" style="color: var(--text-dark);">{{ member.name }}</h5>
-                    <p class="mb-3" style="color: var(--accent-color); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">{{ member.role }}</p>
+                    <h5 class="team-card-name fw-bold mb-1" style="color: var(--text-dark);">{{ member.name }}</h5>
+                    <p class="team-card-role mb-3" style="color: var(--accent-color); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">{{ member.role }}</p>
                     {% if member.bio %}
                     <div class="team-bio-wrap mb-4">
                         <p class="team-bio-text text-muted mb-2" style="font-size: 0.9rem; line-height: 1.65;">{{ member.bio }}</p>
-                        <button type="button" class="team-bio-toggle" hidden>
-                            Read more
-                        </button>
+                        <button type="button" class="team-bio-toggle" hidden>Read more</button>
                     </div>
                     {% endif %}
-                    <div class="d-flex justify-content-center gap-2 flex-wrap">
+                    <div class="team-card-socials d-flex justify-content-center gap-2 flex-wrap">
                         {% if member.instagram %}
                         <a href="{{ member.instagram }}" target="_blank" rel="noopener noreferrer" class="team-social-btn" title="Instagram">
                             <i class="fab fa-instagram" style="font-size:0.9rem;"></i>
@@ -57,6 +55,21 @@
         </div>
     </div>
 </section>
+
+<div class="team-modal" id="teamBioModal" hidden>
+    <div class="team-modal-backdrop" data-team-modal-close></div>
+    <div class="team-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="teamModalName">
+        <button type="button" class="team-modal-close" data-team-modal-close aria-label="Close">&times;</button>
+        <div class="team-modal-photo-wrap">
+            <img src="" alt="" id="teamModalPhoto">
+        </div>
+        <h3 class="fw-bold mb-1" id="teamModalName" style="color: var(--text-dark);"></h3>
+        <p class="mb-4" id="teamModalRole" style="color: var(--accent-color); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;"></p>
+        <div class="team-modal-bio text-muted" id="teamModalBio"></div>
+        <div class="d-flex justify-content-center gap-2 flex-wrap mt-4" id="teamModalSocials"></div>
+    </div>
+</div>
+
 <style>
 .team-card:hover {
     box-shadow: 0 16px 48px rgba(0,0,0,0.1) !important;
@@ -85,11 +98,6 @@
     -webkit-line-clamp: 4;
     overflow: hidden;
 }
-.team-bio-text.is-expanded {
-    display: block;
-    -webkit-line-clamp: unset;
-    overflow: visible;
-}
 .team-bio-toggle {
     background: none;
     border: none;
@@ -103,9 +111,114 @@
 .team-bio-toggle:hover {
     text-decoration: underline;
 }
+.team-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+.team-modal[hidden] {
+    display: none;
+}
+.team-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(16, 52, 76, 0.55);
+    backdrop-filter: blur(4px);
+}
+.team-modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(720px, 100%);
+    max-height: min(86vh, 820px);
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px 36px 36px;
+    text-align: center;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.22);
+}
+.team-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    border: none;
+    background: none;
+    font-size: 2rem;
+    line-height: 1;
+    color: #888;
+    cursor: pointer;
+}
+.team-modal-close:hover {
+    color: var(--text-dark);
+}
+.team-modal-photo-wrap {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 20px;
+    border: 4px solid var(--accent-color);
+    box-shadow: 0 4px 16px rgba(236,127,0,0.2);
+}
+.team-modal-photo-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.team-modal-bio {
+    font-size: 1rem;
+    line-height: 1.75;
+    text-align: left;
+    white-space: pre-wrap;
+}
+body.team-modal-open {
+    overflow: hidden;
+}
 </style>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
+    var modal = document.getElementById('teamBioModal');
+    if (!modal) return;
+
+    var photoEl = document.getElementById('teamModalPhoto');
+    var nameEl = document.getElementById('teamModalName');
+    var roleEl = document.getElementById('teamModalRole');
+    var bioEl = document.getElementById('teamModalBio');
+    var socialsEl = document.getElementById('teamModalSocials');
+
+    function openModal(card) {
+        var img = card.querySelector('.team-card-photo');
+        var name = card.querySelector('.team-card-name');
+        var role = card.querySelector('.team-card-role');
+        var bio = card.querySelector('.team-bio-text');
+        var socials = card.querySelector('.team-card-socials');
+
+        if (img) {
+            photoEl.src = img.src;
+            photoEl.alt = img.alt || '';
+            photoEl.parentElement.style.display = '';
+        } else {
+            photoEl.removeAttribute('src');
+            photoEl.parentElement.style.display = 'none';
+        }
+        nameEl.textContent = name ? name.textContent : '';
+        roleEl.textContent = role ? role.textContent : '';
+        bioEl.textContent = bio ? bio.textContent : '';
+        socialsEl.innerHTML = socials ? socials.innerHTML : '';
+
+        modal.hidden = false;
+        document.body.classList.add('team-modal-open');
+    }
+
+    function closeModal() {
+        modal.hidden = true;
+        document.body.classList.remove('team-modal-open');
+    }
+
     document.querySelectorAll('.team-bio-wrap').forEach(function (wrap) {
         var text = wrap.querySelector('.team-bio-text');
         var btn = wrap.querySelector('.team-bio-toggle');
@@ -114,9 +227,16 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.hidden = false;
         }
         btn.addEventListener('click', function () {
-            var open = text.classList.toggle('is-expanded');
-            btn.textContent = open ? 'Show less' : 'Read more';
+            openModal(wrap.closest('.team-card'));
         });
+    });
+
+    modal.querySelectorAll('[data-team-modal-close]').forEach(function (el) {
+        el.addEventListener('click', closeModal);
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hidden) closeModal();
     });
 });
 </script>
