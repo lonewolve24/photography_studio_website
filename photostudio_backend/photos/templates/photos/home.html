@@ -413,35 +413,264 @@
 
 <!-- DYNAMIC PARTNERS SECTION -->
 {% if partners %}
-    <section class="py-5" style="background: #f8f9fa;">
-        <div class="container">
-            <div class="text-center mb-4 scroll-reveal">
-                <span class="text-uppercase fw-bold" style="color: var(--accent-color); letter-spacing: 2px; font-size: 0.9rem;">Trusted Together</span>
-                <h2 class="display-5 fw-bold mt-2 mb-3">Partners &amp; Collaborations</h2>
-                <p class="lead text-muted mb-0 mx-auto" style="max-width: 560px;">Working with amazing brands and organizations to create exceptional content</p>
-            </div>
-            
-            {# Centered flex so 1–2 partners don't look stranded on the left #}
-            <div class="d-flex flex-wrap justify-content-center gap-4 scroll-reveal-stagger">
+<section class="py-5" style="background: #f8f9fa;">
+    <div class="container">
+        <div class="text-center mb-4 scroll-reveal">
+            <span class="text-uppercase fw-bold" style="color: var(--accent-color); letter-spacing: 2px; font-size: 0.9rem;">Trusted Together</span>
+            <h2 class="display-5 fw-bold mt-2 mb-3">Partners &amp; Collaborations</h2>
+            <p class="lead text-muted mb-0 mx-auto" style="max-width: 560px;">Working with amazing brands and organizations to create exceptional content</p>
+        </div>
+
+        <div class="partners-slider-shell position-relative">
+            <button type="button" class="partners-nav partners-nav-prev" aria-label="Previous partners">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="partners-track" id="partnersTrack">
                 {% for partner in partners %}
-                    <div class="partner-card text-center p-4 bg-white rounded shadow-sm"
-                         style="width: 100%; max-width: 280px; transition: transform 0.3s ease, box-shadow 0.3s ease;">
-                        {% if partner.website_url %}
-                            <a href="{{ partner.website_url }}" target="_blank" rel="noopener noreferrer" title="{{ partner.name }}" class="text-decoration-none">
-                                <img src="{{ partner.logo.url }}" alt="{{ partner.name }}" style="max-width: 150px; max-height: 80px; object-fit: contain; margin-bottom: 15px;">
+                <div class="partner-slide">
+                    <div class="partner-card text-center p-4 bg-white rounded-3 shadow-sm h-100">
+                        <div class="partner-logo-wrap mb-3">
+                            {% if partner.website_url %}
+                            <a href="{{ partner.website_url }}" target="_blank" rel="noopener noreferrer" title="{{ partner.name }}">
+                                <img src="{{ partner.logo.url }}" alt="{{ partner.name }}" class="partner-card-logo">
                             </a>
-                        {% else %}
-                            <img src="{{ partner.logo.url }}" alt="{{ partner.name }}" style="max-width: 150px; max-height: 80px; object-fit: contain; margin-bottom: 15px;">
-                        {% endif %}
-                        <p class="fw-bold mb-2" style="color: var(--text-dark);">{{ partner.name }}</p>
+                            {% else %}
+                            <img src="{{ partner.logo.url }}" alt="{{ partner.name }}" class="partner-card-logo">
+                            {% endif %}
+                        </div>
+                        <p class="partner-card-name fw-bold mb-2" style="color: var(--text-dark);">{{ partner.name }}</p>
                         {% if partner.description %}
-                        <p class="text-muted mb-0" style="font-size: 0.9rem;">{{ partner.description }}</p>
+                        <div class="partner-desc-wrap">
+                            <p class="partner-desc-text text-muted mb-2">{{ partner.description }}</p>
+                            <button type="button" class="partner-see-more" hidden>See more</button>
+                        </div>
                         {% endif %}
                     </div>
+                </div>
                 {% endfor %}
             </div>
+            <button type="button" class="partners-nav partners-nav-next" aria-label="Next partners">
+                <i class="fas fa-chevron-right"></i>
+            </button>
         </div>
-    </section>
+    </div>
+</section>
+
+<div class="team-modal" id="partnerModal" hidden>
+    <div class="team-modal-backdrop" data-partner-modal-close></div>
+    <div class="team-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="partnerModalName">
+        <button type="button" class="team-modal-close" data-partner-modal-close aria-label="Close">&times;</button>
+        <div class="partner-modal-logo-wrap mb-3">
+            <img src="" alt="" id="partnerModalLogo">
+        </div>
+        <h3 class="fw-bold mb-3" id="partnerModalName" style="color: var(--text-dark);"></h3>
+        <div class="team-modal-bio text-muted" id="partnerModalDesc"></div>
+    </div>
+</div>
+
+<style>
+.partners-slider-shell { padding: 0 48px; }
+.partners-track {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 8px 4px 16px;
+    scrollbar-width: none;
+}
+.partners-track::-webkit-scrollbar { display: none; }
+.partner-slide {
+    flex: 0 0 calc(25% - 15px);
+    min-width: 240px;
+}
+.partner-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 320px;
+    border: 1px solid rgba(0,0,0,0.06);
+}
+.partner-logo-wrap {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.partner-card-logo {
+    max-width: 140px;
+    max-height: 72px;
+    object-fit: contain;
+}
+.partner-desc-text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+    min-height: calc(1.6em * 4);
+}
+.partner-see-more {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--accent-color);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+.partner-see-more:hover { text-decoration: underline; }
+.partners-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: var(--primary-color);
+    color: #fff;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.partners-nav-prev { left: 0; }
+.partners-nav-next { right: 0; }
+.partners-nav:hover { background: var(--accent-color); }
+.team-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+.team-modal[hidden] { display: none; }
+.team-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(16, 52, 76, 0.55);
+    backdrop-filter: blur(4px);
+}
+.team-modal-dialog {
+    position: relative;
+    z-index: 1;
+    width: min(720px, 100%);
+    max-height: min(86vh, 820px);
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px 36px 36px;
+    text-align: center;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.22);
+}
+.team-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    border: none;
+    background: none;
+    font-size: 2rem;
+    line-height: 1;
+    color: #888;
+    cursor: pointer;
+}
+.team-modal-bio {
+    font-size: 1rem;
+    line-height: 1.75;
+    text-align: left;
+    white-space: pre-wrap;
+}
+body.team-modal-open { overflow: hidden; }
+.partner-modal-logo-wrap {
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.partner-modal-logo-wrap img {
+    max-width: 180px;
+    max-height: 80px;
+    object-fit: contain;
+}
+@media (max-width: 991px) {
+    .partner-slide { flex-basis: calc(50% - 10px); }
+}
+@media (max-width: 575px) {
+    .partners-slider-shell { padding: 0 40px; }
+    .partner-slide { flex-basis: 85%; }
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var track = document.getElementById('partnersTrack');
+    if (!track) return;
+
+    function stepSize() {
+        var slide = track.querySelector('.partner-slide');
+        return slide ? slide.offsetWidth + 20 : 280;
+    }
+
+    function scrollPartners(dir) {
+        var max = track.scrollWidth - track.clientWidth;
+        if (max <= 0) return;
+        var next = track.scrollLeft + dir * stepSize();
+        if (next >= max - 4) track.scrollTo({ left: 0, behavior: 'smooth' });
+        else if (next < 0) track.scrollTo({ left: max, behavior: 'smooth' });
+        else track.scrollBy({ left: dir * stepSize(), behavior: 'smooth' });
+    }
+
+    var prev = document.querySelector('.partners-nav-prev');
+    var next = document.querySelector('.partners-nav-next');
+    if (prev) prev.addEventListener('click', function () { scrollPartners(-1); });
+    if (next) next.addEventListener('click', function () { scrollPartners(1); });
+
+    var timer = setInterval(function () { scrollPartners(1); }, 4000);
+    track.addEventListener('mouseenter', function () { clearInterval(timer); });
+    track.addEventListener('mouseleave', function () {
+        timer = setInterval(function () { scrollPartners(1); }, 4000);
+    });
+
+    var modal = document.getElementById('partnerModal');
+    var logoEl = document.getElementById('partnerModalLogo');
+    var nameEl = document.getElementById('partnerModalName');
+    var descEl = document.getElementById('partnerModalDesc');
+
+    function openPartnerModal(card) {
+        var logo = card.querySelector('.partner-card-logo');
+        var name = card.querySelector('.partner-card-name');
+        var desc = card.querySelector('.partner-desc-text');
+        if (logo) { logoEl.src = logo.src; logoEl.alt = logo.alt || ''; }
+        nameEl.textContent = name ? name.textContent : '';
+        descEl.textContent = desc ? desc.textContent : '';
+        modal.hidden = false;
+        document.body.classList.add('team-modal-open');
+    }
+
+    function closePartnerModal() {
+        modal.hidden = true;
+        document.body.classList.remove('team-modal-open');
+    }
+
+    document.querySelectorAll('.partner-desc-wrap').forEach(function (wrap) {
+        var text = wrap.querySelector('.partner-desc-text');
+        var btn = wrap.querySelector('.partner-see-more');
+        if (!text || !btn) return;
+        if (text.scrollHeight > text.clientHeight + 2) btn.hidden = false;
+        btn.addEventListener('click', function () {
+            openPartnerModal(wrap.closest('.partner-card'));
+        });
+    });
+
+    modal.querySelectorAll('[data-partner-modal-close]').forEach(function (el) {
+        el.addEventListener('click', closePartnerModal);
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && !modal.hidden) closePartnerModal();
+    });
+});
+</script>
 {% endif %}
 
 <!-- MODERN CONTACT SECTION -->

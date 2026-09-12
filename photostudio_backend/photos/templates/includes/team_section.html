@@ -9,10 +9,10 @@
             </p>
         </div>
 
-        <div class="row g-4 justify-content-center align-items-start scroll-reveal-stagger">
+        <div class="row g-4 justify-content-center align-items-stretch scroll-reveal-stagger">
             {% for member in team_members %}
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="team-card text-center p-4 rounded-4"
+            <div class="col-lg-3 col-md-4 col-sm-6 d-flex">
+                <div class="team-card text-center p-4 rounded-4 w-100"
                      style="background: #fff; border: 1px solid rgba(0,0,0,0.06); box-shadow: 0 6px 24px rgba(0,0,0,0.04); transition: box-shadow 0.3s ease, transform 0.3s ease;">
                     <div class="mb-4 mx-auto team-card-photo-wrap" style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; border: 4px solid var(--accent-color); box-shadow: 0 4px 16px rgba(236,127,0,0.2);">
                         {% if member.photo %}
@@ -24,7 +24,7 @@
                     {% if member.bio %}
                     <div class="team-bio-wrap mb-4">
                         <p class="team-bio-text text-muted mb-2" style="font-size: 0.9rem; line-height: 1.65;">{{ member.bio }}</p>
-                        <button type="button" class="team-bio-toggle" hidden>Read more</button>
+                        <button type="button" class="team-bio-toggle" hidden>See more</button>
                     </div>
                     {% endif %}
                     <div class="team-card-socials d-flex justify-content-center gap-2 flex-wrap">
@@ -71,9 +71,20 @@
 </div>
 
 <style>
+.team-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 420px;
+}
 .team-card:hover {
     box-shadow: 0 16px 48px rgba(0,0,0,0.1) !important;
     transform: translateY(-6px);
+}
+.team-bio-wrap {
+    flex: 1 1 auto;
+}
+.team-card-socials {
+    margin-top: auto;
 }
 .team-social-btn {
     width: 34px;
@@ -97,6 +108,7 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 4;
     overflow: hidden;
+    min-height: calc(1.65em * 4);
 }
 .team-bio-toggle {
     background: none;
