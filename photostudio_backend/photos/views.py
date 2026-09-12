@@ -48,6 +48,8 @@ def home(request):
     home_posts = BlogPost.objects.filter(
         published=True, show_on_home=True
     ).order_by('-published_at', '-created_at')[:6]
+
+    team_members = TeamMember.objects.filter(is_active=True)
     
     context = {
         'hero_slides': hero_slides,
@@ -59,6 +61,7 @@ def home(request):
         'latest_photos': featured_photos,
         'services': services,
         'home_posts': home_posts,
+        'team_members': team_members,
     }
     return render(request, 'photos/home.html', context)
 
